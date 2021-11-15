@@ -10,7 +10,7 @@ public class Lobby implements Serializable {
 
     private List<User> users = new ArrayList<User>();
 
-    private boolean isGameRunning;
+    private boolean isGameRunning=false;
 
 
     public Lobby() {

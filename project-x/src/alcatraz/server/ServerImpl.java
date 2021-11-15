@@ -70,6 +70,8 @@ public class ServerImpl implements IServer {
     }
 
     public Lobby startGame(UUID lobbyID) {
-        return new Lobby();
+          return lobbyManager.changeLobbyStatus(lobbyID);
+
     }
+
 }

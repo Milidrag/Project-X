@@ -6,6 +6,7 @@ import alcatraz.common.User;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 public interface IServer extends Remote {
@@ -17,6 +18,6 @@ public interface IServer extends Remote {
 
     public boolean leaveLobby(User user, UUID lobbyId) throws RemoteException;
 
-    public Lobby startGame(UUID lobbyID) throws RemoteException;
+    public Lobby startGame(UUID lobbyID) throws RemoteException , NoSuchElementException;
     //TODO: Methoden aus der Präsentation einfügen
 }

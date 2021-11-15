@@ -64,5 +64,15 @@ public class LobbyManager {
         throw new NoSuchElementException("No Lobby with the id=" + uuid);
     }
 
+    public Lobby changeLobbyStatus(UUID uuid){
+        for (Lobby lobby : lobbies) {
+            if (lobby.getLobbyId() == uuid) {
+                lobby.setGameRunning(true);
+                return lobby;
+            }
+        }
+        throw new NoSuchElementException("No Lobby with the id=" + uuid);
+    }
+
 
 }
