@@ -88,6 +88,20 @@ public class ClientImpl implements IClient {
         }
     }
 
+
+    public void serverJoinLobby(UUID lobbyID) throws RemoteException {
+        stub.joinLobby(thisUser,lobbyID);
+    }
+
+    public void serverCreateLobby() throws RemoteException {
+        stub.createLobby(thisUser);
+
+    }
+
+    public void leaveLobby(UUID lobbyID) throws RemoteException {
+        stub.leaveLobby(thisUser,lobbyID);
+    }
+
     public void serverConTest() throws RemoteException {
         System.out.println(stub.availableLobbies());
     }
