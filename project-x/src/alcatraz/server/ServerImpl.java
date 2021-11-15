@@ -41,9 +41,7 @@ public class ServerImpl implements IServer{
     //TODO: Methoden aus der Präsentation implmentieren
 
     public List<Lobby> availableLobbies(){
-
-      //  return lobbyManager.getLobbies();
-        return new ArrayList<>();
+        return lobbyManager.getLobbies();
     }
 
     public boolean joinLobby(User user, UUID lobbyId){
