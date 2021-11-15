@@ -8,28 +8,28 @@ import java.util.UUID;
 public class Lobby implements Serializable {
     private UUID lobbyId = UUID.randomUUID();
 
-    private List<User> users =new ArrayList<User>();
+    private List<User> users = new ArrayList<User>();
 
-    private boolean isGameRuning;
+    private boolean isGameRunning;
 
 
-    public Lobby(){
+    public Lobby() {
 
     }
 
-    public boolean isGameRuning() {
-        return isGameRuning;
+    public boolean isGameRunning() {
+        return isGameRunning;
     }
 
-    public void setGameRuning(boolean gameRuning) {
-        isGameRuning = gameRuning;
+    public void setGameRunning(boolean gameRunning) {
+        isGameRunning = gameRunning;
     }
 
-    public void addPlayer(User user){
+    public void addPlayer(User user) {
         users.add(user);
     }
 
-    public void removeUser(User user){
+    public void removeUser(User user) {
         users.remove(user);
     }
 

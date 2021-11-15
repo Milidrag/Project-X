@@ -11,7 +11,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class ClientImpl implements IClient {
@@ -26,7 +25,7 @@ public class ClientImpl implements IClient {
     private ArrayList<IClient> clientStubs = new ArrayList<>();
 
     //User of this client
-    private User thisUser=new User();
+    private User thisUser = new User();
 
     //Lobby of this client
     private Lobby lobby;
@@ -53,7 +52,7 @@ public class ClientImpl implements IClient {
     }
 
     public ClientImpl() {
-        numberofThisClass=numberOfClients;
+        numberofThisClass = numberOfClients;
         numberOfClients++;
     }
 
@@ -81,7 +80,7 @@ public class ClientImpl implements IClient {
             if (user != this.thisUser) {
                 Registry reg = LocateRegistry.getRegistry();
 
-                System.out.println("verbinde zu "+"client/" + user.getUsername());
+                System.out.println("verbinde zu " + "client/" + user.getUsername());
                 IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
                 clientStubs.add(clientStub);
             }
@@ -90,16 +89,16 @@ public class ClientImpl implements IClient {
 
 
     public void serverJoinLobby(UUID lobbyID) throws RemoteException {
-        stub.joinLobby(thisUser,lobbyID);
+        stub.joinLobby(thisUser, lobbyID);
     }
 
     public void serverCreateLobby() throws RemoteException {
-        stub.createLobby(thisUser);
+        this.lobby = stub.createLobby(thisUser);
 
     }
 
     public void leaveLobby(UUID lobbyID) throws RemoteException {
-        stub.leaveLobby(thisUser,lobbyID);
+        stub.leaveLobby(thisUser, lobbyID);
     }
 
     public void serverConTest() throws RemoteException {
@@ -116,7 +115,7 @@ public class ClientImpl implements IClient {
         IClient clientStub = (IClient) UnicastRemoteObject.exportObject(this, 0);
         reg = LocateRegistry.createRegistry(1100 + numberofThisClass);
         reg = LocateRegistry.getRegistry(1100 + numberofThisClass);
-        System.out.println("user/+ "+this.thisUser.getUsername()+"con= "+"client/" + this.thisUser.getUsername());
+        System.out.println("user/+ " + this.thisUser.getUsername() + "con= " + "client/" + this.thisUser.getUsername());
         reg.rebind("client/" + this.thisUser.getUsername(), clientStub);
     }
 
@@ -141,7 +140,7 @@ public class ClientImpl implements IClient {
     }
 
     @Override
-    public GameStaus rejoinGame() {
+    public GameStatus rejoinGame() {
         return null;
     }
 

@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class User implements Serializable {
 
-    private UUID userId ;
+    private UUID userId;
 
     private String username;
 
@@ -15,7 +15,7 @@ public class User implements Serializable {
 
     public User(String username) {
         this.username = username;
-        this.userId=UUID.randomUUID();
+        this.userId = UUID.randomUUID();
     }
 
     public String getUsername() {

@@ -2,11 +2,9 @@ package alcatraz.client;
 
 import alcatraz.common.Lobby;
 import alcatraz.common.Move;
-import alcatraz.common.User;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.List;
 
 public interface IClient extends Remote {
     public void presentPlayers(Lobby lobby) throws RemoteException;
@@ -17,5 +15,5 @@ public interface IClient extends Remote {
 
     public void endGame();
 
-    public GameStaus rejoinGame();
+    public GameStatus rejoinGame();
 }
