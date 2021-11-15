@@ -20,7 +20,7 @@ public class ClientImpl implements IClient {
     static IServer stub;
 
     static int numberOfClients = 0;
-    private int numberofThisClass;
+    private int numberOfThisClass;
 
     private ArrayList<IClient> clientStubs = new ArrayList<>();
 
@@ -52,7 +52,7 @@ public class ClientImpl implements IClient {
     }
 
     public ClientImpl() {
-        numberofThisClass = numberOfClients;
+        numberOfThisClass = numberOfClients;
         numberOfClients++;
     }
 
@@ -113,8 +113,8 @@ public class ClientImpl implements IClient {
 
     public void startClientRMI() throws RemoteException {
         IClient clientStub = (IClient) UnicastRemoteObject.exportObject(this, 0);
-        reg = LocateRegistry.createRegistry(1100 + numberofThisClass);
-        reg = LocateRegistry.getRegistry(1100 + numberofThisClass);
+        reg = LocateRegistry.createRegistry(1100 + numberOfThisClass);
+        reg = LocateRegistry.getRegistry(1100 + numberOfThisClass);
         System.out.println("user/+ " + this.thisUser.getUsername() + "con= " + "client/" + this.thisUser.getUsername());
         reg.rebind("client/" + this.thisUser.getUsername(), clientStub);
     }

@@ -8,7 +8,7 @@ import java.util.UUID;
 public class Lobby implements Serializable {
     private UUID lobbyId = UUID.randomUUID();
 
-    private List<User> users = new ArrayList<User>();
+    private List<User> users = new ArrayList<>();
 
     private boolean isGameRunning=false;
 
