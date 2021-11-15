@@ -59,12 +59,12 @@ public class ClientImpl implements IClient {
 
     public static void main(String[] args) {
         ClientImpl client = new ClientImpl();
-        client.connectToServer();
-        try {
-            client.serverConTest();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+//        client.connectToServer();
+//        try {
+//            client.serverConTest();
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void connectToServer() {
@@ -89,7 +89,7 @@ public class ClientImpl implements IClient {
     }
 
     public void serverConTest() throws RemoteException {
-        System.out.println(stub.availableLobbies().get(0).toString());
+        System.out.println(stub.availableLobbies());
     }
 
     public void sendUsersToOtherClients() throws RemoteException {

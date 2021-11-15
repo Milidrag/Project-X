@@ -7,6 +7,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -14,7 +15,7 @@ import java.util.UUID;
 public class ServerImpl implements IServer{
     static Registry reg;
 
-    LobbyManager lobbyManager;
+    LobbyManager lobbyManager=new LobbyManager();
 
     public static void main(String[] args) {
         ServerImpl remoteObject = new ServerImpl();
@@ -32,10 +33,17 @@ public class ServerImpl implements IServer{
             e.printStackTrace();
         }
     }
+
+    public LobbyManager getLobbyManager() {
+        return lobbyManager;
+    }
+
     //TODO: Methoden aus der Präsentation implmentieren
 
     public List<Lobby> availableLobbies(){
-        return lobbyManager.getLobbies();
+
+      //  return lobbyManager.getLobbies();
+        return new ArrayList<>();
     }
 
     public boolean joinLobby(User user, UUID lobbyId){

@@ -20,7 +20,7 @@ public class Lobby implements Serializable {
         users.add(user);
     }
 
-    public void removeuser(User user){
+    public void removeUser(User user){
         users.remove(user);
     }
 

@@ -1,6 +1,7 @@
 package alcatraz.server;
 
 import alcatraz.client.ClientImpl;
+import alcatraz.common.User;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,7 +15,9 @@ class ServerImplTest {
         try {
             ServerImpl server=new ServerImpl();
             ClientImpl client= new ClientImpl();
+            User user=new User("test");
 
+            server.getLobbyManager().genLobby(user);
             server.registerForRMI();
 
             client.connectToServer();

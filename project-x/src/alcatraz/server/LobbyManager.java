@@ -38,7 +38,7 @@ public class LobbyManager {
     public void removeUserFromLobby(User user, UUID uuid) throws NoSuchElementException {
         for (Lobby lobby : lobbies) {
             if (lobby.getLobbyId() == uuid) {
-                lobby.removeuser(user);
+                lobby.removeUser(user);
                 return;
             }
         }
