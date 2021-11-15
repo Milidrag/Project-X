@@ -108,7 +108,7 @@ public class ClientImpl implements IClient {
 
     public void sendUsersToOtherClients() throws RemoteException {
         for (IClient stub : this.clientStubs) {
-            stub.presentPlayers(this.lobby.getUsers());
+            stub.presentPlayers(this.lobby);
         }
     }
 
@@ -121,13 +121,28 @@ public class ClientImpl implements IClient {
     }
 
     //TODO: Methoden aus der Präsentation implmentieren
-    public void presentPlayers(List<User> users) {
-        System.out.println(users);
+    public void presentPlayers(Lobby lobby) {
+        System.out.println(lobby);
 
     }
 
     public void Move(String username, Move move) {
 
+    }
+
+    @Override
+    public void startGame() {
+
+    }
+
+    @Override
+    public void endGame() {
+
+    }
+
+    @Override
+    public GameStaus rejoinGame() {
+        return null;
     }
 
 }

@@ -54,9 +54,10 @@ public class ServerImpl implements IServer{
         }
     }
 
-    public UUID createLobby(User user){
-        return lobbyManager.genLobby(user).getLobbyId();
+    public Lobby createLobby(User user){
+        return lobbyManager.genLobby(user);
     }
+
     public boolean leaveLobby(User user, UUID lobbyId){
         try {
             lobbyManager.removeUserFromLobby(user,lobbyId);
@@ -68,7 +69,7 @@ public class ServerImpl implements IServer{
 
     }
 
-    public boolean startGame(UUID lobbyID){
-        return false;
+    public Lobby startGame(UUID lobbyID){
+        return new Lobby();
     }
 }

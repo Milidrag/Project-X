@@ -1,5 +1,6 @@
 package alcatraz.client;
 
+import alcatraz.common.Lobby;
 import alcatraz.common.Move;
 import alcatraz.common.User;
 
@@ -8,7 +9,13 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public interface IClient extends Remote {
-    public void presentPlayers(List<User> users) throws RemoteException;
+    public void presentPlayers(Lobby lobby) throws RemoteException;
+
     public void Move(String username, Move move) throws RemoteException;
-    //TODO Methoden aus der Präsentation einfügen
+
+    public void startGame();
+
+    public void endGame();
+
+    public GameStaus rejoinGame();
 }

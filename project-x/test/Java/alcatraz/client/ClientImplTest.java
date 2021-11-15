@@ -13,8 +13,6 @@ class ClientImplTest {
          @Test
          public void testRMIClientToClientPresentPlayers(){
              try {
-
-
                  Lobby lobby=new Lobby();
 
                  ClientImpl client1=new ClientImpl();
