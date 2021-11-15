@@ -36,6 +36,7 @@ public class Lobby implements Serializable {
     public String toString() {
         return "Lobby{" +
                 "lobbyId=" + lobbyId +
+                ", users=" + users +
                 '}';
     }
 }
