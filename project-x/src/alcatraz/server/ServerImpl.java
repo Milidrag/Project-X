@@ -1,16 +1,20 @@
 package alcatraz.server;
 
 import alcatraz.common.Lobby;
+import alcatraz.common.User;
+
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 public class ServerImpl implements IServer{
     static Registry reg;
+
+    LobbyManager lobbyManager;
 
     public static void main(String[] args) {
         ServerImpl remoteObject = new ServerImpl();
@@ -31,20 +35,33 @@ public class ServerImpl implements IServer{
     //TODO: Methoden aus der Präsentation implmentieren
 
     public List<Lobby> availableLobbies(){
-        ArrayList<Lobby> lobbies = new ArrayList<Lobby>();
-        lobbies.add(new Lobby());
-        return lobbies;
-    }
-    public boolean joinLobby(String username, UUID lobbyId){
-        return false;
+        return lobbyManager.getLobbies();
     }
 
-    public UUID createLobby(String username){
-        return UUID.randomUUID();
+    public boolean joinLobby(User user, UUID lobbyId){
+        try {
+            lobbyManager.addUser(user,lobbyId);
+            return true;
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-    public boolean leaveLobby(String username, UUID lobbyId){
-        return false;
+
+    public UUID createLobby(User user){
+        return lobbyManager.genLobby(user).getLobbyId();
     }
+    public boolean leaveLobby(User user, UUID lobbyId){
+        try {
+            lobbyManager.removeUserFromLobby(user,lobbyId);
+            return true;
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
     public boolean startGame(UUID lobbyID){
         return false;
     }
