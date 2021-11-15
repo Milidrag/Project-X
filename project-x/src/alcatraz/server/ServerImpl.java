@@ -17,7 +17,7 @@ public class ServerImpl implements IServer{
         remoteObject.registerForRMI();
     }
 
-    private void registerForRMI(){
+    public void registerForRMI(){
         try {
             IServer stub = (IServer) UnicastRemoteObject.exportObject(this, 0);
             reg = LocateRegistry.createRegistry(1099);
