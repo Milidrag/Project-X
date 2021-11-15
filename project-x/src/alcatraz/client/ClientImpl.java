@@ -120,27 +120,27 @@ public class ClientImpl implements IClient {
     }
 
     //TODO: Methoden aus der Präsentation implmentieren
-    public void presentPlayers(Lobby lobby) {
+    public void presentPlayers(Lobby lobby)throws RemoteException {
         System.out.println(lobby);
 
     }
 
-    public void Move(String username, Move move) {
+    public void Move(String username, Move move)throws RemoteException {
 
     }
 
     @Override
-    public void startGame() {
+    public void startGame()throws RemoteException {
 
     }
 
     @Override
-    public void endGame() {
+    public void endGame()throws RemoteException {
 
     }
 
     @Override
-    public GameStatus rejoinGame() {
+    public GameStatus rejoinGame()throws RemoteException {
         return null;
     }
 

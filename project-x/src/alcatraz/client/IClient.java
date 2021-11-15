@@ -11,9 +11,9 @@ public interface IClient extends Remote {
 
     public void Move(String username, Move move) throws RemoteException;
 
-    public void startGame();
+    public void startGame()throws RemoteException;
 
-    public void endGame();
+    public void endGame()throws RemoteException;
 
-    public GameStatus rejoinGame();
+    public GameStatus rejoinGame()throws RemoteException;
 }
