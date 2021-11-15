@@ -75,8 +75,15 @@ public class ClientImpl implements IClient{
     }
 
 
+
+
+
+
     //TODO: Methoden aus der Präsentation implmentieren
     public void presentPlayers(List<User> users){
+
+
+
 
     }
 
