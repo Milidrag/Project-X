@@ -113,8 +113,8 @@ public class ClientImpl implements IClient {
 
     public void startClientRMI() throws RemoteException {
         IClient clientStub = (IClient) UnicastRemoteObject.exportObject(this, 0);
-        reg = LocateRegistry.createRegistry(1100 + numberOfThisClass);
-        reg = LocateRegistry.getRegistry(1100 + numberOfThisClass);
+        reg = LocateRegistry.createRegistry(1099);//1100 + numberOfThisClass);
+        reg = LocateRegistry.getRegistry(1099);//1100 + numberOfThisClass);
         System.out.println("user/+ " + this.thisUser.getUsername() + "con= " + "client/" + this.thisUser.getUsername());
         reg.rebind("client/" + this.thisUser.getUsername(), clientStub);
     }
