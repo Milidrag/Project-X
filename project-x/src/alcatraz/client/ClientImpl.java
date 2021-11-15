@@ -13,14 +13,20 @@ public class ClientImpl implements IClient{
     static IServer stub;
 
     public static void main(String[] args){
+        connectToServer();
+    }
+
+    private static void connectToServer() {
         try {
             Registry reg = LocateRegistry.getRegistry();
             stub = (IServer) reg.lookup("Server");
             System.out.println(stub.availableLobbies().get(0).toString());
+
         }catch (Exception e){
             System.out.println(e);
         }
     }
+
 
     //TODO: Methoden aus der Präsentation implmentieren
     public void presentPlayers(List<User> users){
