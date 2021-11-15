@@ -10,10 +10,19 @@ public class Lobby implements Serializable {
 
     private List<User> users =new ArrayList<User>();
 
+    private boolean isGameRuning;
 
 
     public Lobby(){
 
+    }
+
+    public boolean isGameRuning() {
+        return isGameRuning;
+    }
+
+    public void setGameRuning(boolean gameRuning) {
+        isGameRuning = gameRuning;
     }
 
     public void addPlayer(User user){
