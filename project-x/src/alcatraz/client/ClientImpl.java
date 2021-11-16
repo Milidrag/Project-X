@@ -123,6 +123,11 @@ public class ClientImpl implements IClient {
     public void presentPlayers(Lobby lobby)throws RemoteException {
         System.out.println(lobby);
 
+        if(!this.lobby.equals(lobby)){
+            throw new RemoteException();
+        }
+
+
     }
 
     public void Move(String username, Move move)throws RemoteException {
