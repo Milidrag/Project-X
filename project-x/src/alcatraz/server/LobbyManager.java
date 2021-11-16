@@ -27,7 +27,7 @@ public class LobbyManager {
 
     public void addUser(User user, UUID uuid) throws NoSuchElementException {
         for (Lobby lobby : lobbies) {
-            if (lobby.getLobbyId() == uuid) {
+            if (lobby.getLobbyId().equals( uuid)) {
                 lobby.addPlayer(user);
                 return;
             }
@@ -37,7 +37,7 @@ public class LobbyManager {
 
     public void removeUserFromLobby(User user, UUID uuid) throws NoSuchElementException {
         for (Lobby lobby : lobbies) {
-            if (lobby.getLobbyId() == uuid) {
+            if (lobby.getLobbyId().equals( uuid)) {
                 lobby.removeUser(user);
                 return;
             }
@@ -47,7 +47,7 @@ public class LobbyManager {
 
     public void deleteLobby(UUID uuid) {
         for (Lobby lobby : lobbies) {
-            if (lobby.getLobbyId() == uuid) {
+            if (lobby.getLobbyId().equals(uuid)) {
                 lobbies.remove(lobby);
                 return;
             }
@@ -57,7 +57,7 @@ public class LobbyManager {
 
     public Lobby getLobby(UUID uuid) {
         for (Lobby lobby : lobbies) {
-            if (lobby.getLobbyId() == uuid) {
+            if (lobby.getLobbyId().equals( uuid)) {
                 return lobby;
             }
         }
@@ -66,7 +66,7 @@ public class LobbyManager {
 
     public Lobby changeLobbyStatus(UUID uuid){
         for (Lobby lobby : lobbies) {
-            if (lobby.getLobbyId() == uuid) {
+            if (lobby.getLobbyId().equals(uuid)){
                 lobby.setGameRunning(true);
                 return lobby;
             }

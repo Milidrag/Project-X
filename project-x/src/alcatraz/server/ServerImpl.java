@@ -60,6 +60,7 @@ public class ServerImpl implements IServer {
 
     public boolean leaveLobby(User user, UUID lobbyId) {
         try {
+            System.out.println("rffdgr");
             lobbyManager.removeUserFromLobby(user, lobbyId);
             return true;
         } catch (NoSuchElementException e) {

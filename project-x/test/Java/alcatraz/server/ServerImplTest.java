@@ -80,7 +80,7 @@ class ServerImplTest {
             server.registerForRMI();
 
             client.connectToServer();
-            client.serverCreateLobby();
+          //  client.serverCreateLobby();
 
             client.serverJoinLobby(lobby.getLobbyId());
 
@@ -110,10 +110,11 @@ class ServerImplTest {
             lobby.addPlayer(user);
             server.lobbyManager.getLobbies().add(lobby);
 
+
             server.registerForRMI();
 
             client.connectToServer();
-            client.serverCreateLobby();
+           // client.serverCreateLobby();
 
             client.serverLeaveLobby(lobby.getLobbyId());
 
