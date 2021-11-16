@@ -87,7 +87,7 @@ public class ClientImpl implements IClient {
 
     }
 
-    public void leaveLobby(UUID lobbyID) throws RemoteException {
+    public void serverLeaveLobby(UUID lobbyID) throws RemoteException {
         stub.leaveLobby(thisUser, lobbyID);
     }
 
