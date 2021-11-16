@@ -15,6 +15,8 @@ import java.util.UUID;
 
 public class ClientImpl implements IClient {
 
+    GameConnection gameConnection = new GameConnection();
+
     static Registry reg;
 
     static IServer stub;
@@ -88,6 +90,7 @@ public class ClientImpl implements IClient {
     }
 
 
+    //!!! Client to server RMI function begin
     public void serverJoinLobby(UUID lobbyID) throws RemoteException {
         stub.joinLobby(thisUser, lobbyID);
     }
@@ -111,6 +114,8 @@ public class ClientImpl implements IClient {
         }
     }
 
+    //!!! Client to server RMI function end
+
     public void startClientRMI() throws RemoteException {
         IClient clientStub = (IClient) UnicastRemoteObject.exportObject(this, 0);
         reg = LocateRegistry.createRegistry(thisUser.getRmiPort());
@@ -119,7 +124,7 @@ public class ClientImpl implements IClient {
         reg.rebind("client/" + this.thisUser.getUsername(), clientStub);
     }
 
-    //TODO: Methoden aus der Präsentation implmentieren
+    //??? Client to Client RMI function begin ???
     public void presentPlayers(Lobby lobby)throws RemoteException {
         System.out.println(lobby);
 
@@ -148,5 +153,7 @@ public class ClientImpl implements IClient {
     public GameStatus rejoinGame()throws RemoteException {
         return null;
     }
+
+    //??? Client to Client RMI function end ???
 
 }
