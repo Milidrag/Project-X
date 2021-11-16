@@ -9,8 +9,18 @@ public class User implements Serializable {
 
     private String username;
 
+    private int rmiPort;
+
     public User() {
 
+    }
+
+    public int getRmiPort() {
+        return rmiPort;
+    }
+
+    public void setRmiPort(int rmiPort) {
+        this.rmiPort = rmiPort;
     }
 
     public User(String username) {

@@ -27,13 +27,14 @@ class ClientImplTest {
                  client1.setLobby(lobby);
                  client2.setLobby(lobby);
 
-                // client1.startClientRMI();
+                 client1.startClientRMI();
                  client2.startClientRMI();
 
                  client1.connectToTheClients();
-                // client2.connectToTheClients();
+                 client2.connectToTheClients();
 
                  client1.sendUsersToOtherClients();
+                 client2.sendUsersToOtherClients();
 
              }catch (Exception e){
                  e.printStackTrace();

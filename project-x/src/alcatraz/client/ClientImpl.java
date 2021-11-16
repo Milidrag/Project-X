@@ -20,7 +20,7 @@ public class ClientImpl implements IClient {
     static IServer stub;
 
     static int numberOfClients = 0;
-    private int numberOfThisClass;
+
 
     private ArrayList<IClient> clientStubs = new ArrayList<>();
 
@@ -43,6 +43,8 @@ public class ClientImpl implements IClient {
         thisUser.setUsername(username);
     }
 
+
+
     public Lobby getLobby() {
         return lobby;
     }
@@ -52,18 +54,16 @@ public class ClientImpl implements IClient {
     }
 
     public ClientImpl() {
-        numberOfThisClass = numberOfClients;
+
+
+        this.thisUser.setRmiPort(1100+numberOfClients);
+
+
         numberOfClients++;
     }
 
     public static void main(String[] args) {
         ClientImpl client = new ClientImpl();
-//        client.connectToServer();
-//        try {
-//            client.serverConTest();
-//        } catch (RemoteException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public void connectToServer() {
@@ -78,7 +78,7 @@ public class ClientImpl implements IClient {
     public void connectToTheClients() throws RemoteException, NotBoundException {
         for (User user : this.lobby.getUsers()) {
             if (user != this.thisUser) {
-                Registry reg = LocateRegistry.getRegistry();
+                Registry reg = LocateRegistry.getRegistry(user.getRmiPort());
 
                 System.out.println("verbinde zu " + "client/" + user.getUsername());
                 IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
@@ -113,8 +113,8 @@ public class ClientImpl implements IClient {
 
     public void startClientRMI() throws RemoteException {
         IClient clientStub = (IClient) UnicastRemoteObject.exportObject(this, 0);
-        reg = LocateRegistry.createRegistry(1099);//1100 + numberOfThisClass);
-        reg = LocateRegistry.getRegistry(1099);//1100 + numberOfThisClass);
+        reg = LocateRegistry.createRegistry(thisUser.getRmiPort());
+        reg = LocateRegistry.getRegistry(thisUser.getRmiPort());
         System.out.println("user/+ " + this.thisUser.getUsername() + "con= " + "client/" + this.thisUser.getUsername());
         reg.rebind("client/" + this.thisUser.getUsername(), clientStub);
     }
