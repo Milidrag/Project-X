@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class ClientImpl implements IClient {
 
-    GameConnection gameConnection = new GameConnection();
+    GameConnection gameConnection = new GameConnection(this);
 
     static Registry reg;
 

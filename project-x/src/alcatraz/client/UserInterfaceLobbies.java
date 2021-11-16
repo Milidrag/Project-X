@@ -11,6 +11,7 @@ public class UserInterfaceLobbies {
     private JLabel userNameInfoLabel;
     private JScrollPane lobbiesScrollPane;
     private JButton createLobbyButton;
+    private JButton startGamebutton;
 
 
     //draws the Window
