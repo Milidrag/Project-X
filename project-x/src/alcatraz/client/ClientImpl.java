@@ -77,17 +77,7 @@ public class ClientImpl implements IClient {
         }
     }
 
-    public void connectToTheClients() throws RemoteException, NotBoundException {
-        for (User user : this.lobby.getUsers()) {
-            if (user != this.thisUser) {
-                Registry reg = LocateRegistry.getRegistry(user.getRmiPort());
 
-                System.out.println("verbinde zu " + "client/" + user.getUsername());
-                IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
-                clientStubs.add(clientStub);
-            }
-        }
-    }
 
 
     //!!! Client to server RMI function begin
@@ -111,6 +101,18 @@ public class ClientImpl implements IClient {
     public void sendUsersToOtherClients() throws RemoteException {
         for (IClient stub : this.clientStubs) {
             stub.presentPlayers(this.lobby);
+        }
+    }
+
+    public void connectToTheClients() throws RemoteException, NotBoundException {
+        for (User user : this.lobby.getUsers()) {
+            if (user != this.thisUser) {
+                Registry reg = LocateRegistry.getRegistry(user.getRmiPort());
+
+                System.out.println("verbinde zu " + "client/" + user.getUsername());
+                IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
+                clientStubs.add(clientStub);
+            }
         }
     }
 
