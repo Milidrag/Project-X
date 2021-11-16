@@ -77,9 +77,6 @@ public class ClientImpl implements IClient {
         }
     }
 
-
-
-
     //!!! Client to server RMI function begin
     public void serverJoinLobby(UUID lobbyID) throws RemoteException {
         stub.joinLobby(thisUser, lobbyID);
@@ -104,6 +101,17 @@ public class ClientImpl implements IClient {
         }
     }
 
+
+    //!!! Client to server RMI function end
+
+    public void startClientRMI() throws RemoteException {
+        IClient clientStub = (IClient) UnicastRemoteObject.exportObject(this, 0);
+        reg = LocateRegistry.createRegistry(thisUser.getRmiPort());
+        reg = LocateRegistry.getRegistry(thisUser.getRmiPort());
+        System.out.println("user/+ " + this.thisUser.getUsername() + "con= " + "client/" + this.thisUser.getUsername());
+        reg.rebind("client/" + this.thisUser.getUsername(), clientStub);
+    }
+
     public void connectToTheClients() throws RemoteException, NotBoundException {
         for (User user : this.lobby.getUsers()) {
             if (user != this.thisUser) {
@@ -116,15 +124,6 @@ public class ClientImpl implements IClient {
         }
     }
 
-    //!!! Client to server RMI function end
-
-    public void startClientRMI() throws RemoteException {
-        IClient clientStub = (IClient) UnicastRemoteObject.exportObject(this, 0);
-        reg = LocateRegistry.createRegistry(thisUser.getRmiPort());
-        reg = LocateRegistry.getRegistry(thisUser.getRmiPort());
-        System.out.println("user/+ " + this.thisUser.getUsername() + "con= " + "client/" + this.thisUser.getUsername());
-        reg.rebind("client/" + this.thisUser.getUsername(), clientStub);
-    }
 
     //??? Client to Client RMI function begin ???
     public void presentPlayers(Lobby lobby)throws RemoteException {
