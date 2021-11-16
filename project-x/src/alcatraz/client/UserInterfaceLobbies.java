@@ -1,6 +1,8 @@
 package alcatraz.client;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class UserInterfaceLobbies {
 
@@ -14,6 +16,23 @@ public class UserInterfaceLobbies {
     private JButton startGamebutton;
 
 
+    public void init() {
+        startGamebutton.setVisible(false);
+        createLobbyButton.addActionListener(e -> {
+            if (!(userNameTextField.getText().equals("") || userNameTextField.getText() == null)) {
+                    userNameTextField.setEnabled(false);
+            } else {
+                userNameTextField.setText("Please enter a valid username!");
+
+            }
+
+        });
+        startGamebutton.addActionListener(e -> {
+
+        });
+
+    }
+
     //draws the Window
     public void generateWindow() {
         JFrame frame = new JFrame("UserInterface");
@@ -25,16 +44,15 @@ public class UserInterfaceLobbies {
 
     public UserInterfaceLobbies() {
         generateWindow();
+        init();
+
     }
 
     public static void main(String[] args) {
-       UserInterfaceLobbies userInterfaceLobbies =new UserInterfaceLobbies();
+        UserInterfaceLobbies userInterfaceLobbies = new UserInterfaceLobbies();
 
 
     }
-
-
-
 
 
 }
