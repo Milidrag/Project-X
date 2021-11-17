@@ -2,7 +2,7 @@ package alcatraz.client;
 
 import java.rmi.RemoteException;
 
-public class Controller {
+public class Main {
 
     private ClientImpl client=new ClientImpl();
     private GameConnection gameConnection;
@@ -30,7 +30,7 @@ public class Controller {
 
 
     public static void main(String[] args) {
-      Controller controller=new Controller();
+      Main controller=new Main();
       controller.init();
 
     }
