@@ -22,6 +22,13 @@ public class UserInterfaceLobbies {
 
 
     private JFrame frame;
+
+    private GameWindow gameWindow;
+
+    public void setGameWindow(GameWindow gameWindow) {
+        this.gameWindow = gameWindow;
+    }
+
     public ClientImpl getClient() {
         return client;
     }
@@ -57,9 +64,17 @@ public class UserInterfaceLobbies {
 
         startGamebutton.addActionListener(e -> {
             try {
-                client.serverStartGame();
-                frame.dispose();
-                //TODO: controller benachrichtigen
+               Lobby lobby= client.serverStartGame();
+               client.setLobby(lobby);
+               frame.dispose();
+                //TODO:
+
+
+                client.sendStartToOutherClients();
+                gameWindow.start();
+
+
+
             } catch (RemoteException remoteException) {
                 remoteException.printStackTrace();
             }

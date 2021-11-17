@@ -113,6 +113,12 @@ public class ClientImpl implements IClient {
         }
     }
 
+    public void sendStartToOutherClients() throws RemoteException {
+        for (IClient stub : this.clientStubs) {
+            stub.startGame();
+        }
+    }
+
     public void startClientRMI() throws RemoteException {
         IClient clientStub = (IClient) UnicastRemoteObject.exportObject(this, 0);
         reg = LocateRegistry.createRegistry(thisUser.getRmiPort());
@@ -137,12 +143,9 @@ public class ClientImpl implements IClient {
     //??? Client to Client RMI function begin ???
     public void presentPlayers(Lobby lobby) throws RemoteException {
         System.out.println(lobby);
-
         if (!this.lobby.equals(lobby)) {
-            throw new RemoteException();
+           this.lobby=lobby;
         }
-
-
     }
 
     public void Move(String username, Move move) throws RemoteException {
@@ -151,6 +154,7 @@ public class ClientImpl implements IClient {
 
     @Override
     public void startGame() throws RemoteException {
+        //TODO controller benachrichten und start game
 
     }
 

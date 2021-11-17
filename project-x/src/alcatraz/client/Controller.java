@@ -1,5 +1,7 @@
 package alcatraz.client;
 
+import java.rmi.RemoteException;
+
 public class Controller {
 
     private ClientImpl client=new ClientImpl();
@@ -9,15 +11,20 @@ public class Controller {
 
     private void init(){
         client.connectToServer();
+        try {
+            client.startClientRMI();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         userInterfaceLobbies=new UserInterfaceLobbies(client);
+        userInterfaceLobbies.setGameWindow(gameWindow);
         gameConnection=new GameConnection(client);
         gameWindow=new GameWindow(client);
+        gameWindow.setGameConnection(gameConnection);
 
 
         userInterfaceLobbies.generateWindow();
-
     }
-
 
 
 

@@ -32,4 +32,7 @@ public class GameWindow {
     public GameWindow(ClientImpl client) {
         this.client=client;
     }
+
+    public void start() {
+    }
 }
