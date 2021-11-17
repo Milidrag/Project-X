@@ -11,11 +11,12 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class ClientImpl implements IClient {
 
-    GameConnection gameConnection = new GameConnection(this);
+
 
     static Registry reg;
 
@@ -91,8 +92,11 @@ public class ClientImpl implements IClient {
         stub.leaveLobby(thisUser, lobbyID);
     }
 
-    public void serverConTest() throws RemoteException {
-        System.out.println(stub.availableLobbies());
+    public List<Lobby> serverGetLobbies() throws RemoteException {
+        List<Lobby> result=stub.availableLobbies();
+        System.out.println(result);
+
+        return result ;
     }
 
     public void sendUsersToOtherClients() throws RemoteException {

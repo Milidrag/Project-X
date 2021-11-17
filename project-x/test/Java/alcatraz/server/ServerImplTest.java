@@ -22,7 +22,7 @@ class ServerImplTest {
             server.registerForRMI();
 
             client.connectToServer();
-            client.serverConTest();
+            client.serverGetLobbies();
 
         }catch (Exception e){
             e.printStackTrace();
