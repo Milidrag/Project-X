@@ -11,11 +11,15 @@ public class GameConnection {
 
 
     private Alcatraz alcatraz = new Alcatraz();
-    private GameWindow gameWindow = new GameWindow();
+    private GameWindow gameWindow ;
     private ClientImpl client;
 
     public ClientImpl getClient() {
         return client;
+    }
+
+    public void setGameWindow(GameWindow gameWindow) {
+        this.gameWindow = gameWindow;
     }
 
     public void setClient(ClientImpl client) {
@@ -26,9 +30,9 @@ public class GameConnection {
     public GameConnection(ClientImpl client) {
         this.client = client;
 
-
-
     }
+
+
 
     public void sartUI(){
 
@@ -48,25 +52,25 @@ public class GameConnection {
         }
     }
 
-
-    public static void main(String[] args) {
-        ClientImpl myClient = new ClientImpl();
-        myClient.init("player NR.1");
-
-        User user2 = new User("player2");
-        Lobby lobby = new Lobby();
-
-        lobby.addPlayer(myClient.getThisUser());
-        lobby.addPlayer(user2);
-
-        myClient.setLobby(lobby);
-
-
-        GameConnection gameConnection = new GameConnection(myClient);
-        //gameConnection.initGame();
-        gameConnection.sartUI();
-
-
-
-    }
+//
+//    public static void main(String[] args) {
+//        ClientImpl myClient = new ClientImpl();
+//        myClient.init("player NR.1");
+//
+//        User user2 = new User("player2");
+//        Lobby lobby = new Lobby();
+//
+//        lobby.addPlayer(myClient.getThisUser());
+//        lobby.addPlayer(user2);
+//
+//        myClient.setLobby(lobby);
+//
+//
+//        GameConnection gameConnection = new GameConnection(myClient);
+//        //gameConnection.initGame();
+//        gameConnection.sartUI();
+//
+//
+//
+//    }
 }

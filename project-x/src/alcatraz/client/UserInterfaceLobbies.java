@@ -22,6 +22,7 @@ public class UserInterfaceLobbies {
     private JButton startGamebutton;
 
 
+
     public ClientImpl getClient() {
         return client;
     }
@@ -46,13 +47,14 @@ public class UserInterfaceLobbies {
                     ex.printStackTrace();
                 }
 
-
             } else {
                 userNameTextField.setText("Please enter a valid username!");
             }
         });
+
         startGamebutton.addActionListener(e -> {
         });
+
     }
 
 
@@ -70,11 +72,8 @@ public class UserInterfaceLobbies {
                     labelText += " User:" + user.getUsername() + " ";
                 }
                 jLabel.setText(labelText);
-
                 jPanel.add(jLabel);
-
                 JButton jButton = new JButton();
-
                 jButton.setText("Join Lobby");
 
                 jButton.addActionListener(e -> {
@@ -90,8 +89,6 @@ public class UserInterfaceLobbies {
                 jPanel.add(jButton);
                 lobbiesScrollPane.add(jPanel);
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -105,26 +102,28 @@ public class UserInterfaceLobbies {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+
+        init();
     }
 
     public UserInterfaceLobbies() {
-        generateWindow();
-        init();
+        //generateWindow();
+       // init();
     }
 
 
     public UserInterfaceLobbies(ClientImpl client) {
         this.client = client;
-        generateWindow();
-        init();
+        //generateWindow();
+        //init();
 
     }
 
-    public static void main(String[] args) {
-        UserInterfaceLobbies userInterfaceLobbies = new UserInterfaceLobbies();
-
-
-    }
+//    public static void main(String[] args) {
+//        ClientImpl client=new ClientImpl();
+//        UserInterfaceLobbies userInterfaceLobbies = new UserInterfaceLobbies( client);
+//
+//    }
 
 
 }
