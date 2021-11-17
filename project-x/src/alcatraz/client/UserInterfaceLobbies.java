@@ -21,6 +21,7 @@ public class UserInterfaceLobbies {
     private JPanel lobbyPanel;
 
 
+    private JFrame frame;
     public ClientImpl getClient() {
         return client;
     }
@@ -55,6 +56,14 @@ public class UserInterfaceLobbies {
         lobbyPanel.setLayout(new BoxLayout(lobbyPanel, BoxLayout.Y_AXIS));
 
         startGamebutton.addActionListener(e -> {
+            try {
+                client.serverStartGame();
+                frame.dispose();
+                //TODO: controller benachrichtigen
+            } catch (RemoteException remoteException) {
+                remoteException.printStackTrace();
+            }
+
         });
 
         fillLobbiesScrollPane(true);
@@ -141,20 +150,20 @@ public class UserInterfaceLobbies {
 
     //draws the Window
     public void generateWindow() {
-        JFrame frame = new JFrame("UserInterface");
+        frame = new JFrame("UserInterface");
         frame.setContentPane(this.root);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
 
         init();
 
     }
-
-    public UserInterfaceLobbies() {
-        //generateWindow();
-        // init();
-    }
+//
+//    public UserInterfaceLobbies() {
+//        //generateWindow();
+//        // init();
+//    }
 
 
     public UserInterfaceLobbies(ClientImpl client) {

@@ -19,7 +19,7 @@ public class GameWindow {
     public void generateWindow() {
         JFrame frame = new JFrame("UserInterface");
         frame.setContentPane(this.root);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
     }

@@ -99,14 +99,19 @@ public class ClientImpl implements IClient {
         return result;
     }
 
+    public Lobby  serverStartGame() throws RemoteException {
+        return stub.startGame(lobby.getLobbyId());
+    }
+
+
+    //!!! Client to server RMI function end
+
+
     public void sendUsersToOtherClients() throws RemoteException {
         for (IClient stub : this.clientStubs) {
             stub.presentPlayers(this.lobby);
         }
     }
-
-
-    //!!! Client to server RMI function end
 
     public void startClientRMI() throws RemoteException {
         IClient clientStub = (IClient) UnicastRemoteObject.exportObject(this, 0);
