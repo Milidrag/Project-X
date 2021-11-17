@@ -4,8 +4,6 @@ import alcatraz.common.Lobby;
 import alcatraz.common.User;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -39,8 +37,10 @@ public class UserInterfaceLobbies {
                 userNameTextField.setEnabled(false);
                 client.getThisUser().setUsername(username);
                 try {
-                    client.serverCreateLobby();
+                    Lobby lobby=client.serverCreateLobby();
                     fillLobbiesScrollPane(false);
+                    createLobbyButton.setVisible(false);
+                    addLeaveLobbieButton(lobby);
 
                     startGamebutton.setVisible(true);
                 } catch (RemoteException ex) {
@@ -52,7 +52,7 @@ public class UserInterfaceLobbies {
             }
         });
 
-        lobbyPanel.setLayout(new BoxLayout(lobbyPanel,BoxLayout.Y_AXIS));
+        lobbyPanel.setLayout(new BoxLayout(lobbyPanel, BoxLayout.Y_AXIS));
 
         startGamebutton.addActionListener(e -> {
         });
@@ -87,13 +87,23 @@ public class UserInterfaceLobbies {
                     jButton.setText("Join Lobby");
 
                     jButton.addActionListener(e -> {
-                        try {
-                            client.serverJoinLobby(lobby.getLobbyId());
-                            jButton.setVisible(false);
-                            lobbiesScrollPane.setVisible(false);
-                            startGamebutton.setVisible(true);
-                        } catch (RemoteException ex) {
-                            ex.printStackTrace();
+                        String username = userNameTextField.getText();
+                        if (!(username.equals("") || username == null)) {
+                            try {
+                                client.serverJoinLobby(lobby.getLobbyId());
+                                jButton.setVisible(false);
+                                client.setLobby(lobby);
+
+                                addLeaveLobbieButton(lobby);
+
+                                startGamebutton.setVisible(true);
+                                createLobbyButton.setVisible(false);
+
+                            } catch (RemoteException ex) {
+                                ex.printStackTrace();
+                            }
+                        } else {
+                            userNameTextField.setText("Please enter a valid username!");
                         }
                     });
                     jPanel.add(jButton);
@@ -105,6 +115,27 @@ public class UserInterfaceLobbies {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    private void addLeaveLobbieButton(Lobby lobby){
+        lobbyPanel.removeAll();
+        JButton jButton =new JButton();
+        jButton.setText("Leave lobby Nr "+lobby.getLobbyId()+"Users: "+lobby.getUsers());
+
+        jButton.addActionListener(e->{
+            try {
+
+                client.serverLeaveLobby(lobby.getLobbyId());
+                fillLobbiesScrollPane(true);
+                createLobbyButton.setVisible(true);
+            }catch (Exception exception){
+                exception.printStackTrace();
+            }
+        });
+        lobbyPanel.add(jButton);
+        lobbyPanel.revalidate();
+        lobbyPanel.repaint();
     }
 
 

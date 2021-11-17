@@ -17,7 +17,6 @@ import java.util.UUID;
 public class ClientImpl implements IClient {
 
 
-
     static Registry reg;
 
     static IServer stub;
@@ -47,7 +46,6 @@ public class ClientImpl implements IClient {
     }
 
 
-
     public Lobby getLobby() {
         return lobby;
     }
@@ -59,7 +57,7 @@ public class ClientImpl implements IClient {
     public ClientImpl() {
 
 
-        this.thisUser.setRmiPort(1100+numberOfClients);
+        this.thisUser.setRmiPort(1100 + numberOfClients);
 
 
         numberOfClients++;
@@ -83,8 +81,10 @@ public class ClientImpl implements IClient {
         stub.joinLobby(thisUser, lobbyID);
     }
 
-    public void serverCreateLobby() throws RemoteException {
-        this.lobby = stub.createLobby(thisUser);
+    public Lobby serverCreateLobby() throws RemoteException {
+        Lobby lob=stub.createLobby(thisUser);
+        this.lobby = lob;
+        return lob;
 
     }
 
@@ -93,10 +93,10 @@ public class ClientImpl implements IClient {
     }
 
     public List<Lobby> serverGetLobbies() throws RemoteException {
-        List<Lobby> result=stub.availableLobbies();
+        List<Lobby> result = stub.availableLobbies();
         System.out.println(result);
 
-        return result ;
+        return result;
     }
 
     public void sendUsersToOtherClients() throws RemoteException {
@@ -130,32 +130,32 @@ public class ClientImpl implements IClient {
 
 
     //??? Client to Client RMI function begin ???
-    public void presentPlayers(Lobby lobby)throws RemoteException {
+    public void presentPlayers(Lobby lobby) throws RemoteException {
         System.out.println(lobby);
 
-        if(!this.lobby.equals(lobby)){
+        if (!this.lobby.equals(lobby)) {
             throw new RemoteException();
         }
 
 
     }
 
-    public void Move(String username, Move move)throws RemoteException {
+    public void Move(String username, Move move) throws RemoteException {
 
     }
 
     @Override
-    public void startGame()throws RemoteException {
+    public void startGame() throws RemoteException {
 
     }
 
     @Override
-    public void endGame()throws RemoteException {
+    public void endGame() throws RemoteException {
 
     }
 
     @Override
-    public GameStatus rejoinGame()throws RemoteException {
+    public GameStatus rejoinGame() throws RemoteException {
         return null;
     }
 
