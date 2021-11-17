@@ -40,7 +40,14 @@
         </constraints>
         <properties/>
         <border type="none"/>
-        <children/>
+        <children>
+          <grid id="bd47a" binding="lobbyPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+            <constraints/>
+            <properties/>
+            <border type="none"/>
+            <children/>
+          </grid>
+        </children>
       </scrollpane>
       <component id="99a49" class="javax.swing.JButton" binding="createLobbyButton">
         <constraints>

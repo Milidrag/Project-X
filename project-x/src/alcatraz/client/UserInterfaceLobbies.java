@@ -20,7 +20,7 @@ public class UserInterfaceLobbies {
     private JScrollPane lobbiesScrollPane;
     private JButton createLobbyButton;
     private JButton startGamebutton;
-
+    private JPanel lobbyPanel;
 
 
     public ClientImpl getClient() {
@@ -40,8 +40,8 @@ public class UserInterfaceLobbies {
                 client.getThisUser().setUsername(username);
                 try {
                     client.serverCreateLobby();
+                    fillLobbiesScrollPane(false);
 
-                    lobbiesScrollPane.setVisible(false);
                     startGamebutton.setVisible(true);
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
@@ -58,9 +58,11 @@ public class UserInterfaceLobbies {
     }
 
 
-    private void fillLobbiesScrollPane() {
+    private void fillLobbiesScrollPane(Boolean generateButtons) {
         try {
             List<Lobby> lobbies = client.serverGetLobbies();
+            //lobbiesScrollPane.removeAll();
+
             for (Lobby lobby : lobbies) {
                 JPanel jPanel = new JPanel();
 
@@ -73,21 +75,26 @@ public class UserInterfaceLobbies {
                 }
                 jLabel.setText(labelText);
                 jPanel.add(jLabel);
-                JButton jButton = new JButton();
-                jButton.setText("Join Lobby");
+                if (generateButtons) {
 
-                jButton.addActionListener(e -> {
-                    try {
-                        client.serverJoinLobby(lobby.getLobbyId());
-                        jButton.setVisible(false);
-                        lobbiesScrollPane.setVisible(false);
-                        startGamebutton.setVisible(true);
-                    } catch (RemoteException ex) {
-                        ex.printStackTrace();
-                    }
-                });
-                jPanel.add(jButton);
-                lobbiesScrollPane.add(jPanel);
+                    JButton jButton = new JButton();
+                    jButton.setText("Join Lobby");
+
+                    jButton.addActionListener(e -> {
+                        try {
+                            client.serverJoinLobby(lobby.getLobbyId());
+                            jButton.setVisible(false);
+                            lobbiesScrollPane.setVisible(false);
+                            startGamebutton.setVisible(true);
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
+                    });
+                    jPanel.add(jButton);
+                }
+                lobbyPanel.add(jPanel);
+                lobbyPanel.revalidate();
+                lobbyPanel.repaint();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,11 +111,12 @@ public class UserInterfaceLobbies {
         frame.setVisible(true);
 
         init();
+
     }
 
     public UserInterfaceLobbies() {
         //generateWindow();
-       // init();
+        // init();
     }
 
 
