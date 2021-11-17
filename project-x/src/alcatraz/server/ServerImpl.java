@@ -20,6 +20,31 @@ public class ServerImpl implements IServer {
     public static void main(String[] args) {
         ServerImpl remoteObject = new ServerImpl();
         remoteObject.registerForRMI();
+
+        remoteObject.test();//add lobbies for testing
+
+    }
+
+
+    //generate Lobbies for testing
+    private void test(){
+        Lobby lobby1=new Lobby();
+        Lobby lobby2=new Lobby();
+        Lobby lobby3=new Lobby();
+
+        User user1=new User("test User 1");
+
+        User user2=new User("test User 2");
+
+        User user3=new User("test User 3");
+
+        lobby1.addPlayer(user1);
+        lobby2.addPlayer(user2);
+        lobby3.addPlayer(user3);
+
+        lobbyManager.getLobbies().add(lobby1);
+        lobbyManager.getLobbies().add(lobby2);
+        lobbyManager.getLobbies().add(lobby3);
     }
 
     public void registerForRMI() {

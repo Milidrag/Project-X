@@ -52,8 +52,12 @@ public class UserInterfaceLobbies {
             }
         });
 
+        lobbyPanel.setLayout(new BoxLayout(lobbyPanel,BoxLayout.Y_AXIS));
+
         startGamebutton.addActionListener(e -> {
         });
+
+        fillLobbiesScrollPane(true);
 
     }
 
@@ -62,6 +66,8 @@ public class UserInterfaceLobbies {
         try {
             List<Lobby> lobbies = client.serverGetLobbies();
             //lobbiesScrollPane.removeAll();
+
+            lobbyPanel.removeAll();
 
             for (Lobby lobby : lobbies) {
                 JPanel jPanel = new JPanel();

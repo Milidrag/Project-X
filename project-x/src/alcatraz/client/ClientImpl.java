@@ -65,9 +65,9 @@ public class ClientImpl implements IClient {
         numberOfClients++;
     }
 
-    public static void main(String[] args) {
-        ClientImpl client = new ClientImpl();
-    }
+//    public static void main(String[] args) {
+//        ClientImpl client = new ClientImpl();
+//    }
 
     public void connectToServer() {
         try {
