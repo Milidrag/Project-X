@@ -33,42 +33,51 @@ public class UserInterfaceLobbies {
     public void init() {
         startGamebutton.setVisible(false);
         createLobbyButton.addActionListener(e -> {
-            if (!(userNameTextField.getText().equals("") || userNameTextField.getText() == null)) {
-                    userNameTextField.setEnabled(false);
+            String username = userNameTextField.getText();
+            if (!(username.equals("") || username == null)) {
+                userNameTextField.setEnabled(false);
+                client.getThisUser().setUsername(username);
+                try {
+                    client.serverCreateLobby();
+
+                    lobbiesScrollPane.setVisible(false);
+                    startGamebutton.setVisible(true);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+
+
             } else {
                 userNameTextField.setText("Please enter a valid username!");
-
             }
-
         });
         startGamebutton.addActionListener(e -> {
-
         });
     }
 
 
-    private void fillLobbiesScrollPane(){
+    private void fillLobbiesScrollPane() {
         try {
-            List <Lobby> lobbies =client.serverGetLobbies();
-            for (Lobby lobby:lobbies) {
-               JPanel jPanel=new JPanel();
+            List<Lobby> lobbies = client.serverGetLobbies();
+            for (Lobby lobby : lobbies) {
+                JPanel jPanel = new JPanel();
 
-               JLabel jLabel =new JLabel();
+                JLabel jLabel = new JLabel();
 
-               String labelText="Lobby Nr"+lobby.getLobbyId();
+                String labelText = "Lobby Nr" + lobby.getLobbyId();
 
-                for (User user:lobby.getUsers()) {
-                    labelText+=" User:"+user.getUsername()+" ";
+                for (User user : lobby.getUsers()) {
+                    labelText += " User:" + user.getUsername() + " ";
                 }
                 jLabel.setText(labelText);
 
                 jPanel.add(jLabel);
 
-                JButton jButton=new JButton();
+                JButton jButton = new JButton();
 
                 jButton.setText("Join Lobby");
 
-                jButton.addActionListener(e->{
+                jButton.addActionListener(e -> {
                     try {
                         client.serverJoinLobby(lobby.getLobbyId());
                         jButton.setVisible(false);
@@ -83,10 +92,8 @@ public class UserInterfaceLobbies {
             }
 
 
-
-
-        }catch (Exception e){
-           e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
