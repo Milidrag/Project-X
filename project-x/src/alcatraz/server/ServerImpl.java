@@ -22,7 +22,6 @@ public class ServerImpl implements IServer {
         remoteObject.registerForRMI();
 
         remoteObject.test();//add lobbies for testing
-
     }
 
 

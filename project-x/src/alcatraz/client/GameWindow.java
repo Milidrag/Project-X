@@ -34,5 +34,6 @@ public class GameWindow {
     }
 
     public void start() {
+        generateWindow();
     }
 }
