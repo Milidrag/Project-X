@@ -3,6 +3,7 @@ package alcatraz.server;
 import alcatraz.common.Lobby;
 import alcatraz.common.User;
 
+import java.rmi.AccessException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -70,9 +71,12 @@ public class ServerImpl implements IServer {
     }
 
     @Override
-    public boolean joinLobby(User user, UUID lobbyId) throws RemoteException {
+    public boolean joinLobby(User user, UUID lobbyId) throws RemoteException,AssertionError {
         try {
-            if(lobbyManager.getLobby(lobbyId).getUsers().size()==4){
+            if(lobbyManager.checkIfUsernameIsUsed(user.getUsername())){
+                throw new AssertionError("Username already taken");
+            }
+            if(lobbyManager.getLobby(lobbyId).getUsers().size()>=4){
                 throw new  RemoteException("Lobby is full");
 
             }else {
@@ -86,7 +90,10 @@ public class ServerImpl implements IServer {
     }
 
     @Override
-    public Lobby createLobby(User user) {
+    public Lobby createLobby(User user)  throws RemoteException,AssertionError{
+        if(lobbyManager.checkIfUsernameIsUsed(user.getUsername())){
+            throw new AssertionError("Username already taken");
+        }
         return lobbyManager.genLobby(user);
     }
 

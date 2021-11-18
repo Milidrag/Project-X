@@ -54,6 +54,11 @@ public class UserInterfaceLobbies {
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
 
+                }catch (AssertionError assertionError){
+                    assertionError.printStackTrace();
+                    userNameTextField.setEnabled(true);
+                    userNameTextField.setText("Username already taken");
+
                 }
 
             } else {
@@ -124,9 +129,16 @@ public class UserInterfaceLobbies {
 
                                 startGamebutton.setVisible(true);
                                 createLobbyButton.setVisible(false);
+                                userNameTextField.setEnabled(false);
 
                             } catch (RemoteException ex) {
                                 ex.printStackTrace();
+
+
+                            }catch (AssertionError assertionError){
+                                assertionError.printStackTrace();
+                                userNameTextField.setEnabled(true);
+                                userNameTextField.setText("Username already taken");
 
                             }
                         } else {

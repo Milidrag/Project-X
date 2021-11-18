@@ -74,5 +74,17 @@ public class LobbyManager {
         throw new NoSuchElementException("No Lobby with the id=" + uuid);
     }
 
+    public boolean checkIfUsernameIsUsed(String username){
+        for (Lobby lobby:lobbies) {
+            for (User user:lobby.getUsers()) {
+                if(user.getUsername().equals(username)){
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
 
 }
