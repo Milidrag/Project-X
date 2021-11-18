@@ -162,6 +162,7 @@ public class ClientImpl implements IClient {
 
 
     //??? Client to Client RMI function begin ???
+    @Override
     public void presentPlayers(Lobby lobby) throws RemoteException {
         System.out.println(lobby);
         if (!this.lobby.equals(lobby)) {
@@ -169,6 +170,7 @@ public class ClientImpl implements IClient {
         }
     }
 
+    @Override
     public void Move(String username, Move move) throws RemoteException {
 
     }

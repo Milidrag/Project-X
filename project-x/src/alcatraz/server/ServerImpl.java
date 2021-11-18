@@ -65,10 +65,12 @@ public class ServerImpl implements IServer {
 
     //TODO: Methoden aus der Präsentation implmentieren
 
+    @Override
     public List<Lobby> availableLobbies() {
         return lobbyManager.getLobbies();
     }
 
+    @Override
     public boolean joinLobby(User user, UUID lobbyId) throws RemoteException {
         try {
             if(lobbyManager.getLobby(lobbyId).getUsers().size()==4){
@@ -84,10 +86,12 @@ public class ServerImpl implements IServer {
         }
     }
 
+    @Override
     public Lobby createLobby(User user) {
         return lobbyManager.genLobby(user);
     }
 
+    @Override
     public boolean leaveLobby(User user, UUID lobbyId) {
         try {
             System.out.println("rffdgr");
@@ -100,6 +104,7 @@ public class ServerImpl implements IServer {
 
     }
 
+    @Override
     public Lobby startGame(UUID lobbyID) {
           return lobbyManager.changeLobbyStatus(lobbyID);
 
