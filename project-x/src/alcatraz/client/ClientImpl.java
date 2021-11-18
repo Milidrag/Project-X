@@ -32,6 +32,27 @@ public class ClientImpl implements IClient {
     //Lobby of this client
     private Lobby lobby;
 
+    private GameConnection gameConnection;
+    private GameWindow gameWindow;
+    private UserInterfaceLobbies userInterfaceLobbies;
+
+
+    public UserInterfaceLobbies getUserInterfaceLobbies() {
+        return userInterfaceLobbies;
+    }
+
+    public void setUserInterfaceLobbies(UserInterfaceLobbies userInterfaceLobbies) {
+        this.userInterfaceLobbies = userInterfaceLobbies;
+    }
+
+    public void setGameConnection(GameConnection gameConnection) {
+        this.gameConnection = gameConnection;
+    }
+
+    public void setGameWindow(GameWindow gameWindow) {
+        this.gameWindow = gameWindow;
+    }
+
     public User getThisUser() {
         return thisUser;
     }
@@ -82,7 +103,7 @@ public class ClientImpl implements IClient {
     }
 
     public Lobby serverCreateLobby() throws RemoteException {
-        Lobby lob=stub.createLobby(thisUser);
+        Lobby lob = stub.createLobby(thisUser);
         this.lobby = lob;
         return lob;
 
@@ -99,7 +120,7 @@ public class ClientImpl implements IClient {
         return result;
     }
 
-    public Lobby  serverStartGame() throws RemoteException {
+    public Lobby serverStartGame() throws RemoteException {
         return stub.startGame(lobby.getLobbyId());
     }
 
@@ -144,7 +165,7 @@ public class ClientImpl implements IClient {
     public void presentPlayers(Lobby lobby) throws RemoteException {
         System.out.println(lobby);
         if (!this.lobby.equals(lobby)) {
-           this.lobby=lobby;
+            this.lobby = lobby;
         }
     }
 
@@ -155,6 +176,9 @@ public class ClientImpl implements IClient {
     @Override
     public void startGame() throws RemoteException {
         //TODO controller benachrichten und start game
+
+        userInterfaceLobbies.closeWindow();
+        gameWindow.start();
 
     }
 

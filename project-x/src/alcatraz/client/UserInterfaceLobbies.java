@@ -67,7 +67,7 @@ public class UserInterfaceLobbies {
             try {
                 Lobby lobby = client.serverStartGame();
                 client.setLobby(lobby);
-                frame.dispose();
+               closeWindow();
                 //TODO:
 
 
@@ -81,6 +81,10 @@ public class UserInterfaceLobbies {
         });
 
         fillLobbiesScrollPane(true);
+    }
+
+    public void closeWindow(){
+        this.frame.dispose();
     }
 
 

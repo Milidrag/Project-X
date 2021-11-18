@@ -10,18 +10,22 @@ public class Main {
     private UserInterfaceLobbies userInterfaceLobbies;
 
     private void init(){
+
+        userInterfaceLobbies=new UserInterfaceLobbies(client);
+        userInterfaceLobbies.setGameWindow(gameWindow);
+        gameConnection=new GameConnection(client);
+        gameWindow=new GameWindow(client);
+        gameWindow.setGameConnection(gameConnection);
+        client.setGameConnection(gameConnection);
+        client.setGameWindow(gameWindow);
+
+
         client.connectToServer();
         try {
             client.startClientRMI();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        userInterfaceLobbies=new UserInterfaceLobbies(client);
-        userInterfaceLobbies.setGameWindow(gameWindow);
-        gameConnection=new GameConnection(client);
-        gameWindow=new GameWindow(client);
-        gameWindow.setGameConnection(gameConnection);
-
 
         userInterfaceLobbies.generateWindow();
     }
