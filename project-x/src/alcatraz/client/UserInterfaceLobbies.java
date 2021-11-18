@@ -156,6 +156,7 @@ public class UserInterfaceLobbies {
                 client.serverLeaveLobby(lobby.getLobbyId());
                 fillLobbiesScrollPane(true);
                 createLobbyButton.setVisible(true);
+                startGamebutton.setVisible(false);
             } catch (Exception exception) {
                 exception.printStackTrace();
 
