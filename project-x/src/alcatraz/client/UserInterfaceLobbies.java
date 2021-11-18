@@ -45,7 +45,7 @@ public class UserInterfaceLobbies {
                 userNameTextField.setEnabled(false);
                 client.getThisUser().setUsername(username);
                 try {
-                    Lobby lobby=client.serverCreateLobby();
+                    Lobby lobby = client.serverCreateLobby();
                     fillLobbiesScrollPane(false);
                     createLobbyButton.setVisible(false);
                     addLeaveLobbieButton(lobby);
@@ -53,6 +53,7 @@ public class UserInterfaceLobbies {
                     startGamebutton.setVisible(true);
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
+
                 }
 
             } else {
@@ -64,25 +65,22 @@ public class UserInterfaceLobbies {
 
         startGamebutton.addActionListener(e -> {
             try {
-               Lobby lobby= client.serverStartGame();
-               client.setLobby(lobby);
-               frame.dispose();
+                Lobby lobby = client.serverStartGame();
+                client.setLobby(lobby);
+                frame.dispose();
                 //TODO:
 
 
                 client.sendStartToOutherClients();
                 gameWindow.start();
 
-
-
             } catch (RemoteException remoteException) {
                 remoteException.printStackTrace();
-            }
 
+            }
         });
 
         fillLobbiesScrollPane(true);
-
     }
 
 
@@ -125,6 +123,7 @@ public class UserInterfaceLobbies {
 
                             } catch (RemoteException ex) {
                                 ex.printStackTrace();
+
                             }
                         } else {
                             userNameTextField.setText("Please enter a valid username!");
@@ -142,19 +141,20 @@ public class UserInterfaceLobbies {
     }
 
 
-    private void addLeaveLobbieButton(Lobby lobby){
+    private void addLeaveLobbieButton(Lobby lobby) {
         lobbyPanel.removeAll();
-        JButton jButton =new JButton();
-        jButton.setText("Leave lobby Nr "+lobby.getLobbyId()+"Users: "+lobby.getUsers());
+        JButton jButton = new JButton();
+        jButton.setText("Leave lobby Nr " + lobby.getLobbyId() + "Users: " + lobby.getUsers());
 
-        jButton.addActionListener(e->{
+        jButton.addActionListener(e -> {
             try {
 
                 client.serverLeaveLobby(lobby.getLobbyId());
                 fillLobbiesScrollPane(true);
                 createLobbyButton.setVisible(true);
-            }catch (Exception exception){
+            } catch (Exception exception) {
                 exception.printStackTrace();
+
             }
         });
         lobbyPanel.add(jButton);

@@ -69,10 +69,15 @@ public class ServerImpl implements IServer {
         return lobbyManager.getLobbies();
     }
 
-    public boolean joinLobby(User user, UUID lobbyId) {
+    public boolean joinLobby(User user, UUID lobbyId) throws RemoteException {
         try {
-            lobbyManager.addUser(user, lobbyId);
-            return true;
+            if(lobbyManager.getLobby(lobbyId).getUsers().size()==4){
+                throw new  RemoteException("Lobby is full");
+
+            }else {
+                lobbyManager.addUser(user, lobbyId);
+                return true;
+            }
         } catch (NoSuchElementException e) {
             e.printStackTrace();
             return false;
