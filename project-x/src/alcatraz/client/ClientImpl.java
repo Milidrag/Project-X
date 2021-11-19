@@ -175,6 +175,11 @@ public class ClientImpl implements IClient {
             System.out.println("reciver ="+thisUser.getUsername()+" changed lobby");
             this.lobby = lobby;
         }
+        try {
+            startClientRMI();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

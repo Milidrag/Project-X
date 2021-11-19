@@ -35,7 +35,11 @@ public class UIGameWindow {
 
     public void start() {
         System.out.println("user "+client.getThisUser().getUsername()+" start start");
-//        generateWindow();
-//        generateGame();
+        try {
+            generateWindow();
+            generateGame();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
