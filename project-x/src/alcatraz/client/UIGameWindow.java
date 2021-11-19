@@ -34,8 +34,8 @@ public class UIGameWindow {
     }
 
     public void start() {
-        System.out.println("start start");
-        generateWindow();
-        generateGame();
+        System.out.println("user "+client.getThisUser().getUsername()+" start start");
+//        generateWindow();
+//        generateGame();
     }
 }

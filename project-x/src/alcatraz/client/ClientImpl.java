@@ -170,8 +170,9 @@ public class ClientImpl implements IClient {
     //??? Client to Client RMI function begin ???
     @Override
     public void presentPlayers(Lobby lobby) throws RemoteException {
-        System.out.println(lobby);
+        System.out.println("reciver ="+thisUser.getUsername()+" "+lobby);
         if (!this.lobby.equals(lobby)) {
+            System.out.println("reciver ="+thisUser.getUsername()+" changed lobby");
             this.lobby = lobby;
         }
     }
@@ -185,9 +186,9 @@ public class ClientImpl implements IClient {
     public void startGame() throws RemoteException {
         //TODO controller benachrichten und start game
 
-        System.out.println("Start game!!! "+ thisUser.getUsername());
+        System.out.println("reciver ="+thisUser.getUsername() +"Start game!!! ");
 
-        userInterfaceLobbies.closeWindow();
+     //   userInterfaceLobbies.closeWindow();
         UIGameWindow.start();
 
     }
