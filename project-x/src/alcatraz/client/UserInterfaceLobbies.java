@@ -4,6 +4,8 @@ import alcatraz.common.Lobby;
 import alcatraz.common.User;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class UserInterfaceLobbies {
     private JButton createLobbyButton;
     private JButton startGamebutton;
     private JPanel lobbyPanel;
+    private JRadioButton radioButtonReload;
 
 
     private JFrame frame;
@@ -84,8 +87,12 @@ public class UserInterfaceLobbies {
 
             } catch (RemoteException remoteException) {
                 remoteException.printStackTrace();
-
             }
+        });
+
+        radioButtonReload.addActionListener(e -> {
+            System.out.println("reaload");
+            fillLobbiesScrollPane(true);
         });
 
         fillLobbiesScrollPane(true);
@@ -105,7 +112,6 @@ public class UserInterfaceLobbies {
 
             for (Lobby lobby : lobbies) {
                 JPanel jPanel = new JPanel();
-
                 JLabel jLabel = new JLabel();
 
                 String labelText = "Lobby Nr" + lobby.getLobbyId();
@@ -113,10 +119,10 @@ public class UserInterfaceLobbies {
                 for (User user : lobby.getUsers()) {
                     labelText += " User:" + user.getUsername() + " ";
                 }
+
                 jLabel.setText(labelText);
                 jPanel.add(jLabel);
                 if (generateButtons) {
-
                     JButton jButton = new JButton();
                     jButton.setText("Join Lobby");
 
@@ -141,7 +147,6 @@ public class UserInterfaceLobbies {
                                 assertionError.printStackTrace();
                                // userNameTextField.setEnabled(true);
                                 userNameTextField.setText("Username already taken");
-
                             }
                         } else {
                             userNameTextField.setText("Please enter a valid username!");
@@ -166,19 +171,21 @@ public class UserInterfaceLobbies {
 
         jButton.addActionListener(e -> {
             try {
-
                 client.serverLeaveLobby(lobby.getLobbyId());
                 fillLobbiesScrollPane(true);
                 createLobbyButton.setVisible(true);
                 startGamebutton.setVisible(false);
+
+                radioButtonReload.setVisible(true);
             } catch (Exception exception) {
                 exception.printStackTrace();
-
             }
         });
         lobbyPanel.add(jButton);
         lobbyPanel.revalidate();
         lobbyPanel.repaint();
+
+        radioButtonReload.setVisible(false);
 
         //Start Client RMI
         try {
@@ -198,13 +205,11 @@ public class UserInterfaceLobbies {
         frame.setVisible(true);
 
         init();
-
     }
 
 
     public UserInterfaceLobbies(ClientImpl client) {
         this.client = client;
-
 
     }
 
