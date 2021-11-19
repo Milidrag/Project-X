@@ -6,6 +6,7 @@ import spread.SpreadConnection;
 import spread.SpreadException;
 import spread.SpreadGroup;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.AccessException;
@@ -55,6 +56,8 @@ public class ServerImpl implements IServer {
         try {
             newConnection.connect(InetAddress.getByName("127.0.0.1"), 4803, this.serverId, false, false);
             this.serverGroup = initSpreadGroup(newConnection, "spreadGroupName");
+            //TODO verstehe nicht was hier genau passiert. Wozu braucht man eine private Group?
+            this.myGroup = newConnection.getPrivateGroup();
 
         } catch (SpreadException e) {
             e.printStackTrace();
@@ -64,6 +67,21 @@ public class ServerImpl implements IServer {
 
 
     }
+
+
+    private static void sendSpreadMessage(SpreadConnection connection, String groupname, Object data, short messagetype) {
+        try {
+            SpreadMessage message = new SpreadMessage();
+            message.setObject((Serializable)data);
+            message.addGroup(groupname);
+            message.setReliable();
+            message.setType(messagetype);
+            connection.multicast(message);
+        } catch (SpreadException ex) {
+            //TODO
+        }
+    }
+
 
     private SpreadGroup initSpreadGroup(SpreadConnection newConnection, String spreadGroupName) {
             SpreadGroup group = new SpreadGroup();
