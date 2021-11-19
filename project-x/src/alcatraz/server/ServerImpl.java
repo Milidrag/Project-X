@@ -184,15 +184,17 @@ public class ServerImpl implements IServer {
     @Override
     public Lobby startGame(UUID lobbyID) throws RemoteException , NoSuchElementException {
         try {
-
+            System.out.println(lobbyID);
             int userCountInLobby  = lobbyManager.getLobby(lobbyID).getUsers().size();
             if(userCountInLobby<2||userCountInLobby>4){
-                throw new RemoteException("wrong Lobby size");
+                System.out.println("lobby s="+userCountInLobby);
+                throw new RemoteException("wrong Lobby size ="+userCountInLobby);
             }else {
                 return lobbyManager.changeLobbyStatus(lobbyID);
             }
         }catch (Exception exception){
-            throw new RemoteException();
+            exception.printStackTrace();
+            throw new RemoteException("error");
         }
 
     }
