@@ -74,7 +74,7 @@ public class UserInterfaceLobbies {
             client.sendUsersToOtherClients();
             client.sendStartToOutherClients();
             UIGameWindow.start();
-            closeWindow();
+           // closeWindow();
 
         } catch (RemoteException remoteException) {
             remoteException.printStackTrace();

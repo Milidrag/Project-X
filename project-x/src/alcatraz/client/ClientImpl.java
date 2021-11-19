@@ -90,9 +90,7 @@ public class ClientImpl implements IClient {
         numberOfClients++;
     }
 
-//    public static void main(String[] args) {
-//        ClientImpl client = new ClientImpl();
-//    }
+
 
     public void connectToServer() {
         try {
@@ -158,10 +156,10 @@ public class ClientImpl implements IClient {
 
     public void connectToTheClients() throws RemoteException, NotBoundException {
         for (User user : this.lobby.getUsers()) {
-            if (user != this.thisUser) {
+            if (!user.getUsername().equals(thisUser.getUsername())) {
                 Registry reg = LocateRegistry.getRegistry(user.getRmiPort());
 
-                System.out.println("verbinde zu " + "client/" + user.getUsername());
+                System.out.println("verbinde zu " + "client/" + user.getUsername()+ " von "+thisUser.getUsername());
                 IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
                 clientStubs.add(clientStub);
             }
@@ -187,7 +185,7 @@ public class ClientImpl implements IClient {
     public void startGame() throws RemoteException {
         //TODO controller benachrichten und start game
 
-        System.out.println("Start game!!!");
+        System.out.println("Start game!!! "+ thisUser.getUsername());
 
         userInterfaceLobbies.closeWindow();
         UIGameWindow.start();
