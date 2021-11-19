@@ -34,6 +34,7 @@ public class UIGameWindow {
     }
 
     public void start() {
+        System.out.println("start start");
         generateWindow();
         generateGame();
     }
