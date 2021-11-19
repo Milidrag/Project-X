@@ -27,7 +27,7 @@ public class LobbyManager {
 
     public void addUser(User user, UUID uuid) throws NoSuchElementException {
         for (Lobby lobby : lobbies) {
-            if (lobby.getLobbyId().equals( uuid)) {
+            if (lobby.getLobbyId().equals(uuid)) {
                 lobby.addPlayer(user);
                 return;
             }
@@ -35,9 +35,9 @@ public class LobbyManager {
         throw new NoSuchElementException("No Lobby with the id=" + uuid);
     }
 
-    public void removeUserFromLobby(User user, UUID uuid) throws NoSuchElementException {
+    public void removeUserFromLobby(User user, UUID uuid) throws NoSuchElementException, NoSuchElementException {
         for (Lobby lobby : lobbies) {
-            if (lobby.getLobbyId().equals( uuid)) {
+            if (lobby.getLobbyId().equals(uuid)) {
                 lobby.removeUser(user);
                 return;
             }
@@ -45,7 +45,7 @@ public class LobbyManager {
         throw new NoSuchElementException("No Lobby with the id=" + uuid);
     }
 
-    public void deleteLobby(UUID uuid) {
+    public void deleteLobby(UUID uuid) throws NoSuchElementException {
         for (Lobby lobby : lobbies) {
             if (lobby.getLobbyId().equals(uuid)) {
                 lobbies.remove(lobby);
@@ -55,18 +55,18 @@ public class LobbyManager {
         throw new NoSuchElementException("No Lobby with the id=" + uuid);
     }
 
-    public Lobby getLobby(UUID uuid) {
+    public Lobby getLobby(UUID uuid) throws NoSuchElementException {
         for (Lobby lobby : lobbies) {
-            if (lobby.getLobbyId().equals( uuid)) {
+            if (lobby.getLobbyId().equals(uuid)) {
                 return lobby;
             }
         }
         throw new NoSuchElementException("No Lobby with the id=" + uuid);
     }
 
-    public Lobby changeLobbyStatus(UUID uuid){
+    public Lobby changeLobbyStatus(UUID uuid) throws NoSuchElementException {
         for (Lobby lobby : lobbies) {
-            if (lobby.getLobbyId().equals(uuid)){
+            if (lobby.getLobbyId().equals(uuid)) {
                 lobby.setGameRunning(true);
                 return lobby;
             }
@@ -74,10 +74,10 @@ public class LobbyManager {
         throw new NoSuchElementException("No Lobby with the id=" + uuid);
     }
 
-    public boolean checkIfUsernameIsUsed(String username){
-        for (Lobby lobby:lobbies) {
-            for (User user:lobby.getUsers()) {
-                if(user.getUsername().equals(username)){
+    public boolean checkIfUsernameIsUsed(String username) {
+        for (Lobby lobby : lobbies) {
+            for (User user : lobby.getUsers()) {
+                if (user.getUsername().equals(username)) {
                     return true;
                 }
             }
