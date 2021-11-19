@@ -73,9 +73,7 @@ public class ServerImpl implements IServer {
     @Override
     public boolean joinLobby(User user, UUID lobbyId) throws RemoteException, AssertionError {
         try {
-            System.out.println("Join");
-            System.out.println(user.getUsername());
-            if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())) {
+            if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())||user.getUsername()==null) {
 
                 throw new AssertionError("Username already taken");
             } else {
@@ -95,9 +93,7 @@ public class ServerImpl implements IServer {
 
     @Override
     public Lobby createLobby(User user) throws RemoteException, AssertionError {
-        System.out.println("crate");
-        System.out.println("");
-        if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())) {
+        if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())||user.getUsername()==null) {
             throw new AssertionError("Username already taken");
         } else {
             return lobbyManager.genLobby(user);
