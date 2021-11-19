@@ -23,10 +23,10 @@ public class UserInterfaceLobbies {
 
     private JFrame frame;
 
-    private GameWindow gameWindow;
+    private UIGameWindow UIGameWindow;
 
-    public void setGameWindow(GameWindow gameWindow) {
-        this.gameWindow = gameWindow;
+    public void setGameWindow(UIGameWindow UIGameWindow) {
+        this.UIGameWindow = UIGameWindow;
     }
 
     public ClientImpl getClient() {
@@ -80,7 +80,7 @@ public class UserInterfaceLobbies {
 
 
                 client.sendStartToOutherClients();
-                gameWindow.start();
+                UIGameWindow.start();
 
             } catch (RemoteException remoteException) {
                 remoteException.printStackTrace();
@@ -179,6 +179,13 @@ public class UserInterfaceLobbies {
         lobbyPanel.add(jButton);
         lobbyPanel.revalidate();
         lobbyPanel.repaint();
+
+        //Start Client RMI
+        try {
+            client.startClientRMI();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -197,8 +204,7 @@ public class UserInterfaceLobbies {
 
     public UserInterfaceLobbies(ClientImpl client) {
         this.client = client;
-        //generateWindow();
-        //init();
+
 
     }
 

@@ -6,26 +6,22 @@ public class Main {
 
     private ClientImpl client=new ClientImpl();
     private GameConnection gameConnection;
-    private GameWindow gameWindow;
+    private UIGameWindow UIGameWindow;
     private UserInterfaceLobbies userInterfaceLobbies;
 
     private void init(){
-
+        //init objects
         userInterfaceLobbies=new UserInterfaceLobbies(client);
-        userInterfaceLobbies.setGameWindow(gameWindow);
         gameConnection=new GameConnection(client);
-        gameWindow=new GameWindow(client);
-        gameWindow.setGameConnection(gameConnection);
-        client.setGameConnection(gameConnection);
-        client.setGameWindow(gameWindow);
+        UIGameWindow =new UIGameWindow(client);
 
+        //set
+        userInterfaceLobbies.setGameWindow(UIGameWindow);
+        UIGameWindow.setGameConnection(gameConnection);
+        client.setGameConnection(gameConnection);
+        client.setGameWindow(UIGameWindow);
 
         client.connectToServer();
-        try {
-            client.startClientRMI();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
 
         userInterfaceLobbies.generateWindow();
     }

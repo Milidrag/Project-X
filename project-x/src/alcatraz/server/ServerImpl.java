@@ -116,16 +116,14 @@ public class ServerImpl implements IServer {
     //TODO: Methoden aus der Präsentation implmentieren
 
     @Override
-    public List<Lobby> availableLobbies() {
+    public List<Lobby> availableLobbies()throws RemoteException {
         return lobbyManager.getLobbies();
     }
 
     @Override
     public boolean joinLobby(User user, UUID lobbyId) throws RemoteException, AssertionError {
         try {
-            System.out.println("Join");
-            System.out.println(user.getUsername());
-            if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())) {
+            if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())||user.getUsername()==null) {
 
                 throw new AssertionError("Username already taken");
             } else {
@@ -145,9 +143,7 @@ public class ServerImpl implements IServer {
 
     @Override
     public Lobby createLobby(User user) throws RemoteException, AssertionError {
-        System.out.println("crate");
-        System.out.println("");
-        if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())) {
+        if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())||user.getUsername()==null) {
             throw new AssertionError("Username already taken");
         } else {
             return lobbyManager.genLobby(user);
@@ -155,7 +151,7 @@ public class ServerImpl implements IServer {
     }
 
     @Override
-    public boolean leaveLobby(User user, UUID lobbyId) {
+    public boolean leaveLobby(User user, UUID lobbyId) throws RemoteException{
         try {
             lobbyManager.removeUserFromLobby(user, lobbyId);
             return true;
@@ -167,8 +163,18 @@ public class ServerImpl implements IServer {
     }
 
     @Override
-    public Lobby startGame(UUID lobbyID) {
-        return lobbyManager.changeLobbyStatus(lobbyID);
+    public Lobby startGame(UUID lobbyID) throws RemoteException , NoSuchElementException {
+        try {
+
+            int userCountInLobby  = lobbyManager.getLobby(lobbyID).getUsers().size();
+            if(userCountInLobby<2||userCountInLobby>4){
+                throw new RemoteException("wrong Lobby size");
+            }else {
+                return lobbyManager.changeLobbyStatus(lobbyID);
+            }
+        }catch (Exception exception){
+            throw new RemoteException();
+        }
 
     }
 
