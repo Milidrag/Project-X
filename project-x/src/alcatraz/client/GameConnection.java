@@ -32,12 +32,12 @@ public class GameConnection {
 
 
 
-    public void sartUI(){
-
-        UIGameWindow.setGameConnection(this);
-        UIGameWindow.generateWindow();
-        UIGameWindow.generateGame();
-    }
+//    public void sartUI(){
+//
+//        UIGameWindow.setGameConnection(this);
+//        UIGameWindow.generateWindow();
+//        UIGameWindow.generateGame();
+//    }
 
     public JPanel getGameWindow() {
         return alcatraz.getGameBoard();
@@ -50,25 +50,5 @@ public class GameConnection {
         }
     }
 
-//
-//    public static void main(String[] args) {
-//        ClientImpl myClient = new ClientImpl();
-//        myClient.init("player NR.1");
-//
-//        User user2 = new User("player2");
-//        Lobby lobby = new Lobby();
-//
-//        lobby.addPlayer(myClient.getThisUser());
-//        lobby.addPlayer(user2);
-//
-//        myClient.setLobby(lobby);
-//
-//
-//        GameConnection gameConnection = new GameConnection(myClient);
-//        //gameConnection.initGame();
-//        gameConnection.sartUI();
-//
-//
-//
-//    }
+
 }

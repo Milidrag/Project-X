@@ -10,22 +10,18 @@ public class Main {
     private UserInterfaceLobbies userInterfaceLobbies;
 
     private void init(){
-
+        //init objects
         userInterfaceLobbies=new UserInterfaceLobbies(client);
-        userInterfaceLobbies.setGameWindow(UIGameWindow);
         gameConnection=new GameConnection(client);
         UIGameWindow =new UIGameWindow(client);
+
+        //set
+        userInterfaceLobbies.setGameWindow(UIGameWindow);
         UIGameWindow.setGameConnection(gameConnection);
         client.setGameConnection(gameConnection);
         client.setGameWindow(UIGameWindow);
 
-
         client.connectToServer();
-//        try {
-//            client.startClientRMI();
-//        } catch (RemoteException e) {
-//            e.printStackTrace();
-//        }
 
         userInterfaceLobbies.generateWindow();
     }

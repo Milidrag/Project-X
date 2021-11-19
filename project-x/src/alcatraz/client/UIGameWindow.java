@@ -35,5 +35,6 @@ public class UIGameWindow {
 
     public void start() {
         generateWindow();
+        generateGame();
     }
 }

@@ -204,8 +204,7 @@ public class UserInterfaceLobbies {
 
     public UserInterfaceLobbies(ClientImpl client) {
         this.client = client;
-        //generateWindow();
-        //init();
+
 
     }
 
