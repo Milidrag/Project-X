@@ -32,7 +32,7 @@ public class ServerImpl implements IServer {
         Lobby lobby2=new Lobby();
         Lobby lobby3=new Lobby();
 
-        User user1=new User("test User 1");
+        User user1=new User("test");
 
         User user2=new User("test User 2");
 

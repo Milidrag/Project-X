@@ -42,7 +42,7 @@ public class UserInterfaceLobbies {
         createLobbyButton.addActionListener(e -> {
             String username = userNameTextField.getText();
             if (!(username.equals("") || username == null)) {
-                userNameTextField.setEnabled(false);
+
                 client.getThisUser().setUsername(username);
                 try {
                     Lobby lobby = client.serverCreateLobby();
@@ -51,13 +51,16 @@ public class UserInterfaceLobbies {
                     addLeaveLobbieButton(lobby);
 
                     startGamebutton.setVisible(true);
+                    userNameTextField.setEnabled(false);
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
 
                 }catch (AssertionError assertionError){
                     assertionError.printStackTrace();
                     userNameTextField.setEnabled(true);
+
                     userNameTextField.setText("Username already taken");
+
 
                 }
 
@@ -191,11 +194,6 @@ public class UserInterfaceLobbies {
         init();
 
     }
-//
-//    public UserInterfaceLobbies() {
-//        //generateWindow();
-//        // init();
-//    }
 
 
     public UserInterfaceLobbies(ClientImpl client) {
@@ -205,11 +203,7 @@ public class UserInterfaceLobbies {
 
     }
 
-//    public static void main(String[] args) {
-//        ClientImpl client=new ClientImpl();
-//        UserInterfaceLobbies userInterfaceLobbies = new UserInterfaceLobbies( client);
-//
-//    }
+
 
 
 }
