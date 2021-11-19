@@ -2,19 +2,27 @@ package alcatraz.server;
 
 import alcatraz.common.Lobby;
 import alcatraz.common.User;
+import spread.SpreadConnection;
+import spread.SpreadException;
+import spread.SpreadGroup;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.AccessException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 public class ServerImpl implements IServer {
     static Registry reg;
+    private boolean isRunning = true;
+    private String serverId;
+    private SpreadGroup myGroup;
+    private SpreadGroup serverGroup;
+
+
 
     LobbyManager lobbyManager = new LobbyManager();
 
@@ -23,6 +31,48 @@ public class ServerImpl implements IServer {
         remoteObject.registerForRMI();
 
         remoteObject.test();//add lobbies for testing
+
+        while(remoteObject.GetIsRunning()) {
+            try {
+                Thread.sleep(17000);
+            } catch (InterruptedException ex) {
+                //TODO or not, whatever
+            }
+        }
+        System.out.println("Programm ended");
+
+
+    }
+
+    private boolean GetIsRunning() {
+        return isRunning;
+    }
+
+    public ServerImpl(){
+        this.serverId = UUID.randomUUID().toString();
+        SpreadConnection newConnection = new SpreadConnection();
+        try {
+            newConnection.connect(InetAddress.getByName("127.0.0.1"), 4803, this.serverId, false, false);
+            this.serverGroup = initSpreadGroup(newConnection, "spreadGroupName");
+
+        } catch (SpreadException e) {
+            e.printStackTrace();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private SpreadGroup initSpreadGroup(SpreadConnection newConnection, String spreadGroupName) {
+            SpreadGroup group = new SpreadGroup();
+            try {
+                group.join(newConnection, spreadGroupName);
+            }
+            catch (SpreadException ex) {
+                System.err.println("Spread Exception: " +ex.getMessage() + Arrays.toString(ex.getStackTrace()));
+            }
+            return group;
     }
 
 
