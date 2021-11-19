@@ -7,7 +7,7 @@ public class MainClient {
     private UIGameWindow UIGameWindow;
     private UserInterfaceLobbies userInterfaceLobbies;
 
-    private void init(){
+    public void init(){
         //init objects
         userInterfaceLobbies=new UserInterfaceLobbies(client);
         gameConnection=new GameConnection(client);
