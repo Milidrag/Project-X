@@ -36,7 +36,7 @@ public class ServerImpl implements IServer {
         ServerImpl remoteObject = new ServerImpl();
         remoteObject.registerForRMI();
 
-        remoteObject.test();//add lobbies for testing
+      //  remoteObject.test();//add lobbies for testing
 
         while(remoteObject.GetIsRunning()) {
             try {
