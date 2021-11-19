@@ -23,7 +23,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
     private String serverId;
     private SpreadGroup myGroup;
     private SpreadGroup serverGroup;
-    private boolean isPrimary;
+    private boolean isPrimary = true;
     SpreadConnection newConnection;
     private final short lobbyMessage = 2;
 
@@ -64,7 +64,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
             this.serverGroup = initSpreadGroup(newConnection, "spreadGroupName");
             //TODO verstehe nicht was hier genau passiert. Wozu braucht man eine private Group?
             this.myGroup = newConnection.getPrivateGroup();
-
+            sendSpreadMessage(newConnection,"spreadGroupName","test", (short) 2);
         } catch (SpreadException e) {
             e.printStackTrace();
         } catch (UnknownHostException e) {
@@ -81,7 +81,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
             message.setObject((Serializable)data);
             message.addGroup(groupname);
             //TODO: laut Doku wird setReliable() per default aufgerufen. Es sollte also hier nicht notwendig sein es wieder zu setzen
-            message.setReliable();
+            // message.setReliable();
             message.setType(messagetype);
             connection.multicast(message);
         } catch (SpreadException ex) {
@@ -214,7 +214,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
     @Override
     public void regularMessageReceived(SpreadMessage spreadMessage) {
-
+        System.out.println("received message: " + spreadMessage.getData().toString());
     }
 
     /**

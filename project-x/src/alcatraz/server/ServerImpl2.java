@@ -213,6 +213,7 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
 
     @Override
     public void regularMessageReceived(SpreadMessage spreadMessage) {
+        System.out.println("received message: " + spreadMessage.getData().toString());
 
     }
 
