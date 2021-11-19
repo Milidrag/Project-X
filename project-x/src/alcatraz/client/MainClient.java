@@ -18,8 +18,11 @@ public class MainClient {
         UIGameWindow.setGameConnection(gameConnection);
         client.setGameConnection(gameConnection);
         client.setGameWindow(UIGameWindow);
+        client.setUserInterfaceLobbies(userInterfaceLobbies);
+
 
         client.connectToServer();
+
 
         userInterfaceLobbies.generateWindow();
     }

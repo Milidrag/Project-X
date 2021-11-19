@@ -187,6 +187,8 @@ public class ClientImpl implements IClient {
     public void startGame() throws RemoteException {
         //TODO controller benachrichten und start game
 
+        System.out.println("Start game!!!");
+
         userInterfaceLobbies.closeWindow();
         UIGameWindow.start();
 
