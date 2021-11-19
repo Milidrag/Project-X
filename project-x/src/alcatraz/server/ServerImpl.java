@@ -23,6 +23,10 @@ public class ServerImpl implements IServer {
     private String serverId;
     private SpreadGroup myGroup;
     private SpreadGroup serverGroup;
+    private boolean isPrimary;
+    SpreadConnection newConnection;
+    private final short lobbyMessage = 2;
+
 
 
 
@@ -52,7 +56,7 @@ public class ServerImpl implements IServer {
 
     public ServerImpl(){
         this.serverId = UUID.randomUUID().toString();
-        SpreadConnection newConnection = new SpreadConnection();
+        newConnection = new SpreadConnection();
         try {
             newConnection.connect(InetAddress.getByName("127.0.0.1"), 4803, this.serverId, false, false);
             this.serverGroup = initSpreadGroup(newConnection, "spreadGroupName");
@@ -74,6 +78,7 @@ public class ServerImpl implements IServer {
             SpreadMessage message = new SpreadMessage();
             message.setObject((Serializable)data);
             message.addGroup(groupname);
+            //TODO: laut Doku wird setReliable() per default aufgerufen. Es sollte also hier nicht notwendig sein es wieder zu setzen
             message.setReliable();
             message.setType(messagetype);
             connection.multicast(message);
@@ -165,6 +170,12 @@ public class ServerImpl implements IServer {
         if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())||user.getUsername()==null) {
             throw new AssertionError("Username already taken");
         } else {
+            if(isPrimary == true) {
+                //TODO Dynamischer machen wegen spreadGroupName. es sollte möglich sein mehrere Gruppen zu verwalten
+                sendSpreadMessage(newConnection, "spreadGroupName", lobbyManager.getLobbies(), lobbyMessage);
+            }
+
+
             return lobbyManager.genLobby(user);
         }
     }
