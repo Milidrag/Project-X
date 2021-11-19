@@ -15,6 +15,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import spread.*;
 
 public class ServerImpl2 implements IServer, AdvancedMessageListener {
@@ -23,20 +26,24 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
     private String serverId;
     private SpreadGroup myGroup;
     private SpreadGroup serverGroup;
-    private boolean isPrimary;
+    private SpreadGroup currentPrimaryGroup;
+    private boolean isPrimary = true;
     SpreadConnection newConnection;
     private final short lobbyMessage = 2;
+    private final short primaryMessage = 1;
+    private final short playerMessage = 3;
 
 
 
 
     LobbyManager lobbyManager = new LobbyManager();
 
+
     public static void main(String[] args) {
         ServerImpl2 remoteObject = new ServerImpl2();
-       /* remoteObject.registerForRMI();
+        // remoteObject.registerForRMI();
 
-        remoteObject.test();//add lobbies for testing*/
+        //  remoteObject.test();//add lobbies for testing
 
         while(remoteObject.GetIsRunning()) {
             try {
@@ -59,11 +66,12 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
         newConnection = new SpreadConnection();
         try {
             newConnection.connect(InetAddress.getByName("127.0.0.1"), 4803, this.serverId, false, true);
+            //add advanced Message listener
             newConnection.add(this);
             this.serverGroup = initSpreadGroup(newConnection, "spreadGroupName");
             //TODO verstehe nicht was hier genau passiert. Wozu braucht man eine private Group?
             this.myGroup = newConnection.getPrivateGroup();
-         //   sendSpreadMessage(newConnection,"spreadGroupName","test", (short) 1);
+            // sendSpreadMessage(newConnection,"spreadGroupName","test", (short) 2);
         } catch (SpreadException e) {
             e.printStackTrace();
         } catch (UnknownHostException e) {
@@ -213,6 +221,7 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
 
     @Override
     public void regularMessageReceived(SpreadMessage spreadMessage) {
+
         DisplayMessage(spreadMessage);
     }
 
@@ -234,6 +243,7 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
         {
             if(msg.isRegular())
             {
+                //TODO nur für Testzwecke derzeit drinnen gelassen
                 System.out.print("Received a ");
                 if(msg.isUnreliable())
                     System.out.print("UNRELIABLE");
@@ -265,11 +275,43 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
                 System.out.println("The data is " + data.length + " bytes.");
 
                 System.out.println("The message is: " + new String(data));
+
+                if(msg.getType() == primaryMessage) {
+                    this.currentPrimaryGroup = msg.getSender();
+                    System.out.println("primary set: "+ this.currentPrimaryGroup.toString());
+                }
+
+                if(msg.getType() == lobbyMessage)
+                {
+                    try {
+                        lobbyManager.setLobbies((ArrayList<Lobby>) msg.getObject());
+                        System.out.println("Lobbies updated");
+                    } catch (SpreadException ex) {
+                        //TODO catch me if you can
+                    }
+                }
+                //TODO Player fehlen noch bei uns
+            /*
+                if(msg.getType() == playerMessage)
+                {
+                    try {
+                        this.AllPlayers = (ArrayList<User>) message.getObject();
+                        System.out.println("User list updated");
+
+                    } catch (SpreadException ex) {
+                        //TODO something useful
+                    }
+                }
+
+             */
+
+
             }
             else if (msg.isMembership())
             {
                 MembershipInfo info = msg.getMembershipInfo();
                 printMembershipInfo(info);
+                definePrimary(info);
             } else if ( msg.isReject() )
             {
                 // Received a Reject message
@@ -314,6 +356,61 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
             System.exit(1);
         }
     }
+
+    private void definePrimary(MembershipInfo info) {
+
+        if(info.isCausedByJoin())
+        {
+            if (info.getMembers().length == 1) {
+                this.currentPrimaryGroup = this.myGroup;
+                this.isPrimary = true;
+                System.out.println("New primary: "+myGroup.toString());
+                //TODO auskommentiert damit Lukas am Frontend weiterarbeiten kann
+                //setRMIforPrimary();
+            }
+
+            if(this.isPrimary == true) {
+                sendSpreadMessage(newConnection, "spreadGroupName", "" , primaryMessage);
+                System.out.println("primary message sent");
+                sendSpreadMessage(newConnection, "spreadGroupName", getLobbyManager().getLobbies(), lobbyMessage);
+                System.out.println("Lobby message sent");
+                //TODO Player fehlen bei uns noch
+                /*
+                sendSpreadMessage(newConnection, "spreadGroupName", AllPlayers, playerMessage );
+                System.out.println("Player message sent");
+
+                 */
+            }
+        }
+
+    }
+
+    private void setRMIforPrimary() {
+        try {
+            IServer stub = (IServer) UnicastRemoteObject.exportObject(this, 0);
+
+            reg = LocateRegistry.createRegistry(1099);
+            reg = LocateRegistry.getRegistry(1099);
+
+            reg.rebind("Server", stub);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ServerImpl2.class.getName()).log(Level.SEVERE, null, ex);
+
+            //TODO ich habe es jetzt mal so direkt reingeschrieben. Damit wir hier nicht gleich zuviele Methoden auf einmal haben
+            //refactoren auf 2 eine Methode
+            try {
+                this.serverGroup.leave();
+                this.newConnection.disconnect();
+            } catch (SpreadException e) {
+                e.printStackTrace();
+            }
+
+            this.isRunning = false;
+        }
+
+    }
+
+
 
     // Print this membership data.  Does so in a generic way so identical
     // function is used in recThread and User.
