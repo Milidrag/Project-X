@@ -21,11 +21,11 @@ public class Main {
 
 
         client.connectToServer();
-        try {
-            client.startClientRMI();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            client.startClientRMI();
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//        }
 
         userInterfaceLobbies.generateWindow();
     }

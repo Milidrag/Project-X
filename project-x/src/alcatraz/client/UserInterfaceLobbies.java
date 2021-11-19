@@ -179,6 +179,13 @@ public class UserInterfaceLobbies {
         lobbyPanel.add(jButton);
         lobbyPanel.revalidate();
         lobbyPanel.repaint();
+
+        //Start Client RMI
+        try {
+            client.startClientRMI();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
 
