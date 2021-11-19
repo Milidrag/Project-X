@@ -17,7 +17,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import spread.*;
 
-public class ServerImpl implements IServer, AdvancedMessageListener {
+public class ServerImpl2 implements IServer, AdvancedMessageListener {
     static Registry reg;
     private boolean isRunning = true;
     private String serverId;
@@ -33,10 +33,10 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
     LobbyManager lobbyManager = new LobbyManager();
 
     public static void main(String[] args) {
-        ServerImpl remoteObject = new ServerImpl();
-        remoteObject.registerForRMI();
+        ServerImpl2 remoteObject = new ServerImpl2();
+       /* remoteObject.registerForRMI();
 
-        remoteObject.test();//add lobbies for testing
+        remoteObject.test();//add lobbies for testing*/
 
         while(remoteObject.GetIsRunning()) {
             try {
@@ -54,12 +54,11 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
         return isRunning;
     }
 
-    public ServerImpl(){
+    public ServerImpl2(){
         this.serverId = UUID.randomUUID().toString();
         newConnection = new SpreadConnection();
         try {
             newConnection.connect(InetAddress.getByName("127.0.0.1"), 4803, this.serverId, false, false);
-            //add advanced Message listener
             newConnection.add(this);
             this.serverGroup = initSpreadGroup(newConnection, "spreadGroupName");
             //TODO verstehe nicht was hier genau passiert. Wozu braucht man eine private Group?
@@ -91,14 +90,14 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
 
     private SpreadGroup initSpreadGroup(SpreadConnection newConnection, String spreadGroupName) {
-            SpreadGroup group = new SpreadGroup();
-            try {
-                group.join(newConnection, spreadGroupName);
-            }
-            catch (SpreadException ex) {
-                System.err.println("Spread Exception: " +ex.getMessage() + Arrays.toString(ex.getStackTrace()));
-            }
-            return group;
+        SpreadGroup group = new SpreadGroup();
+        try {
+            group.join(newConnection, spreadGroupName);
+        }
+        catch (SpreadException ex) {
+            System.err.println("Spread Exception: " +ex.getMessage() + Arrays.toString(ex.getStackTrace()));
+        }
+        return group;
     }
 
 
