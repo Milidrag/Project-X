@@ -58,7 +58,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
         this.serverId = UUID.randomUUID().toString();
         newConnection = new SpreadConnection();
         try {
-            newConnection.connect(InetAddress.getByName("127.0.0.1"), 4803, this.serverId, false, false);
+            newConnection.connect(InetAddress.getByName("127.0.0.1"), 4803, this.serverId, false, true);
             //add advanced Message listener
             newConnection.add(this);
             this.serverGroup = initSpreadGroup(newConnection, "spreadGroupName");

@@ -58,7 +58,7 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
         this.serverId = UUID.randomUUID().toString();
         newConnection = new SpreadConnection();
         try {
-            newConnection.connect(InetAddress.getByName("127.0.0.1"), 4803, this.serverId, false, false);
+            newConnection.connect(InetAddress.getByName("127.0.0.1"), 4803, this.serverId, false, true);
             newConnection.add(this);
             this.serverGroup = initSpreadGroup(newConnection, "spreadGroupName");
             //TODO verstehe nicht was hier genau passiert. Wozu braucht man eine private Group?
