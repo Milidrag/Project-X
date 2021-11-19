@@ -16,7 +16,8 @@ class ServerImplTest {
         try {
             ServerImpl server=new ServerImpl();
             ClientImpl client= new ClientImpl();
-            User user=new User("test");
+            User user=new User("test1");
+            client.setThisUser(user);
 
             server.getLobbyManager().genLobby(user);
             server.registerForRMI();
@@ -41,7 +42,8 @@ class ServerImplTest {
 
             ServerImpl server=new ServerImpl();
             ClientImpl client= new ClientImpl();
-            User user=new User("test");
+            User user=new User("test1");
+            client.setThisUser(user);
 
 
             server.registerForRMI();
@@ -72,10 +74,12 @@ class ServerImplTest {
             ServerImpl server=new ServerImpl();
             ClientImpl client= new ClientImpl();
 
-            client.init("test");
+            client.init("test1");
             User user=client.getThisUser();
+            client.setThisUser(user);
             Lobby lobby =new Lobby();
             server.lobbyManager.getLobbies().add(lobby);
+
 
             server.registerForRMI();
 
@@ -104,7 +108,7 @@ class ServerImplTest {
             ServerImpl server=new ServerImpl();
             ClientImpl client= new ClientImpl();
 
-            client.init("test");
+            client.init("test1");
             User user=client.getThisUser();
             Lobby lobby =new Lobby();
             lobby.addPlayer(user);
