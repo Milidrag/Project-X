@@ -6,18 +6,18 @@ public class Main {
 
     private ClientImpl client=new ClientImpl();
     private GameConnection gameConnection;
-    private GameWindow gameWindow;
+    private UIGameWindow UIGameWindow;
     private UserInterfaceLobbies userInterfaceLobbies;
 
     private void init(){
 
         userInterfaceLobbies=new UserInterfaceLobbies(client);
-        userInterfaceLobbies.setGameWindow(gameWindow);
+        userInterfaceLobbies.setGameWindow(UIGameWindow);
         gameConnection=new GameConnection(client);
-        gameWindow=new GameWindow(client);
-        gameWindow.setGameConnection(gameConnection);
+        UIGameWindow =new UIGameWindow(client);
+        UIGameWindow.setGameConnection(gameConnection);
         client.setGameConnection(gameConnection);
-        client.setGameWindow(gameWindow);
+        client.setGameWindow(UIGameWindow);
 
 
         client.connectToServer();

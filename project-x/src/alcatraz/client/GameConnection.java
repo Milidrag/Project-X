@@ -1,7 +1,5 @@
 package alcatraz.client;
 
-import alcatraz.common.Lobby;
-import alcatraz.common.User;
 import at.falb.games.alcatraz.api.Alcatraz;
 
 import javax.swing.*;
@@ -11,15 +9,15 @@ public class GameConnection {
 
 
     private Alcatraz alcatraz = new Alcatraz();
-    private GameWindow gameWindow ;
+    private UIGameWindow UIGameWindow;
     private ClientImpl client;
 
     public ClientImpl getClient() {
         return client;
     }
 
-    public void setGameWindow(GameWindow gameWindow) {
-        this.gameWindow = gameWindow;
+    public void setGameWindow(UIGameWindow UIGameWindow) {
+        this.UIGameWindow = UIGameWindow;
     }
 
     public void setClient(ClientImpl client) {
@@ -36,9 +34,9 @@ public class GameConnection {
 
     public void sartUI(){
 
-        gameWindow.setGameConnection(this);
-        gameWindow.generateWindow();
-        gameWindow.generateGame();
+        UIGameWindow.setGameConnection(this);
+        UIGameWindow.generateWindow();
+        UIGameWindow.generateGame();
     }
 
     public JPanel getGameWindow() {

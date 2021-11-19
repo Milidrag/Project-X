@@ -2,7 +2,7 @@ package alcatraz.client;
 
 import javax.swing.*;
 
-public class GameWindow {
+public class UIGameWindow {
     private ClientImpl client;
 
     private JPanel gamePanel;
@@ -29,7 +29,7 @@ public class GameWindow {
         gamePanel.add(gameConnection.getGameWindow());
     }
 
-    public GameWindow(ClientImpl client) {
+    public UIGameWindow(ClientImpl client) {
         this.client=client;
     }
 

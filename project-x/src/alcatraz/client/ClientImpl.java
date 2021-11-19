@@ -33,7 +33,7 @@ public class ClientImpl implements IClient {
     private Lobby lobby;
 
     private GameConnection gameConnection;
-    private GameWindow gameWindow;
+    private UIGameWindow UIGameWindow;
     private UserInterfaceLobbies userInterfaceLobbies;
 
 
@@ -49,8 +49,8 @@ public class ClientImpl implements IClient {
         this.gameConnection = gameConnection;
     }
 
-    public void setGameWindow(GameWindow gameWindow) {
-        this.gameWindow = gameWindow;
+    public void setGameWindow(UIGameWindow UIGameWindow) {
+        this.UIGameWindow = UIGameWindow;
     }
 
     public User getThisUser() {
@@ -180,7 +180,7 @@ public class ClientImpl implements IClient {
         //TODO controller benachrichten und start game
 
         userInterfaceLobbies.closeWindow();
-        gameWindow.start();
+        UIGameWindow.start();
 
     }
 

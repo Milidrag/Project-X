@@ -23,10 +23,10 @@ public class UserInterfaceLobbies {
 
     private JFrame frame;
 
-    private GameWindow gameWindow;
+    private UIGameWindow UIGameWindow;
 
-    public void setGameWindow(GameWindow gameWindow) {
-        this.gameWindow = gameWindow;
+    public void setGameWindow(UIGameWindow UIGameWindow) {
+        this.UIGameWindow = UIGameWindow;
     }
 
     public ClientImpl getClient() {
@@ -80,7 +80,7 @@ public class UserInterfaceLobbies {
 
 
                 client.sendStartToOutherClients();
-                gameWindow.start();
+                UIGameWindow.start();
 
             } catch (RemoteException remoteException) {
                 remoteException.printStackTrace();
