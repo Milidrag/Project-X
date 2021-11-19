@@ -64,7 +64,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
             this.serverGroup = initSpreadGroup(newConnection, "spreadGroupName");
             //TODO verstehe nicht was hier genau passiert. Wozu braucht man eine private Group?
             this.myGroup = newConnection.getPrivateGroup();
-            sendSpreadMessage(newConnection,"spreadGroupName","test", (short) 2);
+           // sendSpreadMessage(newConnection,"spreadGroupName","test", (short) 2);
         } catch (SpreadException e) {
             e.printStackTrace();
         } catch (UnknownHostException e) {
@@ -214,7 +214,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
     @Override
     public void regularMessageReceived(SpreadMessage spreadMessage) {
-        System.out.println("received message: " + spreadMessage.getData().toString());
+        DisplayMessage(spreadMessage);
     }
 
     /**
@@ -224,9 +224,146 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
      */
     @Override
     public void membershipMessageReceived(SpreadMessage spreadMessage) {
-        MembershipInfo membershipInfo = spreadMessage.getMembershipInfo();
+        DisplayMessage(spreadMessage);
 
-        System.out.println("New membership message from: " + spreadMessage.getMembershipInfo().getGroup());
+        //TODO: feststellen ob der derzeitige Server der primary ist
+    }
 
+
+
+    private void DisplayMessage(SpreadMessage msg)
+    {
+        try
+        {
+            if(msg.isRegular())
+            {
+                System.out.print("Received a ");
+                if(msg.isUnreliable())
+                    System.out.print("UNRELIABLE");
+                else if(msg.isReliable())
+                    System.out.print("RELIABLE");
+                else if(msg.isFifo())
+                    System.out.print("FIFO");
+                else if(msg.isCausal())
+                    System.out.print("CAUSAL");
+                else if(msg.isAgreed())
+                    System.out.print("AGREED");
+                else if(msg.isSafe())
+                    System.out.print("SAFE");
+                System.out.println(" message.");
+
+                System.out.println("Sent by  " + msg.getSender() + ".");
+
+                System.out.println("Type is " + msg.getType() + ".");
+
+                if(msg.getEndianMismatch() == true)
+                    System.out.println("There is an endian mismatch.");
+                else
+                    System.out.println("There is no endian mismatch.");
+
+                SpreadGroup groups[] = msg.getGroups();
+                System.out.println("To " + groups.length + " groups.");
+
+                byte data[] = msg.getData();
+                System.out.println("The data is " + data.length + " bytes.");
+
+                System.out.println("The message is: " + new String(data));
+            }
+            else if (msg.isMembership())
+            {
+                MembershipInfo info = msg.getMembershipInfo();
+                printMembershipInfo(info);
+            } else if ( msg.isReject() )
+            {
+                // Received a Reject message
+                System.out.print("Received a ");
+                if(msg.isUnreliable())
+                    System.out.print("UNRELIABLE");
+                else if(msg.isReliable())
+                    System.out.print("RELIABLE");
+                else if(msg.isFifo())
+                    System.out.print("FIFO");
+                else if(msg.isCausal())
+                    System.out.print("CAUSAL");
+                else if(msg.isAgreed())
+                    System.out.print("AGREED");
+                else if(msg.isSafe())
+                    System.out.print("SAFE");
+                System.out.println(" REJECTED message.");
+
+                System.out.println("Sent by  " + msg.getSender() + ".");
+
+                System.out.println("Type is " + msg.getType() + ".");
+
+                if(msg.getEndianMismatch() == true)
+                    System.out.println("There is an endian mismatch.");
+                else
+                    System.out.println("There is no endian mismatch.");
+
+                SpreadGroup groups[] = msg.getGroups();
+                System.out.println("To " + groups.length + " groups.");
+
+                byte data[] = msg.getData();
+                System.out.println("The data is " + data.length + " bytes.");
+
+                System.out.println("The message is: " + new String(data));
+            } else {
+                System.out.println("Message is of unknown type: " + msg.getServiceType() );
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    // Print this membership data.  Does so in a generic way so identical
+    // function is used in recThread and User.
+    private void printMembershipInfo(MembershipInfo info)
+    {
+        SpreadGroup group = info.getGroup();
+        if(info.isRegularMembership()) {
+            SpreadGroup members[] = info.getMembers();
+            MembershipInfo.VirtualSynchronySet virtual_synchrony_sets[] = info.getVirtualSynchronySets();
+            MembershipInfo.VirtualSynchronySet my_virtual_synchrony_set = info.getMyVirtualSynchronySet();
+
+            System.out.println("REGULAR membership for group " + group +
+                    " with " + members.length + " members:");
+            for( int i = 0; i < members.length; ++i ) {
+                System.out.println("\t\t" + members[i]);
+            }
+            System.out.println("Group ID is " + info.getGroupID());
+
+            System.out.print("\tDue to ");
+            if(info.isCausedByJoin()) {
+                System.out.println("the JOIN of " + info.getJoined());
+            }	else if(info.isCausedByLeave()) {
+                System.out.println("the LEAVE of " + info.getLeft());
+            }	else if(info.isCausedByDisconnect()) {
+                System.out.println("the DISCONNECT of " + info.getDisconnected());
+            } else if(info.isCausedByNetwork()) {
+                System.out.println("NETWORK change");
+                for( int i = 0 ; i < virtual_synchrony_sets.length ; ++i ) {
+                    MembershipInfo.VirtualSynchronySet set = virtual_synchrony_sets[i];
+                    SpreadGroup         setMembers[] = set.getMembers();
+                    System.out.print("\t\t");
+                    if( set == my_virtual_synchrony_set ) {
+                        System.out.print( "(LOCAL) " );
+                    } else {
+                        System.out.print( "(OTHER) " );
+                    }
+                    System.out.println( "Virtual Synchrony Set " + i + " has " +
+                            set.getSize() + " members:");
+                    for( int j = 0; j < set.getSize(); ++j ) {
+                        System.out.println("\t\t\t" + setMembers[j]);
+                    }
+                }
+            }
+        } else if(info.isTransition()) {
+            System.out.println("TRANSITIONAL membership for group " + group);
+        } else if(info.isSelfLeave()) {
+            System.out.println("SELF-LEAVE message for group " + group);
+        }
     }
 }
