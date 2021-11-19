@@ -189,7 +189,9 @@ public class UserInterfaceLobbies {
 
         //Start Client RMI
         try {
-            client.startClientRMI();
+            if (!client.isRmiStarted()) {
+                client.startClientRMI();
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
         }

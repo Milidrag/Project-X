@@ -36,6 +36,12 @@ public class ClientImpl implements IClient {
     private UIGameWindow UIGameWindow;
     private UserInterfaceLobbies userInterfaceLobbies;
 
+    private boolean rmiStarted=false;
+
+
+    public boolean isRmiStarted() {
+        return rmiStarted;
+    }
 
     public UserInterfaceLobbies getUserInterfaceLobbies() {
         return userInterfaceLobbies;
@@ -146,6 +152,8 @@ public class ClientImpl implements IClient {
         reg = LocateRegistry.getRegistry(thisUser.getRmiPort());
         System.out.println("user/+ " + this.thisUser.getUsername() + "con= " + "client/" + this.thisUser.getUsername());
         reg.rebind("client/" + this.thisUser.getUsername(), clientStub);
+
+        rmiStarted=true;
     }
 
     public void connectToTheClients() throws RemoteException, NotBoundException {
