@@ -124,6 +124,7 @@ public class UserInterfaceLobbies {
                         String username = userNameTextField.getText();
                         if (!(username.equals("") || username == null)) {
                             try {
+                                client.getThisUser().setUsername(username);
                                 client.serverJoinLobby(lobby.getLobbyId());
                                 jButton.setVisible(false);
                                 client.setLobby(lobby);
@@ -136,11 +137,9 @@ public class UserInterfaceLobbies {
 
                             } catch (RemoteException ex) {
                                 ex.printStackTrace();
-
-
                             }catch (AssertionError assertionError){
                                 assertionError.printStackTrace();
-                                userNameTextField.setEnabled(true);
+                               // userNameTextField.setEnabled(true);
                                 userNameTextField.setText("Username already taken");
 
                             }

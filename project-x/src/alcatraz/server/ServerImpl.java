@@ -27,16 +27,16 @@ public class ServerImpl implements IServer {
 
 
     //generate Lobbies for testing
-    private void test(){
-        Lobby lobby1=new Lobby();
-        Lobby lobby2=new Lobby();
-        Lobby lobby3=new Lobby();
+    private void test() {
+        Lobby lobby1 = new Lobby();
+        Lobby lobby2 = new Lobby();
+        Lobby lobby3 = new Lobby();
 
-        User user1=new User("test");
+        User user1 = new User("test");
 
-        User user2=new User("test User 2");
+        User user2 = new User("test User 2");
 
-        User user3=new User("test User 3");
+        User user3 = new User("test User 3");
 
         lobby1.addPlayer(user1);
         lobby2.addPlayer(user2);
@@ -71,17 +71,21 @@ public class ServerImpl implements IServer {
     }
 
     @Override
-    public boolean joinLobby(User user, UUID lobbyId) throws RemoteException,AssertionError {
+    public boolean joinLobby(User user, UUID lobbyId) throws RemoteException, AssertionError {
         try {
-            if(lobbyManager.checkIfUsernameIsUsed(user.getUsername())){
-                throw new AssertionError("Username already taken");
-            }
-            if(lobbyManager.getLobby(lobbyId).getUsers().size()>=4){
-                throw new  RemoteException("Lobby is full");
+            System.out.println("Join");
+            System.out.println(user.getUsername());
+            if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())) {
 
-            }else {
-                lobbyManager.addUser(user, lobbyId);
-                return true;
+                throw new AssertionError("Username already taken");
+            } else {
+                if (lobbyManager.getLobby(lobbyId).getUsers().size() >= 4) {
+                    throw new RemoteException("Lobby is full");
+
+                } else {
+                    lobbyManager.addUser(user, lobbyId);
+                    return true;
+                }
             }
         } catch (NoSuchElementException e) {
             e.printStackTrace();
@@ -90,11 +94,14 @@ public class ServerImpl implements IServer {
     }
 
     @Override
-    public Lobby createLobby(User user)  throws RemoteException,AssertionError{
-        if(lobbyManager.checkIfUsernameIsUsed(user.getUsername())){
+    public Lobby createLobby(User user) throws RemoteException, AssertionError {
+        System.out.println("crate");
+        System.out.println("");
+        if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())) {
             throw new AssertionError("Username already taken");
+        } else {
+            return lobbyManager.genLobby(user);
         }
-        return lobbyManager.genLobby(user);
     }
 
     @Override
@@ -111,7 +118,7 @@ public class ServerImpl implements IServer {
 
     @Override
     public Lobby startGame(UUID lobbyID) {
-          return lobbyManager.changeLobbyStatus(lobbyID);
+        return lobbyManager.changeLobbyStatus(lobbyID);
 
     }
 
