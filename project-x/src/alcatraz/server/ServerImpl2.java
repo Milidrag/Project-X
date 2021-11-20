@@ -254,15 +254,13 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
     @Override
     public void membershipMessageReceived(SpreadMessage spreadMessage) {
 
-        MembershipInfo info = spreadMessage.getMembershipInfo();
-        printMembershipInfo(info);
-        definePrimary(info);
 
+        definePrimary(spreadMessage);
 
         System.out.println("Bin ich der Primary?: " + isPrimary);
-
         DisplayMessage(spreadMessage);
 
+        //TODO: feststellen ob der derzeitige Server der primary ist
     }
 
 
@@ -349,18 +347,17 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
             System.exit(1);
         }
     }
+
     //es funktioniert, dass er erkannt wird wer der Primary ist, allerdings erkennt er nicht
     //falls ein Server ausfällt wer der neue Primary ist.
-    private void definePrimary(MembershipInfo info) {
-
+    private void definePrimary(SpreadMessage spreadMessage) {
+        MembershipInfo info = spreadMessage.getMembershipInfo();
+        printMembershipInfo(info);
+        //falls ein neues Gruppenmitglied dazu kommt
         if(info.isCausedByJoin())
         {
             if (info.getMembers().length == 1) {
-                this.currentPrimaryGroup = this.myGroup;
-                this.isPrimary = true;
-                System.out.println("New primary: "+myGroup.toString());
-                //TODO auskommentiert damit Lukas am Frontend weiterarbeiten kann
-                setRMIforPrimary();
+                setMePrimary();
             }
 
             if(this.isPrimary == true) {
@@ -377,6 +374,53 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
             }
         }
 
+        //falls ein Gruppenmitglied aufgrund von Netzwerkausfall oder weil es die Gruppe verlässt rausgeht
+        if(info.isCausedByDisconnect() || info.isCausedByLeave() || info.isCausedByNetwork())
+        {
+            boolean primaryFound = false;
+            //auskommentiert weil wir message hier nicht mitgeben
+            System.out.println("Member left Group: "+ spreadMessage.getSender().toString());
+
+            for (SpreadGroup member : info.getMembers())
+            {
+                if(member.equals(this.currentPrimaryGroup))
+                {
+                    primaryFound = true;
+                    System.out.println("Primary still exists");
+                    break;
+                }
+            }
+
+            //elect new primary
+            if(primaryFound == false)
+            {
+                System.out.println("Primary is gone");
+
+                if (info.getMembers().length == 1) {
+                    setMePrimary();
+                }
+                else {
+                    this.currentPrimaryGroup = info.getMembers()[0];
+                    System.out.println("New Primary: "+ info.getMembers()[0].toString());
+
+                    if (this.currentPrimaryGroup.equals(this.myGroup)) {
+                        setMePrimary();
+                    }
+                }
+            }
+        }
+
+
+
+
+    }
+
+    private void setMePrimary() {
+        this.currentPrimaryGroup = this.myGroup;
+        this.isPrimary = true;
+        System.out.println("New primary: "+myGroup.toString());
+        //TODO auskommentiert damit Lukas am Frontend weiterarbeiten kann
+        setRMIforPrimary();
     }
 
     private void setRMIforPrimary() {
