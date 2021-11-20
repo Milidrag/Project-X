@@ -46,6 +46,7 @@ public class GameConnection {
 
     public void initGame() {
         int numPlayers = client.getLobby().getUsers().size();
+        System.out.println("init game with playercount"+numPlayers);
         if (numPlayers >= 2 && numPlayers <= 4) {
             alcatraz.init(numPlayers, 0);
         }
