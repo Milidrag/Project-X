@@ -146,8 +146,6 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
         return lobbyManager;
     }
 
-    //TODO: Methoden aus der Präsentation implmentieren
-
     @Override
     public List<Lobby> availableLobbies()throws RemoteException {
         return lobbyManager.getLobbies();
@@ -233,6 +231,8 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
     @Override
     public void membershipMessageReceived(SpreadMessage spreadMessage) {
         DisplayMessage(spreadMessage);
+
+        //TODO: feststellen ob der derzeitige Server der primary ist
     }
 
 
@@ -244,7 +244,8 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
             if(msg.isRegular())
             {
                 //TODO nur für Testzwecke derzeit drinnen gelassen
-                System.out.print("Received a ");
+                //für Fehleranalyse kann man es wieder auskommentieren
+               /* System.out.print("Received a ");
                 if(msg.isUnreliable())
                     System.out.print("UNRELIABLE");
                 else if(msg.isReliable())
@@ -267,7 +268,7 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
                     System.out.println("There is an endian mismatch.");
                 else
                     System.out.println("There is no endian mismatch.");
-
+                */
                 SpreadGroup groups[] = msg.getGroups();
                 System.out.println("To " + groups.length + " groups.");
 
@@ -281,7 +282,7 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
                     System.out.println("primary set: "+ this.currentPrimaryGroup.toString());
                 }
 
-                if(msg.getType() == lobbyMessage)
+             /*   if(msg.getType() == lobbyMessage)
                 {
                     try {
                         lobbyManager.setLobbies((ArrayList<Lobby>) msg.getObject());
@@ -289,7 +290,7 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
                     } catch (SpreadException ex) {
                         //TODO catch me if you can
                     }
-                }
+                }*/
                 //TODO Player fehlen noch bei uns
             /*
                 if(msg.getType() == playerMessage)
