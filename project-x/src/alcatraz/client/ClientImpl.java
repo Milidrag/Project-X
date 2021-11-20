@@ -185,7 +185,7 @@ public class ClientImpl implements IClient {
     }
 
     @Override
-    public void Move(String username, Move move) throws RemoteException {
+    public void Move(User user, Move move) throws RemoteException {
 
     }
 
