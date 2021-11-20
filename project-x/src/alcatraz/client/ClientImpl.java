@@ -176,7 +176,9 @@ public class ClientImpl implements IClient {
             this.lobby = lobby;
         }
         try {
-            startClientRMI();
+            if(!rmiStarted) {
+                startClientRMI();
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
