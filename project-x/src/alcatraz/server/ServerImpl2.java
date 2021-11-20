@@ -27,15 +27,11 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
     private SpreadGroup myGroup;
     private SpreadGroup serverGroup;
     private SpreadGroup currentPrimaryGroup;
-    private boolean isPrimary = true;
+    private boolean isPrimary = false;
     SpreadConnection newConnection;
     private final short lobbyMessage = 2;
     private final short primaryMessage = 1;
     private final short playerMessage = 3;
-
-
-
-
     LobbyManager lobbyManager = new LobbyManager();
 
 
@@ -219,6 +215,33 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
 
     @Override
     public void regularMessageReceived(SpreadMessage spreadMessage) {
+        if(spreadMessage.getType() == primaryMessage) {
+            this.currentPrimaryGroup = spreadMessage.getSender();
+            System.out.println("primary set: "+ this.currentPrimaryGroup.toString());
+        }
+
+             /*   if(msg.getType() == lobbyMessage)
+                {
+                    try {
+                        lobbyManager.setLobbies((ArrayList<Lobby>) msg.getObject());
+                        System.out.println("Lobbies updated");
+                    } catch (SpreadException ex) {
+                        //TODO catch me if you can
+                    }
+                }*/
+        //TODO Player fehlen noch bei uns
+            /*
+                if(msg.getType() == playerMessage)
+                {
+                    try {
+                        this.AllPlayers = (ArrayList<User>) message.getObject();
+                        System.out.println("User list updated");
+
+                    } catch (SpreadException ex) {
+                        //TODO something useful
+                    }
+                }
+                */
 
         DisplayMessage(spreadMessage);
     }
@@ -230,9 +253,16 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
      */
     @Override
     public void membershipMessageReceived(SpreadMessage spreadMessage) {
+
+        MembershipInfo info = spreadMessage.getMembershipInfo();
+        printMembershipInfo(info);
+        definePrimary(info);
+
+
+        System.out.println("Bin ich der Primary?: " + isPrimary);
+
         DisplayMessage(spreadMessage);
 
-        //TODO: feststellen ob der derzeitige Server der primary ist
     }
 
 
@@ -271,49 +301,11 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
                 */
                 SpreadGroup groups[] = msg.getGroups();
                 System.out.println("To " + groups.length + " groups.");
-
                 byte data[] = msg.getData();
                 System.out.println("The data is " + data.length + " bytes.");
-
                 System.out.println("The message is: " + new String(data));
-
-                if(msg.getType() == primaryMessage) {
-                    this.currentPrimaryGroup = msg.getSender();
-                    System.out.println("primary set: "+ this.currentPrimaryGroup.toString());
-                }
-
-             /*   if(msg.getType() == lobbyMessage)
-                {
-                    try {
-                        lobbyManager.setLobbies((ArrayList<Lobby>) msg.getObject());
-                        System.out.println("Lobbies updated");
-                    } catch (SpreadException ex) {
-                        //TODO catch me if you can
-                    }
-                }*/
-                //TODO Player fehlen noch bei uns
-            /*
-                if(msg.getType() == playerMessage)
-                {
-                    try {
-                        this.AllPlayers = (ArrayList<User>) message.getObject();
-                        System.out.println("User list updated");
-
-                    } catch (SpreadException ex) {
-                        //TODO something useful
-                    }
-                }
-
-             */
-
-
             }
-            else if (msg.isMembership())
-            {
-                MembershipInfo info = msg.getMembershipInfo();
-                printMembershipInfo(info);
-                definePrimary(info);
-            } else if ( msg.isReject() )
+            else if ( msg.isReject() )
             {
                 // Received a Reject message
                 System.out.print("Received a ");
@@ -357,7 +349,8 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
             System.exit(1);
         }
     }
-
+    //es funktioniert, dass er erkannt wird wer der Primary ist, allerdings erkennt er nicht
+    //falls ein Server ausfällt wer der neue Primary ist.
     private void definePrimary(MembershipInfo info) {
 
         if(info.isCausedByJoin())
@@ -367,7 +360,7 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
                 this.isPrimary = true;
                 System.out.println("New primary: "+myGroup.toString());
                 //TODO auskommentiert damit Lukas am Frontend weiterarbeiten kann
-                //setRMIforPrimary();
+                setRMIforPrimary();
             }
 
             if(this.isPrimary == true) {
