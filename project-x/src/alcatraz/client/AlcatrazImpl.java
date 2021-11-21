@@ -8,6 +8,10 @@ public class AlcatrazImpl implements MoveListener {
     private int numberOfPlayers;
     private Alcatraz alcatraz;
 
+    public AlcatrazImpl(ClientImpl client) {
+        this.client = client;
+    }
+
     public void setClient(ClientImpl client) {
         this.client = client;
     }
@@ -34,15 +38,25 @@ public class AlcatrazImpl implements MoveListener {
         alcatraz.start();
     }
 
+    public void makeRMIMove(Move move){
+        try {
+            alcatraz.doMove(move.getPlayer(),move.getPrisoner(),move.getRowOrCol(),move.getRow(),move.getCol());
+        } catch (IllegalMoveException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void moveDone(Player player, Prisoner prisoner, int rowOrCol, int row, int col) {
         try {
             alcatraz.doMove(player,prisoner,rowOrCol,row,col);
 
-            Move move=new Move(client.getThisUser(), player,rowOrCol,row,col);
+            Move move=new Move(client.getThisUser(), player,prisoner,rowOrCol,row,col);
 
 
             //TODO send RMI
+
+
 
         } catch (IllegalMoveException e) {
             e.printStackTrace();

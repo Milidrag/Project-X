@@ -72,7 +72,7 @@ public class UserInterfaceLobbies {
 
             client.connectToTheClients();
             client.sendUsersToOtherClients();
-            client.sendStartToOutherClients();
+            client.sendStartToOtherClients();
             UIGameWindow.start();
            // closeWindow();
 

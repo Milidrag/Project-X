@@ -1,6 +1,7 @@
 package alcatraz.common;
 
 import at.falb.games.alcatraz.api.Player;
+import at.falb.games.alcatraz.api.Prisoner;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -14,6 +15,7 @@ public class Move implements Serializable {
 
     private User user;
     private Player player;
+    private Prisoner prisoner;
     private  int rowOrCol;
     private int row;
     private int col;
@@ -21,12 +23,21 @@ public class Move implements Serializable {
     public Move() {
     }
 
-    public Move(User user, Player player, int rowOrCol, int row, int col) {
+    public Move(User user, Player player, Prisoner prisoner, int rowOrCol, int row, int col) {
         this.user = user;
         this.player = player;
+        this.prisoner = prisoner;
         this.rowOrCol = rowOrCol;
         this.row = row;
         this.col = col;
+    }
+
+    public Prisoner getPrisoner() {
+        return prisoner;
+    }
+
+    public void setPrisoner(Prisoner prisoner) {
+        this.prisoner = prisoner;
     }
 
     public User getUser() {

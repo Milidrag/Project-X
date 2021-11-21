@@ -33,6 +33,9 @@ public class ClientImpl implements IClient {
     //Lobby of this client
     private Lobby lobby;
 
+    //Game
+    private AlcatrazImpl alcatraz=new AlcatrazImpl(this);
+
     private GameConnection gameConnection;
     private UIGameWindow UIGameWindow;
     private UserInterfaceLobbies userInterfaceLobbies;
@@ -168,9 +171,15 @@ public class ClientImpl implements IClient {
         }
     }
 
-    public void sendStartToOutherClients() throws RemoteException {
+    public void sendStartToOtherClients() throws RemoteException {
         for (IClient stub : this.clientStubs) {
             stub.startGame();
+        }
+    }
+
+    public void sendMoveToOtherClients(Move move)throws RemoteException{
+        for (IClient stub : this.clientStubs) {
+            stub.Move(thisUser,move);
         }
     }
 
@@ -216,7 +225,7 @@ public class ClientImpl implements IClient {
 
     @Override
     public void Move(User user, Move move) throws RemoteException {
-
+        this.alcatraz.makeRMIMove(move);
     }
 
     @Override
