@@ -10,7 +10,7 @@ public class AlcatrazImpl implements MoveListener {
     private int numberOfPlayers;
     private Alcatraz alcatraz;
 
-    private boolean isReciver = false;
+
 
     public AlcatrazImpl(ClientImpl client) {
         this.client = client;
@@ -48,7 +48,6 @@ public class AlcatrazImpl implements MoveListener {
             System.out.println();
             System.out.println("recived RMI move");
 
-            isReciver = true;
             alcatraz.doMove(move.getPlayer(), move.getPrisoner(), move.getRowOrCol(), move.getRow(), move.getCol());
 
         } catch (IllegalMoveException e) {
@@ -67,7 +66,7 @@ public class AlcatrazImpl implements MoveListener {
         try {
             //  alcatraz.doMove(player,prisoner,rowOrCol,row,col);
 
-            if (!isReciver) {
+
                 Move move = new Move(client.getThisUser(), player, prisoner, rowOrCol, row, col);
 
                 try {
@@ -79,9 +78,7 @@ public class AlcatrazImpl implements MoveListener {
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-            } else {
-                isReciver = false;
-            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
