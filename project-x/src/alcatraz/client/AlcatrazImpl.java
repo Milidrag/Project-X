@@ -3,6 +3,8 @@ package alcatraz.client;
 import alcatraz.common.Move;
 import at.falb.games.alcatraz.api.*;
 
+import java.rmi.RemoteException;
+
 public class AlcatrazImpl implements MoveListener {
     private ClientImpl client;
     private int numberOfPlayers;
@@ -53,11 +55,11 @@ public class AlcatrazImpl implements MoveListener {
 
             Move move=new Move(client.getThisUser(), player,prisoner,rowOrCol,row,col);
 
-
-            //TODO send RMI
-
-
-
+            try {
+                client.sendMoveToOtherClients(move);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         } catch (IllegalMoveException e) {
             e.printStackTrace();
         }
