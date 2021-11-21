@@ -6,6 +6,7 @@ import alcatraz.server.ServerImpl;
 public class MainTest {
     public static void main(String[] args) {
         ServerImpl server=new ServerImpl();
+        server.setRMIforPrimary();
 
         MainClient controller1=new MainClient();
         controller1.init();
