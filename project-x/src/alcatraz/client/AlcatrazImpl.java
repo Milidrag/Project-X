@@ -1,17 +1,61 @@
 package alcatraz.client;
 
-import at.falb.games.alcatraz.api.MoveListener;
-import at.falb.games.alcatraz.api.Player;
-import at.falb.games.alcatraz.api.Prisoner;
+import alcatraz.common.Move;
+import at.falb.games.alcatraz.api.*;
 
 public class AlcatrazImpl implements MoveListener {
-    @Override
-    public void moveDone(Player player, Prisoner prisoner, int i, int i1, int i2) {
+    private ClientImpl client;
+    private int numberOfPlayers;
+    private Alcatraz alcatraz;
 
+    public void setClient(ClientImpl client) {
+        this.client = client;
+    }
+
+    public void init(){
+        numberOfPlayers=client.getLobby().getUsers().size();
+        alcatraz=new Alcatraz();
+
+        int positionOfThisPlayer= 0;
+        try {
+            positionOfThisPlayer=client.getLobby().getUserPosition(client.getThisUser());
+        }catch (Exception e){
+            System.out.println("Error in Alc int position ca not be foun");
+            e.printStackTrace();
+
+        }
+        alcatraz.init(numberOfPlayers,positionOfThisPlayer);
+        for (int i=0;i<numberOfPlayers;i++){
+            if(i!=positionOfThisPlayer){
+                alcatraz.getPlayer(i).setName(client.getLobby().getUsers().get(i).getUsername());
+            }
+        }
+        alcatraz.showWindow();
+        alcatraz.start();
+    }
+
+    @Override
+    public void moveDone(Player player, Prisoner prisoner, int rowOrCol, int row, int col) {
+        try {
+            alcatraz.doMove(player,prisoner,rowOrCol,row,col);
+
+            Move move=new Move(client.getThisUser(), player,rowOrCol,row,col);
+
+
+            //TODO send RMI
+
+        } catch (IllegalMoveException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void gameWon(Player player) {
+        System.out.println(player.getName() +" has won the game");
 
+        //TODO : send end game RMI
     }
+
+
+
 }

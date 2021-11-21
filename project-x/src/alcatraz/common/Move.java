@@ -18,6 +18,17 @@ public class Move implements Serializable {
     private int row;
     private int col;
 
+    public Move() {
+    }
+
+    public Move(User user, Player player, int rowOrCol, int row, int col) {
+        this.user = user;
+        this.player = player;
+        this.rowOrCol = rowOrCol;
+        this.row = row;
+        this.col = col;
+    }
+
     public User getUser() {
         return user;
     }
