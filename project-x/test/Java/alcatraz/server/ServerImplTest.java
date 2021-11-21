@@ -20,7 +20,7 @@ class ServerImplTest {
             client.setThisUser(user);
 
             server.getLobbyManager().genLobby(user);
-            server.registerForRMI();
+            server.setRMIforPrimary();
 
             client.connectToServer();
             client.serverGetLobbies();
@@ -46,7 +46,7 @@ class ServerImplTest {
             client.setThisUser(user);
 
 
-            server.registerForRMI();
+            server.setRMIforPrimary();
 
             client.connectToServer();
             client.serverCreateLobby();
@@ -81,7 +81,7 @@ class ServerImplTest {
             server.lobbyManager.getLobbies().add(lobby);
 
 
-            server.registerForRMI();
+            server.setRMIforPrimary();
 
             client.connectToServer();
           //  client.serverCreateLobby();
@@ -115,7 +115,7 @@ class ServerImplTest {
             server.lobbyManager.getLobbies().add(lobby);
 
 
-            server.registerForRMI();
+            server.setRMIforPrimary();
 
             client.connectToServer();
            // client.serverCreateLobby();
