@@ -73,7 +73,9 @@ public class UserInterfaceLobbies {
             client.connectToTheClients();
             client.sendUsersToOtherClients();
             client.sendStartToOtherClients();
-            UIGameWindow.start();
+
+            client.startAlcatrazGame();
+           // UIGameWindow.start();
            // closeWindow();
 
         } catch (RemoteException remoteException) {

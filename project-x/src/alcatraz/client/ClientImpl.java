@@ -205,6 +205,10 @@ public class ClientImpl implements IClient {
         }
     }
 
+    public void startAlcatrazGame(){
+        alcatraz.init();
+    }
+
 
     //??? Client to Client RMI function begin ???
     @Override
@@ -213,6 +217,7 @@ public class ClientImpl implements IClient {
         if (!this.lobby.equals(lobby)) {
             System.out.println("reciver =" + thisUser.getUsername() + " changed lobby");
             this.lobby = lobby;
+
         }
         try {
             if (!rmiStarted) {
@@ -230,13 +235,13 @@ public class ClientImpl implements IClient {
 
     @Override
     public void startGame() throws RemoteException {
-        //TODO controller benachrichten und start game
+        //TODO controller benachrichtigen und start game
 
-        System.out.println("reciver =" + thisUser.getUsername() + "Start game!!! ");
+        System.out.println("receiver =" + thisUser.getUsername() + "Start game!!! ");
 
         //   userInterfaceLobbies.closeWindow();
-        UIGameWindow.start();
-
+        //UIGameWindow.start();
+        startAlcatrazGame();
     }
 
     @Override
