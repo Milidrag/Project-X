@@ -301,7 +301,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
         setRMIforPrimary();
     }
 
-    private void setRMIforPrimary() {
+    public void setRMIforPrimary() {
             try {
                 IServer stub = (IServer) UnicastRemoteObject.exportObject(this, 0);
 
