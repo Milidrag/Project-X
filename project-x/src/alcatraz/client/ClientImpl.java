@@ -181,6 +181,8 @@ public class ClientImpl implements IClient {
         System.out.println();
         System.out.println("send move"+ move.toString());
         for (IClient stub : this.clientStubs) {
+            System.out.println("send to:");
+            System.out.println(stub.toString());
             stub.Move(thisUser,move);
         }
     }
