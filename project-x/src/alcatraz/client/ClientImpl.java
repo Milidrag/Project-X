@@ -2,8 +2,8 @@ package alcatraz.client;
 
 import alcatraz.common.Lobby;
 import alcatraz.common.Move;
-import alcatraz.server.IServer;
 import alcatraz.common.User;
+import alcatraz.server.IServer;
 
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
@@ -37,7 +37,7 @@ public class ClientImpl implements IClient {
     private UIGameWindow UIGameWindow;
     private UserInterfaceLobbies userInterfaceLobbies;
 
-    private boolean rmiStarted=false;
+    private boolean rmiStarted = false;
 
 
     public boolean isRmiStarted() {
@@ -92,7 +92,6 @@ public class ClientImpl implements IClient {
     }
 
 
-
     public void connectToServer() {
         try {
             Registry reg = LocateRegistry.getRegistry();
@@ -104,20 +103,20 @@ public class ClientImpl implements IClient {
 
     //!!! Client to server RMI function begin
     public void serverJoinLobby(UUID lobbyID) throws RemoteException {
-        try{
+        try {
             stub.joinLobby(thisUser, lobbyID);
-        }catch(ConnectException ex){
+        } catch (ConnectException ex) {
             connectToServer();
             stub.joinLobby(thisUser, lobbyID);
         }
     }
 
     public Lobby serverCreateLobby() throws RemoteException {
-        try{
+        try {
             Lobby lob = stub.createLobby(thisUser);
             this.lobby = lob;
             return lob;
-        }catch (ConnectException ex){
+        } catch (ConnectException ex) {
             connectToServer();
             Lobby lob = stub.createLobby(thisUser);
             this.lobby = lob;
@@ -126,21 +125,21 @@ public class ClientImpl implements IClient {
     }
 
     public void serverLeaveLobby(UUID lobbyID) throws RemoteException {
-        try{
+        try {
             stub.leaveLobby(thisUser, lobbyID);
-        }catch(ConnectException ex){
+        } catch (ConnectException ex) {
             connectToServer();
             stub.leaveLobby(thisUser, lobbyID);
         }
     }
 
     public List<Lobby> serverGetLobbies() throws RemoteException {
-        try{
+        try {
             List<Lobby> result = stub.availableLobbies();
             System.out.println(result);
             return result;
 
-        }catch(ConnectException ex){
+        } catch (ConnectException ex) {
             connectToServer();
             List<Lobby> result = stub.availableLobbies();
             System.out.println(result);
@@ -151,9 +150,9 @@ public class ClientImpl implements IClient {
     }
 
     public Lobby serverStartGame() throws RemoteException {
-        try{
+        try {
             return stub.startGame(lobby.getLobbyId());
-        }catch(ConnectException ex){
+        } catch (ConnectException ex) {
             connectToServer();
             return stub.startGame(lobby.getLobbyId());
         }
@@ -182,7 +181,7 @@ public class ClientImpl implements IClient {
         System.out.println("user/+ " + this.thisUser.getUsername() + "con= " + "client/" + this.thisUser.getUsername());
         reg.rebind("client/" + this.thisUser.getUsername(), clientStub);
 
-        rmiStarted=true;
+        rmiStarted = true;
     }
 
     public void connectToTheClients() throws RemoteException, NotBoundException {
@@ -190,7 +189,7 @@ public class ClientImpl implements IClient {
             if (!user.getUsername().equals(thisUser.getUsername())) {
                 Registry reg = LocateRegistry.getRegistry(user.getRmiPort());
 
-                System.out.println("verbinde zu " + "client/" + user.getUsername()+ " von "+thisUser.getUsername());
+                System.out.println("verbinde zu " + "client/" + user.getUsername() + " von " + thisUser.getUsername());
                 IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
                 clientStubs.add(clientStub);
             }
@@ -201,16 +200,16 @@ public class ClientImpl implements IClient {
     //??? Client to Client RMI function begin ???
     @Override
     public void presentPlayers(Lobby lobby) throws RemoteException {
-        System.out.println("reciver ="+thisUser.getUsername()+" "+lobby);
+        System.out.println("reciver =" + thisUser.getUsername() + " " + lobby);
         if (!this.lobby.equals(lobby)) {
-            System.out.println("reciver ="+thisUser.getUsername()+" changed lobby");
+            System.out.println("reciver =" + thisUser.getUsername() + " changed lobby");
             this.lobby = lobby;
         }
         try {
-            if(!rmiStarted) {
+            if (!rmiStarted) {
                 startClientRMI();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -224,9 +223,9 @@ public class ClientImpl implements IClient {
     public void startGame() throws RemoteException {
         //TODO controller benachrichten und start game
 
-        System.out.println("reciver ="+thisUser.getUsername() +"Start game!!! ");
+        System.out.println("reciver =" + thisUser.getUsername() + "Start game!!! ");
 
-     //   userInterfaceLobbies.closeWindow();
+        //   userInterfaceLobbies.closeWindow();
         UIGameWindow.start();
 
     }
