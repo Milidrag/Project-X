@@ -42,25 +42,35 @@ public class AlcatrazImpl implements MoveListener {
 
     public void makeRMIMove(Move move){
         try {
+            System.out.println();
+            System.out.println("recived RMI move");
+
             alcatraz.doMove(move.getPlayer(),move.getPrisoner(),move.getRowOrCol(),move.getRow(),move.getCol());
         } catch (IllegalMoveException e) {
             e.printStackTrace();
         }
     }
 
+
+
     @Override
     public void moveDone(Player player, Prisoner prisoner, int rowOrCol, int row, int col) {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println("move done");
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         try {
-            alcatraz.doMove(player,prisoner,rowOrCol,row,col);
+          //  alcatraz.doMove(player,prisoner,rowOrCol,row,col);
 
             Move move=new Move(client.getThisUser(), player,prisoner,rowOrCol,row,col);
 
             try {
+                System.out.println();
+                System.out.println("send RMI move ");
                 client.sendMoveToOtherClients(move);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-        } catch (IllegalMoveException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

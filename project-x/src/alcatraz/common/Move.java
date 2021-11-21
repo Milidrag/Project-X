@@ -79,4 +79,17 @@ public class Move implements Serializable {
     public void setCol(int col) {
         this.col = col;
     }
+
+
+    @Override
+    public String toString() {
+        return "Move{" +
+                "user=" + user +
+                ", player=" + player +
+                ", prisoner=" + prisoner +
+                ", rowOrCol=" + rowOrCol +
+                ", row=" + row +
+                ", col=" + col +
+                '}';
+    }
 }

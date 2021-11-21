@@ -178,6 +178,8 @@ public class ClientImpl implements IClient {
     }
 
     public void sendMoveToOtherClients(Move move)throws RemoteException{
+        System.out.println();
+        System.out.println("send move"+ move.toString());
         for (IClient stub : this.clientStubs) {
             stub.Move(thisUser,move);
         }
@@ -230,6 +232,9 @@ public class ClientImpl implements IClient {
 
     @Override
     public void Move(User user, Move move) throws RemoteException {
+
+        System.out.println();
+        System.out.println("recived Move ="+move.toString());
         this.alcatraz.makeRMIMove(move);
     }
 
