@@ -2,14 +2,11 @@ package alcatraz.server;
 
 import alcatraz.common.Lobby;
 import alcatraz.common.User;
-import spread.SpreadConnection;
-import spread.SpreadException;
-import spread.SpreadGroup;
+import spread.*;
 
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.rmi.AccessException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -17,8 +14,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import spread.*;
 
 public class ServerImpl implements IServer, AdvancedMessageListener {
     static Registry reg;
@@ -38,7 +33,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
     public static void main(String[] args) {
         ServerImpl remoteObject = new ServerImpl();
 
-        while(remoteObject.GetIsRunning()) {
+        while(remoteObject.isRunning) {
             try {
                 Thread.sleep(17000);
             } catch (InterruptedException ex) {
@@ -84,6 +79,13 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
         }
     }
 
+    private void sendSpreadLobbyMessage(){
+        if (isPrimary){
+            sendSpreadMessage(newConnection, "spreadGroupName", lobbyManager.getLobbies(), lobbyMessage);
+        }
+    }
+
+
     private SpreadGroup initSpreadGroup(SpreadConnection newConnection, String spreadGroupName) {
             SpreadGroup group = new SpreadGroup();
             try {
@@ -97,20 +99,19 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
     @Override
     public void regularMessageReceived(SpreadMessage spreadMessage) {
-        if(spreadMessage.getType() == primaryMessage) {
+        if (spreadMessage.getType() == primaryMessage) {
             this.currentPrimaryGroup = spreadMessage.getSender();
-            System.out.println("primary set: "+ this.currentPrimaryGroup.toString());
+            System.out.println("primary set: " + this.currentPrimaryGroup.toString());
         }
 
-             /*   if(msg.getType() == lobbyMessage)
-                {
-                    try {
-                        lobbyManager.setLobbies((ArrayList<Lobby>) msg.getObject());
-                        System.out.println("Lobbies updated");
-                    } catch (SpreadException ex) {
-                        //TODO catch me if you can
-                    }
-                }*/
+        if (spreadMessage.getType() == lobbyMessage) {
+            try {
+                lobbyManager.setLobbies((ArrayList<Lobby>) spreadMessage.getObject());
+                System.out.println("Lobbies updated");
+            } catch (SpreadException ex) {
+                //TODO catch me if you can
+            }
+        }
         //TODO Player fehlen noch bei uns
             /*
                 if(msg.getType() == playerMessage)
@@ -349,6 +350,8 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
                 } else {
                     lobbyManager.addUser(user, lobbyId);
+                    //send to backupserver the lobbies with the updated user
+                    sendSpreadLobbyMessage();
                     return true;
                 }
             }
@@ -363,13 +366,10 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
         if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())||user.getUsername()==null) {
             throw new AssertionError("Username already taken");
         } else {
-            if(isPrimary == true) {
-                //TODO Dynamischer machen wegen spreadGroupName. es sollte möglich sein mehrere Gruppen zu verwalten
-                sendSpreadMessage(newConnection, "spreadGroupName", lobbyManager.getLobbies(), lobbyMessage);
-            }
-
-
-            return lobbyManager.genLobby(user);
+            Lobby lobby = lobbyManager.genLobby(user);
+            //send to backupserver the lobbies with the updated user
+            sendSpreadLobbyMessage();
+            return lobby;
         }
     }
 
@@ -377,6 +377,8 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
     public boolean leaveLobby(User user, UUID lobbyId) throws RemoteException{
         try {
             lobbyManager.removeUserFromLobby(user, lobbyId);
+            //send to backupserver the lobbies with the updated user
+            sendSpreadLobbyMessage();
             return true;
         } catch (NoSuchElementException e) {
             e.printStackTrace();
@@ -394,7 +396,11 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
                 System.out.println("lobby s="+userCountInLobby);
                 throw new RemoteException("wrong Lobby size ="+userCountInLobby);
             }else {
-                return lobbyManager.changeLobbyStatus(lobbyID);
+
+                Lobby lobby = lobbyManager.changeLobbyStatus(lobbyID);
+                //send to backupserver the lobbies with the updated user
+                sendSpreadLobbyMessage();
+                return lobby;
             }
         }catch (Exception exception){
             exception.printStackTrace();
@@ -450,10 +456,6 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
         } else if(info.isSelfLeave()) {
             System.out.println("SELF-LEAVE message for group " + group);
         }
-    }
-
-    private boolean GetIsRunning() {
-        return isRunning;
     }
 
 }
