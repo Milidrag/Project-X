@@ -5,6 +5,7 @@ import alcatraz.common.Move;
 import alcatraz.server.IServer;
 import alcatraz.common.User;
 
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -103,29 +104,59 @@ public class ClientImpl implements IClient {
 
     //!!! Client to server RMI function begin
     public void serverJoinLobby(UUID lobbyID) throws RemoteException {
-        stub.joinLobby(thisUser, lobbyID);
+        try{
+            stub.joinLobby(thisUser, lobbyID);
+        }catch(ConnectException ex){
+            connectToServer();
+            stub.joinLobby(thisUser, lobbyID);
+        }
     }
 
     public Lobby serverCreateLobby() throws RemoteException {
-        Lobby lob = stub.createLobby(thisUser);
-        this.lobby = lob;
-        return lob;
-
+        try{
+            Lobby lob = stub.createLobby(thisUser);
+            this.lobby = lob;
+            return lob;
+        }catch (ConnectException ex){
+            connectToServer();
+            Lobby lob = stub.createLobby(thisUser);
+            this.lobby = lob;
+            return lob;
+        }
     }
 
     public void serverLeaveLobby(UUID lobbyID) throws RemoteException {
-        stub.leaveLobby(thisUser, lobbyID);
+        try{
+            stub.leaveLobby(thisUser, lobbyID);
+        }catch(ConnectException ex){
+            connectToServer();
+            stub.leaveLobby(thisUser, lobbyID);
+        }
     }
 
     public List<Lobby> serverGetLobbies() throws RemoteException {
-        List<Lobby> result = stub.availableLobbies();
-        System.out.println(result);
+        try{
+            List<Lobby> result = stub.availableLobbies();
+            System.out.println(result);
+            return result;
 
-        return result;
+        }catch(ConnectException ex){
+            connectToServer();
+            List<Lobby> result = stub.availableLobbies();
+            System.out.println(result);
+            return result;
+
+        }
+
     }
 
     public Lobby serverStartGame() throws RemoteException {
-        return stub.startGame(lobby.getLobbyId());
+        try{
+            return stub.startGame(lobby.getLobbyId());
+        }catch(ConnectException ex){
+            connectToServer();
+            return stub.startGame(lobby.getLobbyId());
+        }
     }
 
 

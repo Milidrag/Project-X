@@ -273,14 +273,14 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
             //elect new primary
             if(primaryFound == false)
             {
-                System.out.println("Primary is gone");
+                Logger.getLogger(ServerImpl2.class.getName()).log(Level.WARNING, "Primary is gone");
 
                 if (info.getMembers().length == 1) {
                     setMePrimary();
                 }
                 else {
                     this.currentPrimaryGroup = info.getMembers()[0];
-                    System.out.println("New Primary: "+ info.getMembers()[0].toString());
+                    Logger.getLogger(ServerImpl2.class.getName()).log(Level.INFO, "New primary: " + info.getMembers()[0].toString());
 
                     if (this.currentPrimaryGroup.equals(this.myGroup)) {
                         setMePrimary();
@@ -298,6 +298,8 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
         this.currentPrimaryGroup = this.myGroup;
         this.isPrimary = true;
         System.out.println("New primary: "+myGroup.toString());
+        Logger.getLogger(ServerImpl2.class.getName()).log(Level.INFO, "New primary: "+myGroup.toString());
+
         setRMIforPrimary();
     }
 
@@ -309,6 +311,7 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
             reg = LocateRegistry.getRegistry(1099);
 
             reg.rebind("Server", stub);
+            Logger.getLogger(ServerImpl2.class.getName()).log(Level.INFO, "New primary set for RMI");
         } catch (RemoteException ex) {
             Logger.getLogger(ServerImpl2.class.getName()).log(Level.SEVERE, null, ex);
 
