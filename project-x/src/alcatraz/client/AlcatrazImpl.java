@@ -36,6 +36,7 @@ public class AlcatrazImpl implements MoveListener {
                 alcatraz.getPlayer(i).setName(client.getLobby().getUsers().get(i).getUsername());
             }
         }
+        alcatraz.addMoveListener(this);
         alcatraz.showWindow();
         alcatraz.start();
     }
@@ -55,9 +56,8 @@ public class AlcatrazImpl implements MoveListener {
 
     @Override
     public void moveDone(Player player, Prisoner prisoner, int rowOrCol, int row, int col) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         System.out.println("move done");
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
         try {
           //  alcatraz.doMove(player,prisoner,rowOrCol,row,col);
 
