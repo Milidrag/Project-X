@@ -25,11 +25,11 @@ public class UserInterfaceLobbies {
 
     private JFrame frame;
 
-    private UIGameWindow UIGameWindow;
+   // private UIGameWindow UIGameWindow;
 
-    public void setGameWindow(UIGameWindow UIGameWindow) {
-        this.UIGameWindow = UIGameWindow;
-    }
+//    public void setGameWindow(UIGameWindow UIGameWindow) {
+//        this.UIGameWindow = UIGameWindow;
+//    }
 
     public ClientImpl getClient() {
         return client;

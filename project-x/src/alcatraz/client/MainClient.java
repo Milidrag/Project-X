@@ -10,14 +10,14 @@ public class MainClient {
     public void init(){
         //init objects
         userInterfaceLobbies=new UserInterfaceLobbies(client);
-        gameConnection=new GameConnection(client);
-        UIGameWindow =new UIGameWindow(client);
+//        gameConnection=new GameConnection(client);
+//        UIGameWindow =new UIGameWindow(client);
 
         //set
-        userInterfaceLobbies.setGameWindow(UIGameWindow);
-        UIGameWindow.setGameConnection(gameConnection);
-        client.setGameConnection(gameConnection);
-        client.setGameWindow(UIGameWindow);
+      //  userInterfaceLobbies.setGameWindow(UIGameWindow);
+     //   UIGameWindow.setGameConnection(gameConnection);
+//        client.setGameConnection(gameConnection);
+//        client.setGameWindow(UIGameWindow);
         client.setUserInterfaceLobbies(userInterfaceLobbies);
 
 
