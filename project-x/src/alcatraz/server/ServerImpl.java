@@ -37,9 +37,6 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
     public static void main(String[] args) {
         ServerImpl remoteObject = new ServerImpl();
-       // remoteObject.registerForRMI();
-
-      //  remoteObject.test();//add lobbies for testing
 
         while(remoteObject.GetIsRunning()) {
             try {
@@ -51,10 +48,6 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
         System.out.println("Programm ended");
 
 
-    }
-
-    private boolean GetIsRunning() {
-        return isRunning;
     }
 
     public ServerImpl(){
@@ -77,7 +70,6 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
     }
 
-
     private static void sendSpreadMessage(SpreadConnection connection, String groupname, Object data, short messagetype) {
         try {
             SpreadMessage message = new SpreadMessage();
@@ -92,7 +84,6 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
         }
     }
 
-
     private SpreadGroup initSpreadGroup(SpreadConnection newConnection, String spreadGroupName) {
             SpreadGroup group = new SpreadGroup();
             try {
@@ -102,115 +93,6 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
                 System.err.println("Spread Exception: " +ex.getMessage() + Arrays.toString(ex.getStackTrace()));
             }
             return group;
-    }
-
-
-    //generate Lobbies for testing
-    private void test() {
-        Lobby lobby1 = new Lobby();
-        Lobby lobby2 = new Lobby();
-        Lobby lobby3 = new Lobby();
-
-        User user1 = new User("test");
-
-        User user2 = new User("test User 2");
-
-        User user3 = new User("test User 3");
-
-        lobby1.addPlayer(user1);
-        lobby2.addPlayer(user2);
-        lobby3.addPlayer(user3);
-
-        lobbyManager.getLobbies().add(lobby1);
-        lobbyManager.getLobbies().add(lobby2);
-        lobbyManager.getLobbies().add(lobby3);
-    }
-
-    public void registerForRMI() {
-        try {
-            IServer stub = (IServer) UnicastRemoteObject.exportObject(this, 0);
-            reg = LocateRegistry.createRegistry(1099);
-            reg = LocateRegistry.getRegistry(1099);
-            reg.rebind("Server", stub);
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public LobbyManager getLobbyManager() {
-        return lobbyManager;
-    }
-
-    @Override
-    public List<Lobby> availableLobbies()throws RemoteException {
-        return lobbyManager.getLobbies();
-    }
-
-    @Override
-    public boolean joinLobby(User user, UUID lobbyId) throws RemoteException, AssertionError {
-        try {
-            if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())||user.getUsername()==null) {
-
-                throw new AssertionError("Username already taken");
-            } else {
-                if (lobbyManager.getLobby(lobbyId).getUsers().size() >= 4) {
-                    throw new RemoteException("Lobby is full");
-
-                } else {
-                    lobbyManager.addUser(user, lobbyId);
-                    return true;
-                }
-            }
-        } catch (NoSuchElementException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public Lobby createLobby(User user) throws RemoteException, AssertionError {
-        if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())||user.getUsername()==null) {
-            throw new AssertionError("Username already taken");
-        } else {
-            if(isPrimary == true) {
-                //TODO Dynamischer machen wegen spreadGroupName. es sollte möglich sein mehrere Gruppen zu verwalten
-                sendSpreadMessage(newConnection, "spreadGroupName", lobbyManager.getLobbies(), lobbyMessage);
-            }
-
-
-            return lobbyManager.genLobby(user);
-        }
-    }
-
-    @Override
-    public boolean leaveLobby(User user, UUID lobbyId) throws RemoteException{
-        try {
-            lobbyManager.removeUserFromLobby(user, lobbyId);
-            return true;
-        } catch (NoSuchElementException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-    }
-
-    @Override
-    public Lobby startGame(UUID lobbyID) throws RemoteException , NoSuchElementException {
-        try {
-            System.out.println(lobbyID);
-            int userCountInLobby  = lobbyManager.getLobby(lobbyID).getUsers().size();
-            if(userCountInLobby<2||userCountInLobby>4){
-                System.out.println("lobby s="+userCountInLobby);
-                throw new RemoteException("wrong Lobby size ="+userCountInLobby);
-            }else {
-                return lobbyManager.changeLobbyStatus(lobbyID);
-            }
-        }catch (Exception exception){
-            exception.printStackTrace();
-            throw new RemoteException("error");
-        }
-
     }
 
     @Override
@@ -262,8 +144,6 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
         //TODO: feststellen ob der derzeitige Server der primary ist
     }
-
-
 
     private void DisplayMessage(SpreadMessage msg)
     {
@@ -448,7 +328,80 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
     }
 
+    public LobbyManager getLobbyManager() {
+        return lobbyManager;
+    }
 
+    @Override
+    public List<Lobby> availableLobbies()throws RemoteException {
+        return lobbyManager.getLobbies();
+    }
+
+    @Override
+    public boolean joinLobby(User user, UUID lobbyId) throws RemoteException, AssertionError {
+        try {
+            if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())||user.getUsername()==null) {
+
+                throw new AssertionError("Username already taken");
+            } else {
+                if (lobbyManager.getLobby(lobbyId).getUsers().size() >= 4) {
+                    throw new RemoteException("Lobby is full");
+
+                } else {
+                    lobbyManager.addUser(user, lobbyId);
+                    return true;
+                }
+            }
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Lobby createLobby(User user) throws RemoteException, AssertionError {
+        if (lobbyManager.checkIfUsernameIsUsed(user.getUsername())||user.getUsername()==null) {
+            throw new AssertionError("Username already taken");
+        } else {
+            if(isPrimary == true) {
+                //TODO Dynamischer machen wegen spreadGroupName. es sollte möglich sein mehrere Gruppen zu verwalten
+                sendSpreadMessage(newConnection, "spreadGroupName", lobbyManager.getLobbies(), lobbyMessage);
+            }
+
+
+            return lobbyManager.genLobby(user);
+        }
+    }
+
+    @Override
+    public boolean leaveLobby(User user, UUID lobbyId) throws RemoteException{
+        try {
+            lobbyManager.removeUserFromLobby(user, lobbyId);
+            return true;
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    @Override
+    public Lobby startGame(UUID lobbyID) throws RemoteException , NoSuchElementException {
+        try {
+            System.out.println(lobbyID);
+            int userCountInLobby  = lobbyManager.getLobby(lobbyID).getUsers().size();
+            if(userCountInLobby<2||userCountInLobby>4){
+                System.out.println("lobby s="+userCountInLobby);
+                throw new RemoteException("wrong Lobby size ="+userCountInLobby);
+            }else {
+                return lobbyManager.changeLobbyStatus(lobbyID);
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+            throw new RemoteException("error");
+        }
+
+    }
 
     // Print this membership data.  Does so in a generic way so identical
     // function is used in recThread and User.
@@ -498,4 +451,9 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
             System.out.println("SELF-LEAVE message for group " + group);
         }
     }
+
+    private boolean GetIsRunning() {
+        return isRunning;
+    }
+
 }
