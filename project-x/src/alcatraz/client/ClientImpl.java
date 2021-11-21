@@ -34,9 +34,9 @@ public class ClientImpl implements IClient {
     private Lobby lobby;
 
     //Game
-    private AlcatrazImpl alcatraz=new AlcatrazImpl(this);
+    private AlcatrazImpl alcatraz = new AlcatrazImpl(this);
 
-   // private GameConnection gameConnection;
+    // private GameConnection gameConnection;
     //private UIGameWindow UIGameWindow;
     private UserInterfaceLobbies userInterfaceLobbies;
 
@@ -177,13 +177,14 @@ public class ClientImpl implements IClient {
         }
     }
 
-    public void sendMoveToOtherClients(Move move)throws RemoteException{
+    public void sendMoveToOtherClients(Move move) throws RemoteException {
         System.out.println();
-        System.out.println("send move"+ move.toString());
+        System.out.println("send moveRMU" + move.toString());
+        System.out.println("anz Clints" + clientStubs.size());
         for (IClient stub : this.clientStubs) {
             System.out.println("send to:");
             System.out.println(stub.toString());
-            stub.Move(thisUser,move);
+            stub.Move(thisUser, move);
         }
     }
 
@@ -198,6 +199,7 @@ public class ClientImpl implements IClient {
     }
 
     public void connectToTheClients() throws RemoteException, NotBoundException {
+
         for (User user : this.lobby.getUsers()) {
             if (!user.getUsername().equals(thisUser.getUsername())) {
                 Registry reg = LocateRegistry.getRegistry(user.getRmiPort());
@@ -209,7 +211,7 @@ public class ClientImpl implements IClient {
         }
     }
 
-    public void startAlcatrazGame(){
+    public void startAlcatrazGame() {
         alcatraz.init();
     }
 
@@ -224,9 +226,11 @@ public class ClientImpl implements IClient {
 
         }
         try {
+
             if (!rmiStarted) {
                 startClientRMI();
             }
+            connectToTheClients();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -236,13 +240,14 @@ public class ClientImpl implements IClient {
     public void Move(User user, Move move) throws RemoteException {
 
         System.out.println();
-        System.out.println("recived Move ="+move.toString());
+        System.out.println("recived Move =" + move.toString());
         this.alcatraz.makeRMIMove(move);
     }
 
     @Override
     public void startGame() throws RemoteException {
         //TODO controller benachrichtigen und start game
+
 
         System.out.println("receiver =" + thisUser.getUsername() + "Start game!!! ");
 

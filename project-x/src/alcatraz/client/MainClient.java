@@ -3,8 +3,8 @@ package alcatraz.client;
 public class MainClient {
 
     private ClientImpl client=new ClientImpl();
-    private GameConnection gameConnection;
-    private UIGameWindow UIGameWindow;
+    //private GameConnection gameConnection;
+    //private UIGameWindow UIGameWindow;
     private UserInterfaceLobbies userInterfaceLobbies;
 
     public void init(){

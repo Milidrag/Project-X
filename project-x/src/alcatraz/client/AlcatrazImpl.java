@@ -10,6 +10,8 @@ public class AlcatrazImpl implements MoveListener {
     private int numberOfPlayers;
     private Alcatraz alcatraz;
 
+    private boolean isReciver = false;
+
     public AlcatrazImpl(ClientImpl client) {
         this.client = client;
     }
@@ -18,21 +20,21 @@ public class AlcatrazImpl implements MoveListener {
         this.client = client;
     }
 
-    public void init(){
-        numberOfPlayers=client.getLobby().getUsers().size();
-        alcatraz=new Alcatraz();
+    public void init() {
+        numberOfPlayers = client.getLobby().getUsers().size();
+        alcatraz = new Alcatraz();
 
-        int positionOfThisPlayer= 0;
+        int positionOfThisPlayer = 0;
         try {
-            positionOfThisPlayer=client.getLobby().getUserPosition(client.getThisUser());
-        }catch (Exception e){
+            positionOfThisPlayer = client.getLobby().getUserPosition(client.getThisUser());
+        } catch (Exception e) {
             System.out.println("Error in Alc int position ca not be foun");
             e.printStackTrace();
 
         }
-        alcatraz.init(numberOfPlayers,positionOfThisPlayer);
-        for (int i=0;i<numberOfPlayers;i++){
-            if(i!=positionOfThisPlayer){
+        alcatraz.init(numberOfPlayers, positionOfThisPlayer);
+        for (int i = 0; i < numberOfPlayers; i++) {
+            if (i != positionOfThisPlayer) {
                 alcatraz.getPlayer(i).setName(client.getLobby().getUsers().get(i).getUsername());
             }
         }
@@ -41,17 +43,21 @@ public class AlcatrazImpl implements MoveListener {
         alcatraz.start();
     }
 
-    public void makeRMIMove(Move move){
+    public void makeRMIMove(Move move) {
         try {
             System.out.println();
             System.out.println("recived RMI move");
 
-            alcatraz.doMove(move.getPlayer(),move.getPrisoner(),move.getRowOrCol(),move.getRow(),move.getCol());
+            isReciver = true;
+            alcatraz.doMove(move.getPlayer(), move.getPrisoner(), move.getRowOrCol(), move.getRow(), move.getCol());
+
         } catch (IllegalMoveException e) {
             e.printStackTrace();
         }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
-
 
 
     @Override
@@ -59,17 +65,24 @@ public class AlcatrazImpl implements MoveListener {
         System.out.println("move done");
 
         try {
-          //  alcatraz.doMove(player,prisoner,rowOrCol,row,col);
+            //  alcatraz.doMove(player,prisoner,rowOrCol,row,col);
 
-            Move move=new Move(client.getThisUser(), player,prisoner,rowOrCol,row,col);
+            if (!isReciver) {
+                Move move = new Move(client.getThisUser(), player, prisoner, rowOrCol, row, col);
 
-            try {
-                System.out.println();
-                System.out.println("send RMI move ");
-                client.sendMoveToOtherClients(move);
-            } catch (RemoteException e) {
-                e.printStackTrace();
+                try {
+                    System.out.println();
+                    System.out.println("send RMI move ");
+                    client.sendMoveToOtherClients(move);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            } else {
+                isReciver = false;
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,11 +90,10 @@ public class AlcatrazImpl implements MoveListener {
 
     @Override
     public void gameWon(Player player) {
-        System.out.println(player.getName() +" has won the game");
+        System.out.println(player.getName() + " has won the game");
 
         //TODO : send end game RMI
     }
-
 
 
 }
