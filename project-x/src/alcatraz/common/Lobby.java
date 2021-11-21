@@ -1,10 +1,7 @@
 package alcatraz.common;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class Lobby implements Serializable {
     private UUID lobbyId = UUID.randomUUID();
@@ -40,6 +37,17 @@ public class Lobby implements Serializable {
 
     public List<User> getUsers() {
         return users;
+    }
+
+    public int getUserPosition(User user) throws NoSuchElementException {
+
+        for ( int i=0;i<users.size();i++){
+            if(users.get(i).equals(user)){
+                return i;
+            }
+        }
+        throw new NoSuchElementException("No user "+user.toString());
+
     }
 
     @Override
