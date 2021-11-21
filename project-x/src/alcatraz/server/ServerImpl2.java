@@ -12,6 +12,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -101,13 +102,14 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
     public void regularMessageReceived(SpreadMessage spreadMessage) {
         if (spreadMessage.getType() == primaryMessage) {
             this.currentPrimaryGroup = spreadMessage.getSender();
-            System.out.println("primary set: " + this.currentPrimaryGroup.toString());
+            Logger.getLogger(ServerImpl2.class.getName()).log(Level.INFO,"primary set: " + this.currentPrimaryGroup.toString());
+
         }
 
         if (spreadMessage.getType() == lobbyMessage) {
             try {
                 lobbyManager.setLobbies((ArrayList<Lobby>) spreadMessage.getObject());
-                System.out.println("Lobbies updated");
+                Logger.getLogger(ServerImpl2.class.getName()).log(Level.INFO,"Lobbies updated");
             } catch (SpreadException ex) {
                 //TODO catch me if you can
             }
@@ -136,14 +138,8 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
      */
     @Override
     public void membershipMessageReceived(SpreadMessage spreadMessage) {
-
-
         definePrimary(spreadMessage);
-
-        System.out.println("Bin ich der Primary?: " + isPrimary);
         DisplayMessage(spreadMessage);
-
-        //TODO: feststellen ob der derzeitige Server der primary ist
     }
 
     private void DisplayMessage(SpreadMessage msg)
@@ -177,12 +173,14 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
                     System.out.println("There is an endian mismatch.");
                 else
                     System.out.println("There is no endian mismatch.");
-                */
+
                 SpreadGroup groups[] = msg.getGroups();
                 System.out.println("To " + groups.length + " groups.");
                 byte data[] = msg.getData();
                 System.out.println("The data is " + data.length + " bytes.");
                 System.out.println("The message is: " + new String(data));
+                  
+                */
             }
             else if ( msg.isReject() )
             {
@@ -300,7 +298,6 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
         this.currentPrimaryGroup = this.myGroup;
         this.isPrimary = true;
         System.out.println("New primary: "+myGroup.toString());
-        //TODO auskommentiert damit Lukas am Frontend weiterarbeiten kann
         setRMIforPrimary();
     }
 
@@ -391,9 +388,12 @@ public class ServerImpl2 implements IServer, AdvancedMessageListener {
     public Lobby startGame(UUID lobbyID) throws RemoteException , NoSuchElementException {
         try {
             System.out.println(lobbyID);
+            Logger.getLogger(ServerImpl2.class.getName()).log(Level.INFO,"startGame gestartet mit lobbyID: " + lobbyID);
+
             int userCountInLobby  = lobbyManager.getLobby(lobbyID).getUsers().size();
             if(userCountInLobby<2||userCountInLobby>4){
                 System.out.println("lobby s="+userCountInLobby);
+                Logger.getLogger(ServerImpl2.class.getName()).log(Level.SEVERE,"Useranzahl ist nicht für startGame in Ordnung, Anzahl +" + userCountInLobby);
                 throw new RemoteException("wrong Lobby size ="+userCountInLobby);
             }else {
 
