@@ -167,13 +167,27 @@ public class ClientImpl implements IClient {
 
     public void sendUsersToOtherClients() throws RemoteException {
         for (IClient stub : this.clientStubs) {
-            stub.presentPlayers(this.lobby);
+
+            try {
+
+                stub.presentPlayers(this.lobby);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+                //TODO: implement connection loss handling
+            }
+
         }
     }
 
     public void sendStartToOtherClients() throws RemoteException {
         for (IClient stub : this.clientStubs) {
-            stub.startGame();
+            try {
+
+                stub.startGame();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+                //TODO: implement connection loss handling
+            }
         }
     }
 
@@ -182,9 +196,15 @@ public class ClientImpl implements IClient {
         System.out.println("send moveRMU" + move.toString());
         System.out.println("anz Clints" + clientStubs.size());
         for (IClient stub : this.clientStubs) {
-            System.out.println("send to:");
-            System.out.println(stub.toString());
-            stub.Move(thisUser, move);
+            try {
+                System.out.println("send to:");
+                System.out.println(stub.toString());
+                stub.Move(thisUser, move);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+                //TODO: implement connection loss handling
+            }
+
         }
     }
 
@@ -246,7 +266,6 @@ public class ClientImpl implements IClient {
 
     @Override
     public void startGame() throws RemoteException {
-        //TODO controller benachrichtigen und start game
 
 
         System.out.println("receiver =" + thisUser.getUsername() + "Start game!!! ");
