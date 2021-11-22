@@ -25,12 +25,6 @@ public class UserInterfaceLobbies {
 
     private JFrame frame;
 
-   // private UIGameWindow UIGameWindow;
-
-//    public void setGameWindow(UIGameWindow UIGameWindow) {
-//        this.UIGameWindow = UIGameWindow;
-//    }
-
     public ClientImpl getClient() {
         return client;
     }
@@ -68,15 +62,11 @@ public class UserInterfaceLobbies {
             Lobby lobby = client.serverStartGame();
             client.setLobby(lobby);
 
-            //TODO:
-
             client.connectToTheClients();
             client.sendUsersToOtherClients();
             client.sendStartToOtherClients();
 
             client.startAlcatrazGame();
-           // UIGameWindow.start();
-           // closeWindow();
 
         } catch (RemoteException remoteException) {
             remoteException.printStackTrace();
@@ -102,7 +92,7 @@ public class UserInterfaceLobbies {
             } catch (RemoteException ex) {
                 ex.printStackTrace();
 
-            }catch (AssertionError assertionError){
+            } catch (AssertionError assertionError) {
                 assertionError.printStackTrace();
                 userNameTextField.setEnabled(true);
 
@@ -115,7 +105,7 @@ public class UserInterfaceLobbies {
         }
     }
 
-    public void closeWindow(){
+    public void closeWindow() {
         this.frame.dispose();
     }
 
@@ -173,9 +163,9 @@ public class UserInterfaceLobbies {
 
             } catch (RemoteException ex) {
                 ex.printStackTrace();
-            }catch (AssertionError assertionError){
+            } catch (AssertionError assertionError) {
                 assertionError.printStackTrace();
-               // userNameTextField.setEnabled(true);
+
                 userNameTextField.setText("Username already taken");
             }
         } else {
@@ -238,8 +228,6 @@ public class UserInterfaceLobbies {
         this.client = client;
 
     }
-
-
 
 
 }

@@ -8,7 +8,7 @@ public class Lobby implements Serializable {
 
     private List<User> users = new ArrayList<>();
 
-    private boolean isGameRunning=false;
+    private boolean isGameRunning = false;
 
 
     public Lobby() {
@@ -41,12 +41,12 @@ public class Lobby implements Serializable {
 
     public int getUserPosition(User user) throws NoSuchElementException {
 
-        for ( int i=0;i<users.size();i++){
-            if(users.get(i).equals(user)){
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).equals(user)) {
                 return i;
             }
         }
-        throw new NoSuchElementException("No user "+user.toString());
+        throw new NoSuchElementException("No user " + user.toString());
 
     }
 

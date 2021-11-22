@@ -11,7 +11,6 @@ public class AlcatrazImpl implements MoveListener {
     private Alcatraz alcatraz;
 
 
-
     public AlcatrazImpl(ClientImpl client) {
         this.client = client;
     }
@@ -52,8 +51,7 @@ public class AlcatrazImpl implements MoveListener {
 
         } catch (IllegalMoveException e) {
             e.printStackTrace();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -67,17 +65,17 @@ public class AlcatrazImpl implements MoveListener {
             //  alcatraz.doMove(player,prisoner,rowOrCol,row,col);
 
 
-                Move move = new Move(client.getThisUser(), player, prisoner, rowOrCol, row, col);
+            Move move = new Move(client.getThisUser(), player, prisoner, rowOrCol, row, col);
 
-                try {
-                    System.out.println();
-                    System.out.println("send RMI move ");
-                    client.sendMoveToOtherClients(move);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+            try {
+                System.out.println();
+                System.out.println("send RMI move ");
+                client.sendMoveToOtherClients(move);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
 
         } catch (Exception e) {

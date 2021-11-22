@@ -36,8 +36,7 @@ public class ClientImpl implements IClient {
     //Game
     private AlcatrazImpl alcatraz = new AlcatrazImpl(this);
 
-    // private GameConnection gameConnection;
-    //private UIGameWindow UIGameWindow;
+
     private UserInterfaceLobbies userInterfaceLobbies;
 
     private boolean rmiStarted = false;
@@ -54,14 +53,6 @@ public class ClientImpl implements IClient {
     public void setUserInterfaceLobbies(UserInterfaceLobbies userInterfaceLobbies) {
         this.userInterfaceLobbies = userInterfaceLobbies;
     }
-
-//    public void setGameConnection(GameConnection gameConnection) {
-//        this.gameConnection = gameConnection;
-//    }
-//
-//    public void setGameWindow(UIGameWindow UIGameWindow) {
-//        this.UIGameWindow = UIGameWindow;
-//    }
 
     public User getThisUser() {
         return thisUser;
@@ -267,11 +258,8 @@ public class ClientImpl implements IClient {
     @Override
     public void startGame() throws RemoteException {
 
-
         System.out.println("receiver =" + thisUser.getUsername() + "Start game!!! ");
 
-        //   userInterfaceLobbies.closeWindow();
-        //UIGameWindow.start();
         startAlcatrazGame();
     }
 

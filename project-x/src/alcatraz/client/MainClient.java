@@ -2,37 +2,22 @@ package alcatraz.client;
 
 public class MainClient {
 
-    private ClientImpl client=new ClientImpl();
-    //private GameConnection gameConnection;
-    //private UIGameWindow UIGameWindow;
+    private ClientImpl client = new ClientImpl();
     private UserInterfaceLobbies userInterfaceLobbies;
 
-    public void init(){
-        //init objects
-        userInterfaceLobbies=new UserInterfaceLobbies(client);
-//        gameConnection=new GameConnection(client);
-//        UIGameWindow =new UIGameWindow(client);
+    public void init() {
+        userInterfaceLobbies = new UserInterfaceLobbies(client);
 
-        //set
-      //  userInterfaceLobbies.setGameWindow(UIGameWindow);
-     //   UIGameWindow.setGameConnection(gameConnection);
-//        client.setGameConnection(gameConnection);
-//        client.setGameWindow(UIGameWindow);
         client.setUserInterfaceLobbies(userInterfaceLobbies);
 
-
         client.connectToServer();
-
 
         userInterfaceLobbies.generateWindow();
     }
 
-
-
-
     public static void main(String[] args) {
-      MainClient controller=new MainClient();
-      controller.init();
+        MainClient controller = new MainClient();
+        controller.init();
 
     }
 

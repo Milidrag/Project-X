@@ -12,12 +12,12 @@ import java.util.UUID;
 public interface IServer extends Remote {
     public List<Lobby> availableLobbies() throws RemoteException;
 
-    public boolean joinLobby(User user, UUID lobbyId) throws RemoteException,AssertionError;
+    public boolean joinLobby(User user, UUID lobbyId) throws RemoteException, AssertionError;
 
-    public Lobby createLobby(User user) throws RemoteException,AssertionError ;
+    public Lobby createLobby(User user) throws RemoteException, AssertionError;
 
     public boolean leaveLobby(User user, UUID lobbyId) throws RemoteException;
 
-    public Lobby startGame(UUID lobbyID) throws RemoteException , NoSuchElementException;
+    public Lobby startGame(UUID lobbyID) throws RemoteException, NoSuchElementException;
 
 }

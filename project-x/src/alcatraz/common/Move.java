@@ -16,7 +16,7 @@ public class Move implements Serializable {
     private User user;
     private Player player;
     private Prisoner prisoner;
-    private  int rowOrCol;
+    private int rowOrCol;
     private int row;
     private int col;
 
