@@ -67,6 +67,7 @@ public class UserInterfaceLobbies {
             client.sendStartToOtherClients();
 
             client.startAlcatrazGame();
+            closeWindow();
 
         } catch (RemoteException remoteException) {
             remoteException.printStackTrace();
@@ -106,7 +107,7 @@ public class UserInterfaceLobbies {
     }
 
     public void closeWindow() {
-        this.frame.dispose();
+        this.frame.setVisible(false);
     }
 
 

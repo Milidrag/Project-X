@@ -8,11 +8,12 @@ public class MainClient {
     public void init() {
         userInterfaceLobbies = new UserInterfaceLobbies(client);
 
-        client.setUserInterfaceLobbies(userInterfaceLobbies);
+
 
         client.connectToServer();
 
         userInterfaceLobbies.generateWindow();
+        client.setUserInterfaceLobbies(userInterfaceLobbies);
     }
 
     public static void main(String[] args) {

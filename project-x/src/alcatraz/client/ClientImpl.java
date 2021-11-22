@@ -260,6 +260,7 @@ public class ClientImpl implements IClient {
 
         System.out.println("receiver =" + thisUser.getUsername() + "Start game!!! ");
 
+        userInterfaceLobbies.closeWindow();
         startAlcatrazGame();
     }
 
