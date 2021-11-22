@@ -110,6 +110,10 @@ public class UserInterfaceLobbies {
         this.frame.setVisible(false);
     }
 
+    public void showWindow(){
+        this.frame.setVisible(true);
+    }
+
 
     private void fillLobbiesScrollPane(Boolean generateButtons) {
         try {
