@@ -19,5 +19,5 @@ public interface IServer extends Remote {
     public boolean leaveLobby(User user, UUID lobbyId) throws RemoteException;
 
     public Lobby startGame(UUID lobbyID) throws RemoteException , NoSuchElementException;
-    //TODO: Methoden aus der Präsentation einfügen
+
 }
