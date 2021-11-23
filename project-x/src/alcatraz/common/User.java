@@ -14,17 +14,17 @@ public class User implements Serializable {
 
     private int rmiPort;
 
-    private InetAddress ipAddress;
+    private String ipAddress;
 
     public User() {
 
     }
 
     public void setIpAddress() throws UnknownHostException {
-        ipAddress=InetAddress.getLocalHost();
+        ipAddress=InetAddress.getLocalHost().getHostAddress();
     }
 
-    public InetAddress getIpAddress() {
+    public String getIpAddress() {
         return ipAddress;
     }
 

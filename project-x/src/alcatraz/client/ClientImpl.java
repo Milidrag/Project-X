@@ -219,10 +219,25 @@ public class ClientImpl implements IClient {
 
         for (User user : this.lobby.getUsers()) {
             if (!user.getUsername().equals(thisUser.getUsername())) {
-                Registry reg = LocateRegistry.getRegistry(user.getRmiPort());
+                Registry reg;
+                String ipAddress = user.getIpAddress().toString();
+                if(ipAddress!=null) {
+
+
+
+                    System.out.println();
+                    System.out.println();
+                    System.out.println("connect to ip: "+ipAddress);
+                     reg = LocateRegistry.getRegistry(ipAddress,user.getRmiPort());
+                }else {
+                    reg = LocateRegistry.getRegistry(user.getRmiPort());
+                }
 
                 System.out.println("verbinde zu " + "client/" + user.getUsername() + " von " + thisUser.getUsername());
+
                 IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
+
+
                 clientStubs.add(clientStub);
             }
         }
