@@ -202,9 +202,11 @@ public class ClientImpl implements IClient {
         IClient clientStub = (IClient) UnicastRemoteObject.exportObject(this, 0);
         reg = LocateRegistry.createRegistry(thisUser.getRmiPort());
         reg = LocateRegistry.getRegistry(thisUser.getRmiPort());
-        System.out.println("user/+ " + this.thisUser.getUsername() + "con= " + "client/" + this.thisUser.getUsername());
-        reg.rebind("client/" + this.thisUser.getUsername(), clientStub);
-
+       // System.out.println("user/+ " + this.thisUser.getUsername() + "con= " + "client/" + this.thisUser.getUsername());
+        String connect = "client/" + this.thisUser.getUsername();
+        reg.rebind(connect, clientStub);
+        System.out.println();
+        Logger.getLogger(ClientImpl.class.getName()).log(Level.INFO, " \n client:" +thisUser.getUsername()+ "has started RMI with name= "+connect);
         rmiStarted = true;
     }
 
@@ -219,7 +221,8 @@ public class ClientImpl implements IClient {
 //                    System.out.println("connect to ip: " + ipAddress);
                     reg = LocateRegistry.getRegistry(ipAddress, user.getRmiPort());
                 } else {
-                    Logger.getLogger(ClientImpl.class.getName()).log(Level.WARNING," \n \nNo Ip Address from Target");
+                    System.out.println();
+                    Logger.getLogger(ClientImpl.class.getName()).log(Level.WARNING,"No Ip Address from Target");
                     reg = LocateRegistry.getRegistry(user.getRmiPort());
                 }
 
@@ -227,7 +230,9 @@ public class ClientImpl implements IClient {
 
                 IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
                 clientStubs.add(clientStub);
-                Logger.getLogger(ClientImpl.class.getName()).log(Level.INFO, " \nVerbinde:" +thisUser.getUsername() +" zu:"+user.getUsername()+"\n"+" Ip address: "+ipAddress+" Port:"+user.getRmiPort() );
+                System.out.println();
+                Logger.getLogger(ClientImpl.class.getName()).log(Level.INFO, " Verbinde:" +thisUser.getUsername() +" zu:"+user.getUsername()+"\n"+" Ip address: "+ipAddress+" Port:"+user.getRmiPort() );
+
             }
         }
     }
