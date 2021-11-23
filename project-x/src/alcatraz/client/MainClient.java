@@ -8,8 +8,6 @@ public class MainClient {
     public void init() {
         userInterfaceLobbies = new UserInterfaceLobbies(client);
 
-
-
         client.connectToServer();
 
         userInterfaceLobbies.generateWindow();
