@@ -1,6 +1,8 @@
 package alcatraz.common;
 
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,8 +14,18 @@ public class User implements Serializable {
 
     private int rmiPort;
 
+    private InetAddress ipAddress;
+
     public User() {
 
+    }
+
+    public void setIpAddress() throws UnknownHostException {
+        ipAddress=InetAddress.getLocalHost();
+    }
+
+    public InetAddress getIpAddress() {
+        return ipAddress;
     }
 
     public int getRmiPort() {

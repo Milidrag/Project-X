@@ -98,9 +98,7 @@ public class UserInterfaceLobbies {
                 userNameTextField.setEnabled(true);
 
                 userNameTextField.setText("Username already taken");
-
             }
-
         } else {
             userNameTextField.setText("Please enter a valid username!");
         }
@@ -216,7 +214,6 @@ public class UserInterfaceLobbies {
         }
     }
 
-
     //draws the Window
     public void generateWindow() {
         frame = new JFrame("UserInterface");
@@ -227,7 +224,6 @@ public class UserInterfaceLobbies {
 
         init();
     }
-
 
     public UserInterfaceLobbies(ClientImpl client) {
         this.client = client;
