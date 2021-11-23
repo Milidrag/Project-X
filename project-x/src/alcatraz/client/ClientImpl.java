@@ -270,15 +270,13 @@ public class ClientImpl implements IClient {
 
     @Override
     public void Move(User user, Move move) throws RemoteException {
-        System.out.println();
-        System.out.println("recived Move =" + move.toString());
+        genInfLog("recived Move =\" + move.toString() ");
         this.alcatraz.makeRMIMove(move);
     }
 
     @Override
     public void startGame() throws RemoteException {
-        System.out.println("receiver =" + thisUser.getUsername() + "Start game!!! ");
-
+        genInfLog("receiver =" + thisUser.getUsername() + "Start game!!! ");
         userInterfaceLobbies.closeWindow();
         startAlcatrazGame();
     }
