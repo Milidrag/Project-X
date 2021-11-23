@@ -42,6 +42,9 @@ public class ClientImpl implements IClient {
 
     private boolean rmiStarted = false;
 
+    private Logger logger =Logger.getLogger(ClientImpl.class.getName());
+
+
     public boolean isRmiStarted() {
         return rmiStarted;
     }
@@ -206,7 +209,8 @@ public class ClientImpl implements IClient {
         String connect = "client/" + this.thisUser.getUsername();
         reg.rebind(connect, clientStub);
         System.out.println();
-        Logger.getLogger(ClientImpl.class.getName()).log(Level.INFO, " \n client:" +thisUser.getUsername()+ "has started RMI with name= "+connect);
+
+        genLog(" client:" +thisUser.getUsername()+ "has started RMI with name= "+connect);
         rmiStarted = true;
     }
 
@@ -222,7 +226,7 @@ public class ClientImpl implements IClient {
                     reg = LocateRegistry.getRegistry(ipAddress, user.getRmiPort());
                 } else {
                     System.out.println();
-                    Logger.getLogger(ClientImpl.class.getName()).log(Level.WARNING,"No Ip Address from Target");
+                    genLog("No Ip Address from Target");
                     reg = LocateRegistry.getRegistry(user.getRmiPort());
                 }
 
@@ -230,11 +234,16 @@ public class ClientImpl implements IClient {
 
                 IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
                 clientStubs.add(clientStub);
-                System.out.println();
-                Logger.getLogger(ClientImpl.class.getName()).log(Level.INFO, " Verbinde:" +thisUser.getUsername() +" zu:"+user.getUsername()+"\n"+" Ip address: "+ipAddress+" Port:"+user.getRmiPort() );
 
+                genLog(" Verbinde:" +thisUser.getUsername() +" zu:"+user.getUsername()+"\n"+" Ip address: "+ipAddress+" Port:"+user.getRmiPort());
             }
         }
+    }
+
+    private void genLog(String message){
+        logger.log(Level.OFF,"\n");
+        logger.log(Level.INFO, message );
+
     }
 
     public void startAlcatrazGame() {
