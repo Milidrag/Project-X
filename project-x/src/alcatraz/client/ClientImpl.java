@@ -4,6 +4,7 @@ import alcatraz.common.Lobby;
 import alcatraz.common.Move;
 import alcatraz.common.User;
 import alcatraz.server.IServer;
+import alcatraz.server.ServerImpl;
 
 import java.net.UnknownHostException;
 import java.rmi.ConnectException;
@@ -15,6 +16,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientImpl implements IClient {
 
@@ -211,18 +214,20 @@ public class ClientImpl implements IClient {
                 Registry reg;
                 String ipAddress = user.getIpAddress().toString();
                 if (ipAddress != null) {
-                    System.out.println();
-                    System.out.println();
-                    System.out.println("connect to ip: " + ipAddress);
+//                    System.out.println();
+//                    System.out.println();
+//                    System.out.println("connect to ip: " + ipAddress);
                     reg = LocateRegistry.getRegistry(ipAddress, user.getRmiPort());
                 } else {
+                    Logger.getLogger(ClientImpl.class.getName()).log(Level.WARNING," \n \nNo Ip Address from Target");
                     reg = LocateRegistry.getRegistry(user.getRmiPort());
                 }
 
-                System.out.println("verbinde zu " + "client/" + user.getUsername() + " von " + thisUser.getUsername());
+              //  System.out.println("verbinde zu " + "client/" + user.getUsername() + " von " + thisUser.getUsername());
 
                 IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
                 clientStubs.add(clientStub);
+                Logger.getLogger(ClientImpl.class.getName()).log(Level.INFO, "\n \nVerbinde:" +thisUser.getUsername() +" zu:"+user.getUsername()+"\n"+" Ip address: "+ipAddress+" Port:"+user.getRmiPort() );
             }
         }
     }
