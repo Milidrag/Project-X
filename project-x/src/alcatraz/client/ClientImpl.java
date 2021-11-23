@@ -227,7 +227,7 @@ public class ClientImpl implements IClient {
 
                 IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
                 clientStubs.add(clientStub);
-                Logger.getLogger(ClientImpl.class.getName()).log(Level.INFO, "\n \nVerbinde:" +thisUser.getUsername() +" zu:"+user.getUsername()+"\n"+" Ip address: "+ipAddress+" Port:"+user.getRmiPort() );
+                Logger.getLogger(ClientImpl.class.getName()).log(Level.INFO, " \nVerbinde:" +thisUser.getUsername() +" zu:"+user.getUsername()+"\n"+" Ip address: "+ipAddress+" Port:"+user.getRmiPort() );
             }
         }
     }
