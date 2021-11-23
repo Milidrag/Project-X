@@ -18,13 +18,11 @@ import java.util.UUID;
 
 public class ClientImpl implements IClient {
 
-
     static Registry reg;
 
     static IServer stub;
 
     static int numberOfClients = 0;
-
 
     private ArrayList<IClient> clientStubs = new ArrayList<>();
 
@@ -37,11 +35,9 @@ public class ClientImpl implements IClient {
     //Game
     private AlcatrazImpl alcatraz = new AlcatrazImpl(this);
 
-
     private UserInterfaceLobbies userInterfaceLobbies;
 
     private boolean rmiStarted = false;
-
 
     public boolean isRmiStarted() {
         return rmiStarted;
@@ -78,8 +74,6 @@ public class ClientImpl implements IClient {
     }
 
     public ClientImpl() {
-
-
         this.thisUser.setRmiPort(1100 + numberOfClients);
 
         numberOfClients++;
@@ -161,12 +155,9 @@ public class ClientImpl implements IClient {
 
     //!!! Client to server RMI function end
 
-
     public void sendUsersToOtherClients() throws RemoteException {
         for (IClient stub : this.clientStubs) {
-
             try {
-
                 stub.presentPlayers(this.lobby);
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -179,7 +170,6 @@ public class ClientImpl implements IClient {
     public void sendStartToOtherClients() throws RemoteException {
         for (IClient stub : this.clientStubs) {
             try {
-
                 stub.startGame();
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -216,28 +206,22 @@ public class ClientImpl implements IClient {
     }
 
     public void connectToTheClients() throws RemoteException, NotBoundException {
-
         for (User user : this.lobby.getUsers()) {
             if (!user.getUsername().equals(thisUser.getUsername())) {
                 Registry reg;
                 String ipAddress = user.getIpAddress().toString();
-                if(ipAddress!=null) {
-
-
-
+                if (ipAddress != null) {
                     System.out.println();
                     System.out.println();
-                    System.out.println("connect to ip: "+ipAddress);
-                     reg = LocateRegistry.getRegistry(ipAddress,user.getRmiPort());
-                }else {
+                    System.out.println("connect to ip: " + ipAddress);
+                    reg = LocateRegistry.getRegistry(ipAddress, user.getRmiPort());
+                } else {
                     reg = LocateRegistry.getRegistry(user.getRmiPort());
                 }
 
                 System.out.println("verbinde zu " + "client/" + user.getUsername() + " von " + thisUser.getUsername());
 
                 IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
-
-
                 clientStubs.add(clientStub);
             }
         }
@@ -255,10 +239,8 @@ public class ClientImpl implements IClient {
         if (!this.lobby.equals(lobby)) {
             System.out.println("reciver =" + thisUser.getUsername() + " changed lobby");
             this.lobby = lobby;
-
         }
         try {
-
             if (!rmiStarted) {
                 startClientRMI();
             }
@@ -270,7 +252,6 @@ public class ClientImpl implements IClient {
 
     @Override
     public void Move(User user, Move move) throws RemoteException {
-
         System.out.println();
         System.out.println("recived Move =" + move.toString());
         this.alcatraz.makeRMIMove(move);
@@ -278,7 +259,6 @@ public class ClientImpl implements IClient {
 
     @Override
     public void startGame() throws RemoteException {
-
         System.out.println("receiver =" + thisUser.getUsername() + "Start game!!! ");
 
         userInterfaceLobbies.closeWindow();
