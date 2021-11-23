@@ -5,6 +5,7 @@ import alcatraz.common.Move;
 import alcatraz.common.User;
 import alcatraz.server.IServer;
 
+import java.net.UnknownHostException;
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -81,8 +82,13 @@ public class ClientImpl implements IClient {
 
         this.thisUser.setRmiPort(1100 + numberOfClients);
 
-
         numberOfClients++;
+
+        try {
+            thisUser.setIpAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
     }
 
 
