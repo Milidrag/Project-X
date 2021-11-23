@@ -90,5 +90,9 @@ public class AlcatrazImpl implements MoveListener {
         //TODO : send end game RMI
     }
 
+    public void end(){
+        alcatraz.closeWindow();
+    }
+
 
 }

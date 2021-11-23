@@ -35,7 +35,7 @@ public class ClientImpl implements IClient {
     private Lobby lobby;
 
     //Game
-    private AlcatrazImpl alcatraz = new AlcatrazImpl(this);
+    private AlcatrazImpl alcatrazImpl = new AlcatrazImpl(this);
 
     private UserInterfaceLobbies userInterfaceLobbies;
 
@@ -246,7 +246,7 @@ public class ClientImpl implements IClient {
     }
 
     public void startAlcatrazGame() {
-        alcatraz.init();
+        alcatrazImpl.init();
     }
 
 
@@ -271,7 +271,7 @@ public class ClientImpl implements IClient {
     @Override
     public void Move(User user, Move move) throws RemoteException {
         genInfLog("recived Move =\" + move.toString() ");
-        this.alcatraz.makeRMIMove(move);
+        this.alcatrazImpl.makeRMIMove(move);
     }
 
     @Override
@@ -283,7 +283,7 @@ public class ClientImpl implements IClient {
 
     @Override
     public void endGame() throws RemoteException {
-
+        alcatrazImpl.end();
     }
 
     @Override
