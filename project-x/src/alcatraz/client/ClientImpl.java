@@ -4,7 +4,6 @@ import alcatraz.common.Lobby;
 import alcatraz.common.Move;
 import alcatraz.common.User;
 import alcatraz.server.IServer;
-import alcatraz.server.ServerImpl;
 
 import java.net.UnknownHostException;
 import java.rmi.ConnectException;
@@ -210,7 +209,7 @@ public class ClientImpl implements IClient {
         reg.rebind(connect, clientStub);
         System.out.println();
 
-        genLog(" client:" +thisUser.getUsername()+ "has started RMI with name= "+connect);
+        genInfLog(" client:" +thisUser.getUsername()+ "has started RMI with name= "+connect);
         rmiStarted = true;
     }
 
@@ -226,7 +225,7 @@ public class ClientImpl implements IClient {
                     reg = LocateRegistry.getRegistry(ipAddress, user.getRmiPort());
                 } else {
                     System.out.println();
-                    genLog("No Ip Address from Target");
+                    genInfLog("No Ip Address from Target");
                     reg = LocateRegistry.getRegistry(user.getRmiPort());
                 }
 
@@ -235,12 +234,12 @@ public class ClientImpl implements IClient {
                 IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
                 clientStubs.add(clientStub);
 
-                genLog(" Verbinde:" +thisUser.getUsername() +" zu:"+user.getUsername()+"\n"+" Ip address: "+ipAddress+" Port:"+user.getRmiPort());
+                genInfLog(" Verbinde:" +thisUser.getUsername() +" zu:"+user.getUsername()+"\n"+" Ip address: "+ipAddress+" Port:"+user.getRmiPort());
             }
         }
     }
 
-    private void genLog(String message){
+    private void genInfLog(String message){
         logger.log(Level.OFF,"\n");
         logger.log(Level.INFO, message );
 
