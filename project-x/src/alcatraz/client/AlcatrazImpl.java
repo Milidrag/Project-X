@@ -33,9 +33,7 @@ public class AlcatrazImpl implements MoveListener {
         }
         alcatraz.init(numberOfPlayers, positionOfThisPlayer);
         for (int i = 0; i < numberOfPlayers; i++) {
-
                 alcatraz.getPlayer(i).setName(client.getLobby().getUsers().get(i).getUsername());
-
         }
         alcatraz.addMoveListener(this);
         alcatraz.showWindow();
