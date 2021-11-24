@@ -44,6 +44,7 @@ public class ClientImpl implements IClient {
     private Logger logger =Logger.getLogger(ClientImpl.class.getName());
 
 
+
     public boolean isRmiStarted() {
         return rmiStarted;
     }
@@ -54,6 +55,7 @@ public class ClientImpl implements IClient {
 
     public void setUserInterfaceLobbies(UserInterfaceLobbies userInterfaceLobbies) {
         this.userInterfaceLobbies = userInterfaceLobbies;
+
     }
 
     public User getThisUser() {
@@ -88,6 +90,7 @@ public class ClientImpl implements IClient {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
+        System.setProperty ("sun.rmi.transport.tcp.responseTimeout", "5000");
     }
 
 
@@ -164,7 +167,7 @@ public class ClientImpl implements IClient {
         for (IClient stub : this.clientStubs) {
             try {
                 stub.presentPlayers(this.lobby);
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 //TODO: implement connection loss handling
             }
@@ -176,7 +179,7 @@ public class ClientImpl implements IClient {
         for (IClient stub : this.clientStubs) {
             try {
                 stub.startGame();
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 //TODO: implement connection loss handling
             }
@@ -192,7 +195,7 @@ public class ClientImpl implements IClient {
                 System.out.println("send to:");
                 System.out.println(stub.toString());
                 stub.Move(thisUser, move);
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 //TODO: implement connection loss handling
             }
