@@ -90,7 +90,7 @@ public class ClientImpl implements IClient {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        System.setProperty ("sun.rmi.transport.tcp.responseTimeout", "5000");
+        System.setProperty ("sun.rmi.transport.tcp.responseTimeout", "10000");
     }
 
 
@@ -198,9 +198,28 @@ public class ClientImpl implements IClient {
             } catch (Exception e) {
                 e.printStackTrace();
                 //TODO: implement connection loss handling
+                handelTimeOut(stub);
             }
 
         }
+    }
+
+    private void sendEndGameToOtherClients(){
+        for (IClient stub:clientStubs){
+            try {
+                stub.endGame();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void handelTimeOut(IClient disconnectedStub){
+        clientStubs.remove(disconnectedStub);
+
+        genInfLog("time Out: End Game");
+
+        sendEndGameToOtherClients();
     }
 
     public void startClientRMI() throws RemoteException {
@@ -287,6 +306,8 @@ public class ClientImpl implements IClient {
     @Override
     public void endGame() throws RemoteException {
         alcatrazImpl.end();
+        userInterfaceLobbies.showWindow();
+
     }
 
     @Override
