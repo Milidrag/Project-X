@@ -387,6 +387,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
                 Lobby lobby = lobbyManager.changeLobbyStatus(lobbyID);
                 //send to backupserver the lobbies with the updated user
                 sendSpreadLobbyMessage();
+                lobbyManager.deleteLobby(lobbyID);
                 return lobby;
             }
         } catch (Exception exception) {
