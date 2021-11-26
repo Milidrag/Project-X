@@ -90,7 +90,7 @@ public class ClientImpl implements IClient {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        System.setProperty ("sun.rmi.transport.tcp.responseTimeout", "10000");
+      //  System.setProperty ("sun.rmi.transport.tcp.responseTimeout", "10000");
     }
 
 
@@ -198,7 +198,7 @@ public class ClientImpl implements IClient {
             } catch (Exception e) {
                 e.printStackTrace();
                 //TODO: implement connection loss handling
-                handelTimeOut(stub);
+              //  handelTimeOut(stub);
             }
 
         }
@@ -214,13 +214,13 @@ public class ClientImpl implements IClient {
         }
     }
 
-    private void handelTimeOut(IClient disconnectedStub){
-        clientStubs.remove(disconnectedStub);
-
-        genInfLog("time Out: End Game");
-
-        sendEndGameToOtherClients();
-    }
+//    private void handelTimeOut(IClient disconnectedStub){
+//        clientStubs.remove(disconnectedStub);
+//
+//        genInfLog("time Out: End Game");
+//
+//        sendEndGameToOtherClients();
+//    }
 
     public void startClientRMI() throws RemoteException {
         IClient clientStub = (IClient) UnicastRemoteObject.exportObject(this, 0);
