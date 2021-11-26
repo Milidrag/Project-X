@@ -169,7 +169,7 @@ public class ClientImpl implements IClient {
                 stub.presentPlayers(this.lobby);
             } catch (Exception e) {
                 e.printStackTrace();
-                //TODO: implement connection loss handling
+
             }
 
         }
@@ -181,7 +181,7 @@ public class ClientImpl implements IClient {
                 stub.startGame();
             } catch (Exception e) {
                 e.printStackTrace();
-                //TODO: implement connection loss handling
+
             }
         }
     }
@@ -197,7 +197,7 @@ public class ClientImpl implements IClient {
                 stub.Move(thisUser, move);
             } catch (Exception e) {
                 e.printStackTrace();
-                //TODO: implement connection loss handling
+
               //  handelTimeOut(stub);
             }
 
@@ -213,14 +213,6 @@ public class ClientImpl implements IClient {
             }
         }
     }
-
-//    private void handelTimeOut(IClient disconnectedStub){
-//        clientStubs.remove(disconnectedStub);
-//
-//        genInfLog("time Out: End Game");
-//
-//        sendEndGameToOtherClients();
-//    }
 
     public void startClientRMI() throws RemoteException {
         IClient clientStub = (IClient) UnicastRemoteObject.exportObject(this, 0);
