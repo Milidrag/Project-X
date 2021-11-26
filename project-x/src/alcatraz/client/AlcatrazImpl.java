@@ -58,10 +58,7 @@ public class AlcatrazImpl implements MoveListener {
     @Override
     public void moveDone(Player player, Prisoner prisoner, int rowOrCol, int row, int col) {
         System.out.println("move done");
-
         try {
-            //  alcatraz.doMove(player,prisoner,rowOrCol,row,col);
-
 
             Move move = new Move(client.getThisUser(), player, prisoner, rowOrCol, row, col);
 
@@ -84,8 +81,6 @@ public class AlcatrazImpl implements MoveListener {
     @Override
     public void gameWon(Player player) {
         System.out.println(player.getName() + " has won the game");
-
-        //TODO : send end game RMI
     }
 
     public void end(){
