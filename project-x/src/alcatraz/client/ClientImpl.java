@@ -310,10 +310,6 @@ public class ClientImpl implements IClient {
 
     }
 
-    @Override
-    public GameStatus rejoinGame() throws RemoteException {
-        return null;
-    }
 
     //??? Client to Client RMI function end ???
 

@@ -16,5 +16,4 @@ public interface IClient extends Remote {
 
     public void endGame() throws RemoteException;
 
-    public GameStatus rejoinGame() throws RemoteException;
 }
