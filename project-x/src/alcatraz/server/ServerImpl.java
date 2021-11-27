@@ -33,7 +33,6 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
     public static void main(String[] args) {
         ServerImpl remoteObject = new ServerImpl();
-
         while (remoteObject.isRunning) {
             try {
                 Thread.sleep(17000);
@@ -99,20 +98,21 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
     @Override
     public void regularMessageReceived(SpreadMessage spreadMessage) {
-        if (spreadMessage.getType() == primaryMessage) {
+        if(spreadMessage.getType() == primaryMessage) {
             this.currentPrimaryGroup = spreadMessage.getSender();
             Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "primary set: " + this.currentPrimaryGroup.toString());
 
         }
 
-        if (spreadMessage.getType() == lobbyMessage) {
-            try {
-                lobbyManager.setLobbies((ArrayList<Lobby>) spreadMessage.getObject());
-                Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "Lobbies updated");
-            } catch (SpreadException ex) {
-                //TODO catch me if you can
-            }
-        }
+             /*   if(msg.getType() == lobbyMessage)
+                {
+                    try {
+                        lobbyManager.setLobbies((ArrayList<Lobby>) msg.getObject());
+                        System.out.println("Lobbies updated");
+                    } catch (SpreadException ex) {
+                        //TODO catch me if you can
+                    }
+                }*/
         //TODO Player fehlen noch bei uns
             /*
                 if(msg.getType() == playerMessage)
@@ -137,13 +137,24 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
      */
     @Override
     public void membershipMessageReceived(SpreadMessage spreadMessage) {
+
+
         definePrimary(spreadMessage);
+
+        System.out.println("Bin ich der Primary?: " + isPrimary);
         DisplayMessage(spreadMessage);
+
+        //TODO: feststellen ob der derzeitige Server der primary ist
     }
 
-    private void DisplayMessage(SpreadMessage msg) {
-        try {
-            if (msg.isRegular()) {
+
+
+    private void DisplayMessage(SpreadMessage msg)
+    {
+        try
+        {
+            if(msg.isRegular())
+            {
                 //TODO nur für Testzwecke derzeit drinnen gelassen
                 //für Fehleranalyse kann man es wieder auskommentieren
                /* System.out.print("Received a ");
@@ -169,14 +180,14 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
                     System.out.println("There is an endian mismatch.");
                 else
                     System.out.println("There is no endian mismatch.");
-
+                */
                 SpreadGroup groups[] = msg.getGroups();
                 System.out.println("To " + groups.length + " groups.");
                 byte data[] = msg.getData();
                 System.out.println("The data is " + data.length + " bytes.");
                 System.out.println("The message is: " + new String(data));
-                  
-                */
+
+
             } else if (msg.isReject()) {
                 // Received a Reject message
                 System.out.print("Received a ");

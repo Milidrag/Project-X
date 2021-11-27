@@ -65,7 +65,7 @@ public class AlcatrazImpl implements MoveListener {
             try {
                 System.out.println();
                 System.out.println("send RMI move ");
-                client.sendMoveToOtherClients(move);
+                client.sendMoveToOtherClients(move, 0);
             } catch (RemoteException e) {
                 e.printStackTrace();
             } catch (Exception e) {

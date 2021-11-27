@@ -22,7 +22,7 @@ class ServerImplTest {
             server.getLobbyManager().genLobby(user);
             server.setRMIforPrimary();
 
-            client.connectToServer();
+            client.connectToServer(0);
             client.serverGetLobbies();
 
         }catch (Exception e){
@@ -48,7 +48,7 @@ class ServerImplTest {
 
             server.setRMIforPrimary();
 
-            client.connectToServer();
+            client.connectToServer(0);
             client.serverCreateLobby();
 
             actualResult=server.lobbyManager.getLobbies().size();
@@ -83,7 +83,7 @@ class ServerImplTest {
 
             server.setRMIforPrimary();
 
-            client.connectToServer();
+            client.connectToServer(0);
           //  client.serverCreateLobby();
 
             client.serverJoinLobby(lobby.getLobbyId());
@@ -117,7 +117,7 @@ class ServerImplTest {
 
             server.setRMIforPrimary();
 
-            client.connectToServer();
+            client.connectToServer(0);
            // client.serverCreateLobby();
 
             client.serverLeaveLobby(lobby.getLobbyId());

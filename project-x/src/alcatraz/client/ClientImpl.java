@@ -13,6 +13,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -27,7 +28,7 @@ public class ClientImpl implements IClient {
     static int numberOfClients = 0;
 
     private ArrayList<IClient> clientStubs = new ArrayList<>();
-
+    private List<String> serverIPs = Arrays.asList("127.0.0.1", "10.0.0.16", "10.0.0.42", "10.0.0.45");
     //User of this client
     private User thisUser = new User();
 
@@ -94,11 +95,12 @@ public class ClientImpl implements IClient {
     }
 
 
-    public void connectToServer() {
+    public void connectToServer(Integer counter) {
         try {
-            Registry reg = LocateRegistry.getRegistry();
+            Registry reg = LocateRegistry.getRegistry(serverIPs.get(counter));
             stub = (IServer) reg.lookup("Server");
         } catch (Exception e) {
+            connectToServer(counter+1);
             System.out.println(e);
         }
     }
@@ -108,7 +110,7 @@ public class ClientImpl implements IClient {
         try {
             stub.joinLobby(thisUser, lobbyID);
         } catch (ConnectException ex) {
-            connectToServer();
+            connectToServer(0);
             stub.joinLobby(thisUser, lobbyID);
         }
     }
@@ -119,7 +121,7 @@ public class ClientImpl implements IClient {
             this.lobby = lob;
             return lob;
         } catch (ConnectException ex) {
-            connectToServer();
+            connectToServer(0);
             Lobby lob = stub.createLobby(thisUser);
             this.lobby = lob;
             return lob;
@@ -130,7 +132,7 @@ public class ClientImpl implements IClient {
         try {
             stub.leaveLobby(thisUser, lobbyID);
         } catch (ConnectException ex) {
-            connectToServer();
+            connectToServer(0);
             stub.leaveLobby(thisUser, lobbyID);
         }
     }
@@ -142,7 +144,7 @@ public class ClientImpl implements IClient {
             return result;
 
         } catch (ConnectException ex) {
-            connectToServer();
+            connectToServer(0);
             List<Lobby> result = stub.availableLobbies();
             System.out.println(result);
             return result;
@@ -155,7 +157,7 @@ public class ClientImpl implements IClient {
         try {
             return stub.startGame(lobby.getLobbyId());
         } catch (ConnectException ex) {
-            connectToServer();
+            connectToServer(0);
             return stub.startGame(lobby.getLobbyId());
         }
     }
@@ -186,7 +188,7 @@ public class ClientImpl implements IClient {
         }
     }
 
-    public void sendMoveToOtherClients(Move move) throws RemoteException {
+    public void sendMoveToOtherClients(Move move, int count) throws RemoteException {
         System.out.println();
         System.out.println("send moveRMU" + move.toString());
         System.out.println("anz Clints" + clientStubs.size());
@@ -196,6 +198,12 @@ public class ClientImpl implements IClient {
                 System.out.println(stub.toString());
                 stub.Move(thisUser, move);
             } catch (Exception e) {
+                try{
+                    Thread.sleep(10000);
+                    sendMoveToOtherClients(move, count+1);
+                }catch(InterruptedException ex){
+                    ex.printStackTrace();
+                }
                 e.printStackTrace();
 
               //  handelTimeOut(stub);
