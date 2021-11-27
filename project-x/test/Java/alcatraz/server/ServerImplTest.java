@@ -3,13 +3,11 @@ package alcatraz.server;
 import alcatraz.client.ClientImpl;
 import alcatraz.common.Lobby;
 import alcatraz.common.User;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.testng.annotations.Test;
 
 class ServerImplTest {
 
-
+/*
 
     @Test
     public void testRMIServerConnection(){
@@ -134,7 +132,7 @@ class ServerImplTest {
             fail();
         }
     }
-
+*/
 
 
 }
