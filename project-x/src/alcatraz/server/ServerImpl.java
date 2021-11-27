@@ -89,7 +89,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
         try {
             group.join(newConnection, spreadGroupName);
         } catch (SpreadException ex) {
-            System.err.println("Spread Exception: " + ex.getMessage() + Arrays.toString(ex.getStackTrace()));
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, "Could not init spread connection", ex);
         }
         return group;
     }
