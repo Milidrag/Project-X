@@ -27,7 +27,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
     SpreadConnection newConnection;
     private final short lobbyMessage = 2;
     private final short primaryMessage = 1;
-    private final short playerMessage = 3;
+    private final String spreadGroupName = "spreadGroupName";
     LobbyManager lobbyManager = new LobbyManager();
 
 
@@ -38,11 +38,10 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
             try {
                 Thread.sleep(17000);
             } catch (InterruptedException ex) {
-                //TODO or not, whatever
+                Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, "No connection was established", ex);
             }
         }
-        System.out.println("Programm ended");
-
+        Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, "Programm ended");
 
     }
 
@@ -53,12 +52,10 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
             newConnection.connect(InetAddress.getByName("127.0.0.1"), 4803, this.serverId, false, true);
             //add advanced Message listener
             newConnection.add(this);
-            this.serverGroup = initSpreadGroup(newConnection, "spreadGroupName");
-            //TODO verstehe nicht was hier genau passiert. Wozu braucht man eine private Group?
+            this.serverGroup = initSpreadGroup(newConnection, spreadGroupName);
             this.myGroup = newConnection.getPrivateGroup();
-            // sendSpreadMessage(newConnection,"spreadGroupName","test", (short) 2);
         } catch (SpreadException e) {
-            e.printStackTrace();
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, "No spread connection could be established", e);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -82,7 +79,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
     private void sendSpreadLobbyMessage() {
         if (isPrimary) {
-            sendSpreadMessage(newConnection, "spreadGroupName", lobbyManager.getLobbies(), lobbyMessage);
+            sendSpreadMessage(newConnection, spreadGroupName, lobbyManager.getLobbies(), lobbyMessage);
         }
     }
 
@@ -231,16 +228,10 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
             }
 
             if (this.isPrimary == true) {
-                sendSpreadMessage(newConnection, "spreadGroupName", "", primaryMessage);
+                sendSpreadMessage(newConnection, spreadGroupName, "", primaryMessage);
                 System.out.println("primary message sent");
-                sendSpreadMessage(newConnection, "spreadGroupName", getLobbyManager().getLobbies(), lobbyMessage);
+                sendSpreadMessage(newConnection, spreadGroupName, getLobbyManager().getLobbies(), lobbyMessage);
                 System.out.println("Lobby message sent");
-                //TODO Player fehlen bei uns noch
-                /*
-                sendSpreadMessage(newConnection, "spreadGroupName", AllPlayers, playerMessage );
-                System.out.println("Player message sent");
-
-                 */
             }
         }
 
@@ -374,13 +365,11 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
     @Override
     public Lobby startGame(UUID lobbyID) throws RemoteException, NoSuchElementException {
         try {
-            System.out.println(lobbyID);
-            Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "startGame gestartet mit lobbyID: " + lobbyID);
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "Game started with lobbyID: " + lobbyID);
 
             int userCountInLobby = lobbyManager.getLobby(lobbyID).getUsers().size();
             if (userCountInLobby < 2 || userCountInLobby > 4) {
-                System.out.println("lobby s=" + userCountInLobby);
-                Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, "Useranzahl ist nicht für startGame in Ordnung, Anzahl +" + userCountInLobby);
+                Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, "Wrong lobby size: " + userCountInLobby);
                 throw new RemoteException("wrong Lobby size =" + userCountInLobby);
             } else {
 
@@ -391,7 +380,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
                 return lobby;
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, "The game could not be started", exception);
             throw new RemoteException("error");
         }
 
@@ -406,42 +395,44 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
             MembershipInfo.VirtualSynchronySet virtual_synchrony_sets[] = info.getVirtualSynchronySets();
             MembershipInfo.VirtualSynchronySet my_virtual_synchrony_set = info.getMyVirtualSynchronySet();
 
-            System.out.println("REGULAR membership for group " + group +
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "REGULAR membership for group " + group +
                     " with " + members.length + " members:");
             for (int i = 0; i < members.length; ++i) {
-                System.out.println("\t\t" + members[i]);
+                Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "\t\t" + members[i]);
             }
-            System.out.println("Group ID is " + info.getGroupID());
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "Group ID is " + info.getGroupID());
 
-            System.out.print("\tDue to ");
             if (info.isCausedByJoin()) {
-                System.out.println("the JOIN of " + info.getJoined());
+                Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "the JOIN of " + info.getJoined());
             } else if (info.isCausedByLeave()) {
-                System.out.println("the LEAVE of " + info.getLeft());
+                Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "the LEAVE of " + info.getLeft());
             } else if (info.isCausedByDisconnect()) {
-                System.out.println("the DISCONNECT of " + info.getDisconnected());
+                Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "the DISCONNECT of " + info.getDisconnected());
             } else if (info.isCausedByNetwork()) {
+                Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "NETWORK change");
                 System.out.println("NETWORK change");
                 for (int i = 0; i < virtual_synchrony_sets.length; ++i) {
                     MembershipInfo.VirtualSynchronySet set = virtual_synchrony_sets[i];
                     SpreadGroup setMembers[] = set.getMembers();
                     System.out.print("\t\t");
                     if (set == my_virtual_synchrony_set) {
-                        System.out.print("(LOCAL) ");
+                        Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "(LOCAL) ");
                     } else {
-                        System.out.print("(OTHER) ");
+                        Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "(OTHER) ");
                     }
-                    System.out.println("Virtual Synchrony Set " + i + " has " +
+                    Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "Virtual Synchrony Set " + i + " has " +
                             set.getSize() + " members:");
+
                     for (int j = 0; j < set.getSize(); ++j) {
                         System.out.println("\t\t\t" + setMembers[j]);
                     }
                 }
             }
         } else if (info.isTransition()) {
-            System.out.println("TRANSITIONAL membership for group " + group);
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "TRANSITIONAL membership for group " + group);
         } else if (info.isSelfLeave()) {
-            System.out.println("SELF-LEAVE message for group " + group);
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "SELF-LEAVE message for group " + group);
+
         }
     }
 
