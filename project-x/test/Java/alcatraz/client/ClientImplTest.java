@@ -2,13 +2,12 @@ package alcatraz.client;
 
 import alcatraz.common.Lobby;
 import alcatraz.server.ServerImpl;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class ClientImplTest {
 
-
+/*
 
          @Test
          public void testRMIClientToClientPresentPlayers(){
@@ -41,4 +40,6 @@ class ClientImplTest {
                  fail();
              }
          }
+         */
+
 }
