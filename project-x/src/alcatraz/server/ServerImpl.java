@@ -30,12 +30,16 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
     private final String spreadGroupName = "spreadGroupName";
     LobbyManager lobbyManager = new LobbyManager();
 
-
+    /**
+     * start method - calls the constructor and checks whether a connection could be established
+     * if no connection could be established the server ends after 15 seconds
+     * @param args
+     */
     public static void main(String[] args) {
         ServerImpl remoteObject = new ServerImpl();
         while (remoteObject.isRunning) {
             try {
-                Thread.sleep(17000);
+                Thread.sleep(15000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, "No connection was established", ex);
             }
@@ -44,9 +48,16 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
     }
 
+    /**
+     * is called by the main method
+     */
     public ServerImpl() {
         this.serverId = UUID.randomUUID().toString();
         newConnection = new SpreadConnection();
+
+        if (newConnection == null){
+            isRunning = false;
+        }
         try {
             newConnection.connect(InetAddress.getByName("127.0.0.1"), 4803, this.serverId, false, true);
             //add advanced Message listener
@@ -56,12 +67,19 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
         } catch (SpreadException e) {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, "No spread connection could be established", e);
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, "Host was not recognized", e);
         }
 
 
     }
 
+    /**
+     * multicasts a spread message to the other group members
+     * @param connection - the defined spread connection
+     * @param groupname - the defined groupname of the spreadconnection
+     * @param data - the dataload which is sent to the other members
+     * @param messagetype - primaryMessage or lobbyMessage
+     */
     private static void sendSpreadMessage(SpreadConnection connection, String groupname, Object data, short messagetype) {
         try {
             SpreadMessage message = new SpreadMessage();
@@ -75,13 +93,23 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
         }
     }
 
+    /**
+     * spreadlobbymessage is used by the primary to send the new status from the lobbymanager, who holds
+     * all lobbies with all players
+     * whenever a new lobby is created or a player joins a lobby, this method is used
+     */
     private void sendSpreadLobbyMessage() {
         if (isPrimary) {
             sendSpreadMessage(newConnection, spreadGroupName, lobbyManager.getLobbies(), lobbyMessage);
         }
     }
 
-
+    /**
+     * this method initiates a new spread group.
+     * @param newConnection
+     * @param spreadGroupName
+     * @return
+     */
     private SpreadGroup initSpreadGroup(SpreadConnection newConnection, String spreadGroupName) {
         SpreadGroup group = new SpreadGroup();
         try {
@@ -92,6 +120,11 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
         return group;
     }
 
+    /**
+     * two types of spreadMessage (primaryMessage and lobbyMessage)
+     * first figure out which type and then decide the logic
+     * @param spreadMessage
+     */
     @Override
     public void regularMessageReceived(SpreadMessage spreadMessage) {
         if(spreadMessage.getType() == primaryMessage) {
@@ -111,9 +144,8 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
     }
 
     /**
-     * hier wird festgestellt ob ein neues Gruppenmitglied dazugekommen ist
-     * außerdem wird hier festgestellt ob der derzeitige Server der Primary ist
-     * Primary falls er der erste ist welche in der Gruppe ist
+     * recognize whether a new membership joined or leaved the group
+     * furthermore this method decides which server is the primary server
      */
     @Override
     public void membershipMessageReceived(SpreadMessage spreadMessage) {
