@@ -67,7 +67,6 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
             SpreadMessage message = new SpreadMessage();
             message.setObject((Serializable) data);
             message.addGroup(groupname);
-            //TODO: laut Doku wird setReliable() per default aufgerufen. Es sollte also hier nicht notwendig sein es wieder zu setzen
             message.setReliable();
             message.setType(messagetype);
             connection.multicast(message);
@@ -109,30 +108,6 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
             }
         }
 
-             /*   if(msg.getType() == lobbyMessage)
-                {
-                    try {
-                        lobbyManager.setLobbies((ArrayList<Lobby>) msg.getObject());
-                        System.out.println("Lobbies updated");
-                    } catch (SpreadException ex) {
-                        //TODO catch me if you can
-                    }
-                }*/
-        //TODO Player fehlen noch bei uns
-            /*
-                if(msg.getType() == playerMessage)
-                {
-                    try {
-                        this.AllPlayers = (ArrayList<User>) message.getObject();
-                        System.out.println("User list updated");
-
-                    } catch (SpreadException ex) {
-                        //TODO something useful
-                    }
-                }
-                */
-
-        DisplayMessage(spreadMessage);
     }
 
     /**
@@ -144,95 +119,11 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
     public void membershipMessageReceived(SpreadMessage spreadMessage) {
 
         definePrimary(spreadMessage);
-
-        System.out.println("Bin ich der Primary?: " + isPrimary);
-        DisplayMessage(spreadMessage);
-
-        //TODO: feststellen ob der derzeitige Server der primary ist
     }
 
 
 
-    private void DisplayMessage(SpreadMessage msg)
-    {
-        try
-        {
-            if(msg.isRegular())
-            {
-                //TODO nur für Testzwecke derzeit drinnen gelassen
-                //für Fehleranalyse kann man es wieder auskommentieren
-               /* System.out.print("Received a ");
-                if(msg.isUnreliable())
-                    System.out.print("UNRELIABLE");
-                else if(msg.isReliable())
-                    System.out.print("RELIABLE");
-                else if(msg.isFifo())
-                    System.out.print("FIFO");
-                else if(msg.isCausal())
-                    System.out.print("CAUSAL");
-                else if(msg.isAgreed())
-                    System.out.print("AGREED");
-                else if(msg.isSafe())
-                    System.out.print("SAFE");
-                System.out.println(" message.");
 
-                System.out.println("Sent by  " + msg.getSender() + ".");
-
-                System.out.println("Type is " + msg.getType() + ".");
-
-                if(msg.getEndianMismatch() == true)
-                    System.out.println("There is an endian mismatch.");
-                else
-                    System.out.println("There is no endian mismatch.");
-                */
-                SpreadGroup groups[] = msg.getGroups();
-                System.out.println("To " + groups.length + " groups.");
-                byte data[] = msg.getData();
-                System.out.println("The data is " + data.length + " bytes.");
-                System.out.println("The message is: " + new String(data));
-
-
-            } else if (msg.isReject()) {
-                // Received a Reject message
-                System.out.print("Received a ");
-                if (msg.isUnreliable())
-                    System.out.print("UNRELIABLE");
-                else if (msg.isReliable())
-                    System.out.print("RELIABLE");
-                else if (msg.isFifo())
-                    System.out.print("FIFO");
-                else if (msg.isCausal())
-                    System.out.print("CAUSAL");
-                else if (msg.isAgreed())
-                    System.out.print("AGREED");
-                else if (msg.isSafe())
-                    System.out.print("SAFE");
-                System.out.println(" REJECTED message.");
-
-                System.out.println("Sent by  " + msg.getSender() + ".");
-
-                System.out.println("Type is " + msg.getType() + ".");
-
-                if (msg.getEndianMismatch() == true)
-                    System.out.println("There is an endian mismatch.");
-                else
-                    System.out.println("There is no endian mismatch.");
-
-                SpreadGroup groups[] = msg.getGroups();
-                System.out.println("To " + groups.length + " groups.");
-
-                byte data[] = msg.getData();
-                System.out.println("The data is " + data.length + " bytes.");
-
-                System.out.println("The message is: " + new String(data));
-            } else {
-                System.out.println("Message is of unknown type: " + msg.getServiceType());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }
 
     //es funktioniert, dass er erkannt wird wer der Primary ist, allerdings erkennt er nicht
     //falls ein Server ausfällt wer der neue Primary ist.
@@ -247,22 +138,23 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
             if (this.isPrimary == true) {
                 sendSpreadMessage(newConnection, spreadGroupName, "", primaryMessage);
-                System.out.println("primary message sent");
+                Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "primary message sent");
+
                 sendSpreadMessage(newConnection, spreadGroupName, getLobbyManager().getLobbies(), lobbyMessage);
-                System.out.println("Lobby message sent");
+                Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "Lobby message sent");
+
             }
         }
 
         //falls ein Gruppenmitglied aufgrund von Netzwerkausfall oder weil es die Gruppe verlässt rausgeht
         if (info.isCausedByDisconnect() || info.isCausedByLeave() || info.isCausedByNetwork()) {
             boolean primaryFound = false;
-            //auskommentiert weil wir message hier nicht mitgeben
-            System.out.println("Member left Group: " + spreadMessage.getSender().toString());
+            Logger.getLogger(ServerImpl.class.getName()).log(Level.WARNING, "Member left Group: " + spreadMessage.getSender().toString());
 
             for (SpreadGroup member : info.getMembers()) {
                 if (member.equals(this.currentPrimaryGroup)) {
                     primaryFound = true;
-                    System.out.println("Primary still exists");
+                    Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "Primary still exists");
                     break;
                 }
             }
@@ -290,9 +182,7 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
     private void setMePrimary() {
         this.currentPrimaryGroup = this.myGroup;
         this.isPrimary = true;
-        System.out.println("New primary: " + myGroup.toString());
-        Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "New primary: " + myGroup.toString());
-
+        Logger.getLogger(ServerImpl.class.getName()).log(Level.WARNING, "New primary: " + myGroup.toString());
         setRMIforPrimary();
     }
 
@@ -427,11 +317,9 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
                 Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "the DISCONNECT of " + info.getDisconnected());
             } else if (info.isCausedByNetwork()) {
                 Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "NETWORK change");
-                System.out.println("NETWORK change");
                 for (int i = 0; i < virtual_synchrony_sets.length; ++i) {
                     MembershipInfo.VirtualSynchronySet set = virtual_synchrony_sets[i];
                     SpreadGroup setMembers[] = set.getMembers();
-                    System.out.print("\t\t");
                     if (set == my_virtual_synchrony_set) {
                         Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "(LOCAL) ");
                     } else {
