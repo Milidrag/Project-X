@@ -154,11 +154,11 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
     }
 
 
-
-
-
-    //es funktioniert, dass er erkannt wird wer der Primary ist, allerdings erkennt er nicht
-    //falls ein Server ausfällt wer der neue Primary ist.
+    /**
+     * this method recognizes who is the primary. so if a group member leaves a group
+     * a new primary is defined is the primary does not exist anymore
+     * @param spreadMessage - contains the information who should be the new primary
+     */
     private void definePrimary(SpreadMessage spreadMessage) {
         MembershipInfo info = spreadMessage.getMembershipInfo();
         printMembershipInfo(info);
@@ -211,6 +211,10 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
 
     }
 
+    /**
+     * sets THIS server to the new primary with the value true.
+     * the other server will have the boolean value isPrimary false
+     */
     private void setMePrimary() {
         this.currentPrimaryGroup = this.myGroup;
         this.isPrimary = true;
@@ -218,6 +222,9 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
         setRMIforPrimary();
     }
 
+    /**
+     * sets the RMI-connection from the primary to the clients
+     */
     public void setRMIforPrimary() {
         try {
             IServer stub = (IServer) UnicastRemoteObject.exportObject(this, 0);
@@ -256,7 +263,6 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
     public boolean joinLobby(User user, UUID lobbyId) throws RemoteException, AssertionError {
         try {
             if (lobbyManager.checkIfUsernameIsUsed(user.getUsername()) || user.getUsername() == null) {
-
                 throw new AssertionError("Username already taken");
             } else {
                 if (lobbyManager.getLobby(lobbyId).getUsers().size() >= 4) {
