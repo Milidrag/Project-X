@@ -100,6 +100,14 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "primary set: " + this.currentPrimaryGroup.toString());
 
         }
+        if(spreadMessage.getType() == lobbyMessage){
+
+            try {
+                lobbyManager.setLobbies((ArrayList<Lobby>) spreadMessage.getObject());
+            } catch (SpreadException e) {
+                e.printStackTrace();
+            }
+        }
 
              /*   if(msg.getType() == lobbyMessage)
                 {
@@ -134,7 +142,6 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
      */
     @Override
     public void membershipMessageReceived(SpreadMessage spreadMessage) {
-
 
         definePrimary(spreadMessage);
 
@@ -300,7 +307,6 @@ public class ServerImpl implements IServer, AdvancedMessageListener {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.INFO, "New primary set for RMI");
         } catch (RemoteException ex) {
             Logger.getLogger(ServerImpl.class.getName()).log(Level.SEVERE, null, ex);
-
             //TODO ich habe es jetzt mal so direkt reingeschrieben. Damit wir hier nicht gleich zuviele Methoden auf einmal haben
             //refactoren auf 2 eine Methode
             try {

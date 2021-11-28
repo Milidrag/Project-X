@@ -28,7 +28,7 @@ public class ClientImpl implements IClient {
     static int numberOfClients = 0;
 
     private ArrayList<IClient> clientStubs = new ArrayList<>();
-    private List<String> serverIPs = Arrays.asList("127.0.0.1", "10.0.0.16", "10.0.0.42", "10.0.0.45");
+    private List<String> serverIPs = Arrays.asList("127.0.0.1", "10.0.0.16","10.0.0.45", "10.0.0.42");
     //User of this client
     private User thisUser = new User();
 
