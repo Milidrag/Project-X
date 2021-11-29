@@ -19,6 +19,9 @@ public class AlcatrazImpl implements MoveListener {
         this.client = client;
     }
 
+    /**
+     init the game
+     */
     public void init() {
         numberOfPlayers = client.getLobby().getUsers().size();
         alcatraz = new Alcatraz();
@@ -40,6 +43,10 @@ public class AlcatrazImpl implements MoveListener {
         alcatraz.start();
     }
 
+    /**
+     this method is call from the clientImpl if a RMI move is recived
+     @param move the received move
+     */
     public void makeRMIMove(Move move) {
         try {
             System.out.println();
@@ -55,6 +62,9 @@ public class AlcatrazImpl implements MoveListener {
     }
 
 
+    /**
+     this method is call when a move is done in GUI
+     */
     @Override
     public void moveDone(Player player, Prisoner prisoner, int rowOrCol, int row, int col) {
         System.out.println("move done");
@@ -78,6 +88,10 @@ public class AlcatrazImpl implements MoveListener {
         }
     }
 
+    /**
+     this method is call when the game is won by a player
+     @param player the player that has wohn the game
+     */
     @Override
     public void gameWon(Player player) {
         System.out.println(player.getName() + " has won the game");
