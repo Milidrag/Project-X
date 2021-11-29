@@ -320,6 +320,7 @@ public class ClientImpl implements IClient {
 
 
     //??? Client to Client RMI function begin ???
+
     @Override
     public void presentPlayers(Lobby lobby) throws RemoteException {
         System.out.println("reciver =" + thisUser.getUsername() + " " + lobby);
