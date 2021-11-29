@@ -94,7 +94,9 @@ public class ClientImpl implements IClient {
       //  System.setProperty ("sun.rmi.transport.tcp.responseTimeout", "10000");
     }
 
-
+    /**
+     connect to the primary Lobby Server
+     */
     public void connectToServer(Integer counter) {
         try {
             Registry reg = LocateRegistry.getRegistry(serverIPs.get(counter));
