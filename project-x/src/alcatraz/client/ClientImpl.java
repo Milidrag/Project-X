@@ -106,6 +106,12 @@ public class ClientImpl implements IClient {
     }
 
     //!!! Client to server RMI function begin
+
+    /**
+     join a  lobby
+     send join lobby to the primary Lobby Server
+     @param lobbyID the id of the joined lobby
+     */
     public void serverJoinLobby(UUID lobbyID) throws RemoteException {
         try {
             stub.joinLobby(thisUser, lobbyID);
@@ -115,6 +121,10 @@ public class ClientImpl implements IClient {
         }
     }
 
+    /**
+     create a  lobby
+     send create lobby to the primary Lobby Server
+     */
     public Lobby serverCreateLobby() throws RemoteException {
         try {
             Lobby lob = stub.createLobby(thisUser);
@@ -128,6 +138,10 @@ public class ClientImpl implements IClient {
         }
     }
 
+    /**
+     leave the joined lobby
+     send leave lobby to the primary Lobby Server
+     */
     public void serverLeaveLobby(UUID lobbyID) throws RemoteException {
         try {
             stub.leaveLobby(thisUser, lobbyID);
@@ -137,6 +151,9 @@ public class ClientImpl implements IClient {
         }
     }
 
+    /**
+     get all Lobbys from the primary Lobby Server
+     */
     public List<Lobby> serverGetLobbies() throws RemoteException {
         try {
             List<Lobby> result = stub.availableLobbies();
@@ -153,6 +170,9 @@ public class ClientImpl implements IClient {
 
     }
 
+    /**
+     send start Game to the primary Lobby Server
+     */
     public Lobby serverStartGame() throws RemoteException {
         try {
             return stub.startGame(lobby.getLobbyId());
@@ -165,6 +185,9 @@ public class ClientImpl implements IClient {
 
     //!!! Client to server RMI function end
 
+    /**
+     send the Lobby of this client to the connected clients, to ensure that all clients have the same information
+     */
     public void sendUsersToOtherClients() throws RemoteException {
         for (IClient stub : this.clientStubs) {
             try {
@@ -177,6 +200,9 @@ public class ClientImpl implements IClient {
         }
     }
 
+    /**
+     send the start game to the connected clients
+     */
     public void sendStartToOtherClients() throws RemoteException {
         for (IClient stub : this.clientStubs) {
             try {
@@ -188,6 +214,12 @@ public class ClientImpl implements IClient {
         }
     }
 
+
+    /**
+     send a  game move to the connected clients
+     @param move The move operation from the game
+     @param count
+     */
     public void sendMoveToOtherClients(Move move, int count) throws RemoteException {
         System.out.println();
         System.out.println("send moveRMU" + move.toString());
@@ -212,6 +244,10 @@ public class ClientImpl implements IClient {
         }
     }
 
+
+    /**
+     send the end game to the connected clients
+     */
     private void sendEndGameToOtherClients(){
         for (IClient stub:clientStubs){
             try {
@@ -222,6 +258,9 @@ public class ClientImpl implements IClient {
         }
     }
 
+    /**
+     Starts the RMI of this client
+     */
     public void startClientRMI() throws RemoteException {
         IClient clientStub = (IClient) UnicastRemoteObject.exportObject(this, 0);
         reg = LocateRegistry.createRegistry(thisUser.getRmiPort());
@@ -235,23 +274,24 @@ public class ClientImpl implements IClient {
         rmiStarted = true;
     }
 
+
+    /**
+     connect this client to the other clients
+     get the other client(and there ip&port) from the lobby
+     */
     public void connectToTheClients() throws RemoteException, NotBoundException {
         for (User user : this.lobby.getUsers()) {
             if (!user.getUsername().equals(thisUser.getUsername())) {
                 Registry reg;
                 String ipAddress = user.getIpAddress().toString();
                 if (ipAddress != null) {
-//                    System.out.println();
-//                    System.out.println();
-//                    System.out.println("connect to ip: " + ipAddress);
+
                     reg = LocateRegistry.getRegistry(ipAddress, user.getRmiPort());
                 } else {
                     System.out.println();
                     genInfLog("No Ip Address from Target");
                     reg = LocateRegistry.getRegistry(user.getRmiPort());
                 }
-
-              //  System.out.println("verbinde zu " + "client/" + user.getUsername() + " von " + thisUser.getUsername());
 
                 IClient clientStub = (IClient) reg.lookup("client/" + user.getUsername());
                 clientStubs.add(clientStub);
@@ -261,12 +301,17 @@ public class ClientImpl implements IClient {
         }
     }
 
+
+
     private void genInfLog(String message){
         logger.log(Level.OFF,"\n");
         logger.log(Level.INFO, message );
 
     }
 
+    /**
+    Starts the Game
+    */
     public void startAlcatrazGame() {
         alcatrazImpl.init();
     }
