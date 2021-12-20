@@ -4,8 +4,8 @@ import alcatraz.common.Lobby;
 import alcatraz.server.ServerImpl;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
+import static org.junit.jupiter.api.Assertions.*;
 class ClientImplTest {
 
 
@@ -41,4 +41,6 @@ class ClientImplTest {
                  fail();
              }
          }
+
+
 }
